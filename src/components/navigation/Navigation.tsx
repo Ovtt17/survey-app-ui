@@ -2,6 +2,7 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Button } from '@mui/material'
 import { Add } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 
 const navigation = [
@@ -53,9 +54,11 @@ export default function Navigation() {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <Button variant="contained" startIcon={<Add />}>
-              <span>Add</span>
-            </Button>
+            <Link to={'surveys/create'}>
+              <Button variant="contained" startIcon={<Add />}>
+                <span>Add</span>
+              </Button>
+            </Link>
 
             {/* Notification button */}
             <button
