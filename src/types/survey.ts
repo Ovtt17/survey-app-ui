@@ -3,5 +3,5 @@ export interface Survey {
   title: string;
   description: string;
   creatorId: number;
-  creationDate: string;
+  creationDate?: string;
 }
