@@ -1,4 +1,3 @@
-import React from "react";
 import SurveyCard from "../components/Survey/SurveyCard";
 
 const surveys = [
@@ -49,19 +48,21 @@ const Home = () => {
 
   return (
     <div className="App flex flex-col items-center">
-      {surveys.map((survey, index) => (
-        <div key={index} className="w-full max-w-xl">
-          <SurveyCard
-            title={survey.title}
-            description={survey.description}
-            rating={survey.rating}
-            author={survey.author}
-            onAnswerSurvey={handleAnswerSurvey}
-            onViewReviews={handleViewReviews}
-            onRateSurvey={handleRateSurvey}
-          />
-        </div>
-      ))}
+      <div className="flex flex-wrap justify-start">
+        {surveys.map((survey, index) => (
+          <div key={index} className="w-full sm:w-1/2 p-2">
+            <SurveyCard
+              title={survey.title}
+              description={survey.description}
+              rating={survey.rating}
+              author={survey.author}
+              onAnswerSurvey={handleAnswerSurvey}
+              onViewReviews={handleViewReviews}
+              onRateSurvey={handleRateSurvey}
+            />
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
