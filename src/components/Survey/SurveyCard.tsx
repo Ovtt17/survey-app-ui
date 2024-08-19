@@ -1,20 +1,19 @@
 import React from "react";
 import Button from '@mui/material/Button';
 import { Modal, Rating, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
+import { Survey } from "../../types/survey";
 
 interface SurveyCardProps {
-  title: string;
-  description: string;
-  rating: number;
-  author: string;
+  survey: Survey;
   onAnswerSurvey: () => void;
   onViewReviews: () => void;
   onRateSurvey: () => void;
 }
 
-const SurveyCard: React.FC<SurveyCardProps> = ({ title, description, rating, author, onAnswerSurvey, onViewReviews, onRateSurvey }) => {
+const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onAnswerSurvey, onViewReviews, onRateSurvey }) => {
   const [openRatingModel, setOpenRatingModel] = React.useState(false);
-  const [userRating, setUserRating] = React.useState(rating);
+  const [userRating, setUserRating] = React.useState(survey.rating);
 
   const handleOpen = () => setOpenRatingModel(true);
   const handleClose = () => setOpenRatingModel(false);
@@ -34,20 +33,20 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ title, description, rating, aut
             </svg>
             Members only
           </p>
-          <div className="text-gray-900 font-bold text-xl mb-2">{title}</div>
-          <p className="text-gray-700 text-base">{description}</p>
+          <div className="text-gray-900 font-bold text-xl mb-2">{survey.title}</div>
+          <p className="text-gray-700 text-base">{survey.description}</p>
         </div>
         <div className="flex items-center">
-          <img className="w-10 h-10 rounded-full mr-4" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt={`Avatar of ${author}`} />
+          <img className="w-10 h-10 rounded-full mr-4" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt={`Avatar of ${survey.author}`} />
           <div className="text-sm">
-            <p className="text-gray-900">{author}</p>
+            <p className="text-gray-900">{survey.author}</p>
             <div>
               <span className="text-gray-600 flex items-center">
                 Rating:
                 <Rating
                   name="read-only ml-1"
                   size="small"
-                  value={rating}
+                  value={survey.rating}
                   readOnly
                   precision={0.5}
                 />
@@ -56,14 +55,16 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ title, description, rating, aut
           </div>
         </div>
         <div className="mt-4 flex space-x-2">
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={onAnswerSurvey}
-            style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
-          >
-            Responder Encuesta
-          </Button>
+          <Link to={`/surveys/${survey.id}/answer`}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={onAnswerSurvey}
+              style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
+            >
+              Responder Encuesta
+            </Button>
+          </Link>
           <Button
             variant="contained"
             color="secondary"
