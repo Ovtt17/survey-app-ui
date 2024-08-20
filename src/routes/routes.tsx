@@ -1,8 +1,8 @@
 // src/routes.tsx
 import { Route, Routes } from 'react-router-dom';
 import Home from '../pages/Home';
-import AnswerSurvey from '../components/Survey/AnswerSurvey';
-import CreateSurveyForm from '../components/Survey/CreateSurveyForm';
+import AnswerSurvey from '../components/survey/AnswerSurvey';
+import CreateSurveyForm from '../components/survey/CreateSurveyForm';
 
 const AppRoutes = () => {
   return (
