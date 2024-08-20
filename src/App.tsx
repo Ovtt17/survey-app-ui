@@ -1,9 +1,11 @@
 import Navigation from "./components/navigation/Navigation";
 import AppRoutes from './routes/routes';
+import ScrollToTop from "./utils/ScrollToTop";
 
 function App() {
   return (
     <div className="min-h-screen flex flex-col">
+      <ScrollToTop />
       <header>
         <Navigation />
       </header>
