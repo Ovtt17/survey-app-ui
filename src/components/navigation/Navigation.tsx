@@ -3,8 +3,8 @@ import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
 import { Link } from 'react-router-dom';
-import { useState } from 'react';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import { useAuth } from '../../context/AuthContext';
 
 
 const navigation = [
@@ -16,7 +16,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navigation() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { isAuthenticated, logout } = useAuth();
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -113,7 +113,7 @@ export default function Navigation() {
                       </Link>
                     </MenuItem>
                     <MenuItem>
-                      <Link to="/signout" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                      <Link to="/" onClick={logout} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                         Sign out
                       </Link>
                     </MenuItem>
