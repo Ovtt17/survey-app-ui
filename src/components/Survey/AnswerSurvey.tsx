@@ -13,16 +13,17 @@ import Radio from '@mui/material/Radio';
 import Button from '@mui/material/Button';
 import { Survey } from '../../types/survey';
 import { getSurvey } from '../../services/surveyService';
-import { Answer } from '../../types/answer';
+import { NewAnswer } from '../../types/answer';
+import { createAnswer } from '../../services/answerService';
 
 const AnswerSurvey = () => {
   const { id } = useParams<{ id: string }>();
   const [survey, setSurvey] = useState<Survey | null>(null);
-  const [answers, setAnswers] = useState<Answer[]>([]);
+  const [answers, setAnswers] = useState<NewAnswer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const handleAnswerChange = (questionId: number, answer: Answer) => {
+  const handleAnswerChange = (questionId: number, answer: NewAnswer) => {
     setAnswers((prevAnswers) => {
       const existingAnswerIndex = prevAnswers.findIndex(
         (a) => a.questionId === questionId
@@ -38,8 +39,18 @@ const AnswerSurvey = () => {
   };
 
   const handleSubmit = () => {
-    console.log('Submitting answers:', answers);
-    
+    try {
+      answers.map(
+        (a) =>
+          createAnswer(a)
+      );
+    } catch {
+      return (
+        <Container>
+          <Alert severity="warning">Error al responder la encuesta.</Alert>
+        </Container>
+      );
+    }
   };
 
   useEffect(() => {
