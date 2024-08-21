@@ -1,11 +1,11 @@
 import { NewQuestion } from "./question";
+import { User } from "./user";
 
 export interface Survey {
   id: number;
   title: string;
   description: string;
-  creatorId: number;
-  creator: string;
+  creator: User;
   rating: number;
   creationDate?: string;
 }
@@ -13,6 +13,5 @@ export interface Survey {
 export interface NewSurvey {
   title: string;
   description: string;
-  creatorId: number;
   questions: NewQuestion[];
 }

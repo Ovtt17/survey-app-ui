@@ -11,5 +11,5 @@ export interface Question {
 export interface NewQuestion {
   text: string;
   type: QuestionType;
-  options: NewQuestionOption[];
+  options?: NewQuestionOption[];
 }

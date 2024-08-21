@@ -5,6 +5,8 @@ import AccordionList from './AccordionList';
 import { NewQuestion, Question } from '../../types/question';
 import { QuestionType } from '../../types/questionType';
 import { NewSurvey } from '../../types/survey';
+import { createSurvey } from '../../services/surveyService';
+import { NewQuestionOption } from '../../types/questionOption';
 
 interface AccordionState {
   id: number;
@@ -14,14 +16,13 @@ interface AccordionState {
 
 const CreateSurveyForm: React.FC = () => {
   const [accordions, setAccordions] = useState<AccordionState[]>([
-    { id: 1, expanded: false, question: { text: '', type: 'Texto' as QuestionType, options: [] } }
+    { id: 1, expanded: false, question: { text: '', type: QuestionType.SELECCION_UNICA as QuestionType, options: [] as NewQuestionOption[] } }
   ]);
 
   const [formData, setFormData] = useState<NewSurvey>(
     {
       title: '',
       description: '',
-      creatorId: 1,
       questions: []
     }
   );
@@ -54,7 +55,7 @@ const CreateSurveyForm: React.FC = () => {
   const addAccordion = () => {
     setAccordions((prevAccordions) => [
       ...prevAccordions,
-      { id: prevAccordions.length + 1, expanded: false, question: { text: '', type: 'Texto' as QuestionType, options: [] } },
+      { id: prevAccordions.length + 1, expanded: false, question: { text: '', type: 'Texto' as QuestionType, options: [] as NewQuestionOption[] } },
     ]);
   };
 
@@ -62,12 +63,13 @@ const CreateSurveyForm: React.FC = () => {
     setAccordions((prevAccordions) => prevAccordions.filter((accordion) => accordion.id !== id));
   };
 
-  const createSurvey = () => {
+  const createNewSurvey = () => {
     const survey: NewSurvey = {
       ...formData,
       questions: accordions.map((accordion) => accordion.question)
     };
-    
+    createSurvey(survey);
+    console.log(survey);
     // Lógica para crear la encuesta
     console.log('Encuesta creada:', accordions);
   };
@@ -77,7 +79,7 @@ const CreateSurveyForm: React.FC = () => {
       <h2 className='text-2xl font-bold mb-5'>Nueva Encuesta</h2>
       <div className='flex justify-center items-center'>
         <div className='w-11/12 bg-white p-8 rounded-lg shadow-xl'>
-          <form onSubmit={createSurvey}>
+          <form onSubmit={createNewSurvey}>
             {/* Survey Title */}
             <div className='mb-6'>
               <label className="block text-gray-600 mb-2">Título</label>

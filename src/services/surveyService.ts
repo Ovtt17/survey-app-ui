@@ -1,4 +1,5 @@
 import { NewSurvey, Survey } from "../types/survey";
+import { getToken } from "../utils/auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys`;
 
@@ -8,15 +9,16 @@ export const createSurvey = async (survey: NewSurvey): Promise<Survey> => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${getToken()}`
       },
-      body: JSON.stringify(survey) // Enviar los datos del survey en el cuerpo de la solicitud
+      body: JSON.stringify(survey)
     });
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
-    const newSurvey: Survey = await response.json();
-    return newSurvey;
+    const surveyCreated: Survey = await response.json();
+    return surveyCreated;
   } catch (error) {
     console.error('Error creating survey:', error);
     throw error;

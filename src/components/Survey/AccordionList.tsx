@@ -1,9 +1,8 @@
 import React from 'react';
-import Accordion, { AccordionSlots } from '@mui/material/Accordion';
+import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Button from '@mui/material/Button';
-import Fade from '@mui/material/Fade';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -42,8 +41,6 @@ const AccordionList: React.FC<AccordionListProps> = ({
           key={accordion.id}
           expanded={accordion.expanded}
           onChange={handleExpansion(accordion.id)}
-          slots={{ transition: Fade as AccordionSlots['transition'] }}
-          slotProps={{ transition: { timeout: 400 } }}
           sx={{
             '& .MuiAccordion-region': { height: accordion.expanded ? 'auto' : 0 },
             '& .MuiAccordionDetails-root': { display: accordion.expanded ? 'block' : 'none' },
