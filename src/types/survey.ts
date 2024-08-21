@@ -1,3 +1,5 @@
+import { NewQuestion } from "./question";
+
 export interface Survey {
   id: number;
   title: string;
@@ -12,7 +14,5 @@ export interface NewSurvey {
   title: string;
   description: string;
   creatorId: number;
-  creator: string;
-  rating: number;
-  creationDate?: string;
+  questions: NewQuestion[];
 }

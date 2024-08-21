@@ -5,13 +5,13 @@ import MenuItem from '@mui/material/MenuItem';
 import { SelectChangeEvent } from '@mui/material/Select';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { Question } from '../../types/question';
+import { NewQuestion } from '../../types/question';
 import OptionList from './OptionList';
 
 interface AccordionDetailsContentProps {
-  question: Question;
+  question: NewQuestion;
   onTextChange: (value: string) => void;
-  onTypeChange: (event: SelectChangeEvent<Question['type']>) => void;
+  onTypeChange: (event: SelectChangeEvent<NewQuestion['type']>) => void;
 }
 
 const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ question, onTextChange, onTypeChange }) => {

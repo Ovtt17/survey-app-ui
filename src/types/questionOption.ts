@@ -3,3 +3,8 @@ export interface QuestionOption {
   questionId: number;
   text: string;
 }
+
+export interface NewQuestionOption {
+  text: string;
+  isCorrect?: boolean;
+}

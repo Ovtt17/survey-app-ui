@@ -2,18 +2,29 @@ import Button from '@mui/material/Button';
 import { SelectChangeEvent } from '@mui/material/Select';
 import React, { useState } from 'react';
 import AccordionList from './AccordionList';
-import { Question } from '../../types/question';
+import { NewQuestion, Question } from '../../types/question';
+import { QuestionType } from '../../types/questionType';
+import { NewSurvey } from '../../types/survey';
 
 interface AccordionState {
   id: number;
   expanded: boolean;
-  question: Question;
+  question: NewQuestion;
 }
 
 const CreateSurveyForm: React.FC = () => {
   const [accordions, setAccordions] = useState<AccordionState[]>([
-    { id: 1, expanded: false, question: { id: 1, surveyId: 1, text: '', type: 'Texto' as Question['type'] } }
+    { id: 1, expanded: false, question: { text: '', type: 'Texto' as QuestionType, options: [] } }
   ]);
+
+  const [formData, setFormData] = useState<NewSurvey>(
+    {
+      title: '',
+      description: '',
+      creatorId: 1,
+      questions: []
+    }
+  );
 
   const handleExpansion = (panelId: number) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
     setAccordions((prevAccordions) =>
@@ -43,7 +54,7 @@ const CreateSurveyForm: React.FC = () => {
   const addAccordion = () => {
     setAccordions((prevAccordions) => [
       ...prevAccordions,
-      { id: prevAccordions.length + 1, expanded: false, question: { id: prevAccordions.length + 1, surveyId: 1, text: '', type: 'Texto' as Question['type'] } },
+      { id: prevAccordions.length + 1, expanded: false, question: { text: '', type: 'Texto' as QuestionType, options: [] } },
     ]);
   };
 
@@ -52,6 +63,11 @@ const CreateSurveyForm: React.FC = () => {
   };
 
   const createSurvey = () => {
+    const survey: NewSurvey = {
+      ...formData,
+      questions: accordions.map((accordion) => accordion.question)
+    };
+    
     // Lógica para crear la encuesta
     console.log('Encuesta creada:', accordions);
   };
@@ -68,6 +84,8 @@ const CreateSurveyForm: React.FC = () => {
               <input
                 type="text"
                 name="Title"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 placeholder="Título de la Encuesta"
                 className="w-full border border-gray-300 rounded-lg p-3"
               />
@@ -79,6 +97,8 @@ const CreateSurveyForm: React.FC = () => {
               <input
                 type="text"
                 name="Description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="Descripción de la Encuesta"
                 className="w-full border border-gray-300 rounded-lg p-3"
               />
