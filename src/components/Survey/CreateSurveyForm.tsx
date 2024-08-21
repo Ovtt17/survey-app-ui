@@ -69,9 +69,6 @@ const CreateSurveyForm: React.FC = () => {
       questions: accordions.map((accordion) => accordion.question)
     };
     createSurvey(survey);
-    console.log(survey);
-    // Lógica para crear la encuesta
-    console.log('Encuesta creada:', accordions);
   };
 
   return (

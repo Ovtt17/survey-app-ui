@@ -1,13 +1,46 @@
-import { FC, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getSurvey } from '../../services/surveyService';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
+import CircularProgress from '@mui/material/CircularProgress';
+import Alert from '@mui/material/Alert';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import Button from '@mui/material/Button';
 import { Survey } from '../../types/survey';
+import { getSurvey } from '../../services/surveyService';
+import { Answer } from '../../types/answer';
 
-const AnswerSurvey: FC = () => {
+const AnswerSurvey = () => {
   const { id } = useParams<{ id: string }>();
   const [survey, setSurvey] = useState<Survey | null>(null);
+  const [answers, setAnswers] = useState<Answer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+
+  const handleAnswerChange = (questionId: number, answer: Answer) => {
+    setAnswers((prevAnswers) => {
+      const existingAnswerIndex = prevAnswers.findIndex(
+        (a) => a.questionId === questionId
+      );
+      if (existingAnswerIndex !== -1) {
+        const updatedAnswers = [...prevAnswers];
+        updatedAnswers[existingAnswerIndex] = answer;
+        return updatedAnswers;
+      } else {
+        return [...prevAnswers, answer];
+      }
+    });
+  };
+
+  const handleSubmit = () => {
+    console.log('Submitting answers:', answers);
+    
+  };
 
   useEffect(() => {
     const fetchSurvey = async () => {
@@ -32,37 +65,90 @@ const AnswerSurvey: FC = () => {
   }, [id]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <Container>
+        <CircularProgress />
+      </Container>
+    );
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <Container>
+        <Alert severity="error">{error}</Alert>
+      </Container>
+    );
   }
 
   if (!survey) {
-    return <div>No survey found</div>;
+    return (
+      <Container>
+        <Alert severity="warning">No survey found</Alert>
+      </Container>
+    );
   }
 
   return (
-    <div>
-      <h1>{survey.title}</h1>
-      <p>{survey.description}</p>
-      <p>Creator: {survey.creator.firstName}</p>
-      <p>Rating: {survey.rating}</p>
-      {survey.creationDate && <p>Creation Date: {survey.creationDate}</p>}
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        {survey.title}
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        {survey.description}
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        <b>Creator:</b> {survey.creator.firstName} {survey.creator.lastName}
+      </Typography>
+      <Typography variant="subtitle1" gutterBottom>
+        <b>Rating:</b> {survey.rating}
+      </Typography>
+      {survey.creationDate && (
+        <Typography variant="subtitle1" gutterBottom>
+          <b>Creation Date:</b> {survey.creationDate}
+        </Typography>
+      )}
       <div>
-        {survey.questions.map((question, qIndex) => (
-          <div className='mt-5' key={qIndex}>
-            <h3>{question.text}</h3>
-            <ul>
-              {question.options?.map((option, oIndex) => (
-                <li key={oIndex}>{option.text}</li>
-              ))}
-            </ul>
-          </div>
+        {survey.questions.map((question) => (
+          <Paper
+            key={question.id}
+            elevation={3}
+            style={{ margin: '20px 0', padding: '20px' }}>
+            <FormControl component="fieldset">
+              <FormLabel component="legend">
+                <Typography variant="h6" gutterBottom>
+                  {question.text}
+                </Typography>
+              </FormLabel>
+              <RadioGroup>
+                {question.options?.map((option) => (
+                  <FormControlLabel
+                    key={option.id}
+                    value={option.id}
+                    control={
+                      <Radio
+                        checked={answers.some(
+                          (a) => a.questionId === question.id && a.answerText === option.text
+                        )}
+                        onChange={() =>
+                          handleAnswerChange(question.id, { questionId: question.id, answerText: option.text })
+                        }
+                      />
+                    }
+                    label={option.text}
+                  />
+                ))}
+              </RadioGroup>
+            </FormControl>
+          </Paper>
         ))}
       </div>
-    </div>
+
+      <div>
+        <Button onClick={handleSubmit}>
+          Submit
+        </Button>
+      </div>
+    </Container>
   );
 }
 
