@@ -27,7 +27,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onAnswerSurvey, onViewR
         title="Woman holding a mug"
       >
       </div>
-      <div className="border-r border-b border-l border-gray-400 lg:border-l-0 lg:border-t lg:border-gray-400 bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+      <div className="h-72 shadow-xl bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
         <div className="mb-8">
           <p className="text-sm text-gray-600 flex items-center">
             <svg className="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -36,7 +36,9 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onAnswerSurvey, onViewR
             Members only
           </p>
           <div className="text-gray-900 font-bold text-xl mb-2">{survey.title}</div>
-          <p className="text-gray-700 text-base">{survey.description}</p>
+          <p className="text-gray-700 text-base overflow-hidden" style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
+            {survey.description}
+          </p>
         </div>
         <div className="flex items-center">
           <img className="w-10 h-10 rounded-full mr-4" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt={`Avatar of ${survey.creator}`} />
