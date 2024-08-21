@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
@@ -17,11 +17,13 @@ import { NewAnswer } from '../../types/answer';
 import { createAnswer } from '../../services/answerService';
 
 const AnswerSurvey = () => {
+  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [survey, setSurvey] = useState<Survey | null>(null);
   const [answers, setAnswers] = useState<NewAnswer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<boolean>(false);
 
   const handleAnswerChange = (questionId: number, answer: NewAnswer) => {
     setAnswers((prevAnswers) => {
@@ -38,18 +40,15 @@ const AnswerSurvey = () => {
     });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
-      answers.map(
-        (a) =>
-          createAnswer(a)
-      );
+      await Promise.all(answers.map((a) => createAnswer(a)));
+      setSuccess(true);
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
     } catch {
-      return (
-        <Container>
-          <Alert severity="warning">Error al responder la encuesta.</Alert>
-        </Container>
-      );
+      setError('Error al responder la encuesta.');
     }
   };
 
@@ -101,6 +100,8 @@ const AnswerSurvey = () => {
 
   return (
     <Container>
+      {success && <Alert severity="success">Encuesta respondida correctamente.</Alert>}
+      {error && <Alert severity="warning">{error}</Alert>}
       <Typography variant="h4" gutterBottom>
         {survey.title}
       </Typography>
@@ -126,7 +127,7 @@ const AnswerSurvey = () => {
             style={{ margin: '20px 0', padding: '20px' }}>
             <FormControl component="fieldset">
               <FormLabel component="legend">
-                <Typography variant="h6" gutterBottom>
+                <Typography variant="h6" gutterBottom style={{ color: 'blue'}}>
                   {question.text}
                 </Typography>
               </FormLabel>
@@ -141,7 +142,7 @@ const AnswerSurvey = () => {
                           (a) => a.questionId === question.id && a.answerText === option.text
                         )}
                         onChange={() =>
-                          handleAnswerChange(question.id, { questionId: question.id, answerText: option.text })
+                          handleAnswerChange(question.id, { questionId: question.id, surveyId: question.surveyId, answerText: option.text })
                         }
                       />
                     }
