@@ -1,4 +1,4 @@
-import { NewQuestionOption } from './questionOption';
+import { NewQuestionOption, QuestionOption } from './questionOption';
 import { QuestionType } from './questionType';
 
 export interface Question {
@@ -6,6 +6,7 @@ export interface Question {
   surveyId: number;
   text: string;
   type: QuestionType;
+  options?: QuestionOption[];
 }
 
 export interface NewQuestion {

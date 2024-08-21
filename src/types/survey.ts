@@ -1,4 +1,4 @@
-import { NewQuestion } from "./question";
+import { NewQuestion, Question } from "./question";
 import { User } from "./user";
 
 export interface Survey {
@@ -8,6 +8,7 @@ export interface Survey {
   creator: User;
   rating: number;
   creationDate?: string;
+  questions: Question[];
 }
 
 export interface NewSurvey {
