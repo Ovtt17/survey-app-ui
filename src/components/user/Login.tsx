@@ -13,11 +13,11 @@ const Login = () => {
     event.preventDefault();
 
     const formData = new FormData(event.currentTarget);
-    const email = formData.get('email') as string;
+    const usernameOrEmail = formData.get('usernameOrEmail') as string;
     const password = formData.get('password') as string;
 
     try {
-      const result = await login(email, password);
+      const result = await login(usernameOrEmail, password);
       setAuth(result.token);
       navigate('/');
     } catch (error) {
@@ -52,16 +52,16 @@ const Login = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 pb-2">
-                Email address
+                Email / Username
               </label>
               <TextField
-                id="email"
-                label="Email"
+                id="usernameOrEmail"
+                label="Email / Username"
                 variant="outlined"
-                name="email"
-                type="email"
+                name="usernameOrEmail"
+                type="text"
                 required
-                autoComplete="email"
+                autoComplete="username"
                 className="w-full"
               />
             </div>

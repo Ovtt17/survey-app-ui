@@ -1,7 +1,7 @@
 const BASE_URL = `${import.meta.env.VITE_API_URL}/auth/authenticate`;
 
-export const login = async (email: string, password: string) => {
-  const data = { email, password };
+export const login = async (usernameOrEmail: string, password: string) => {
+  const data = { usernameOrEmail, password };
 
   try {
     const response = await fetch(BASE_URL, {
