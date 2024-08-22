@@ -7,12 +7,9 @@ import Rating from '@mui/material/Rating';
 
 interface SurveyCardProps {
   survey: Survey;
-  onAnswerSurvey: () => void;
-  onViewReviews: () => void;
-  onRateSurvey: (rating: number) => void;
 }
 
-const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onAnswerSurvey, onViewReviews, onRateSurvey }) => {
+const SurveyCard: React.FC<SurveyCardProps> = ({ survey}) => {
   const [openRatingModal, setOpenRatingModal] = React.useState(false);
   const [userRating, setUserRating] = React.useState(survey.rating);
 
@@ -21,7 +18,6 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onAnswerSurvey, onViewR
 
   const handleRate = (rating: number) => {
     setUserRating(rating);
-    onRateSurvey(rating);
   };
 
   const creatorFullName = `${survey.creator.firstName} ${survey.creator.lastName}`;
@@ -69,7 +65,6 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onAnswerSurvey, onViewR
             <Button
               variant="contained"
               color="primary"
-              onClick={onAnswerSurvey}
               style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
             >
               Responder Encuesta
@@ -78,7 +73,6 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onAnswerSurvey, onViewR
           <Button
             variant="contained"
             color="secondary"
-            onClick={onViewReviews}
             style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
           >
             Ver Reseñas

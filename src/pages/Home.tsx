@@ -15,20 +15,6 @@ const Home = () => {
     fetchSurveys();
   }, []);
 
-  const handleAnswerSurvey = () => {
-    console.log("Responder Encuesta");
-  };
-
-  const handleViewReviews = () => {
-    console.log("Ver Reseñas");
-  };
-
-  const handleRateSurvey = () => {
-    console.log("Valorar");
-  };
-
-
-
   return (
     <div className="App flex flex-col items-center">
       <div className="flex flex-wrap justify-start">
@@ -36,9 +22,6 @@ const Home = () => {
           <div key={index} className="w-full sm:w-1/2 p-2">
             <SurveyCard
               survey={survey}
-              onAnswerSurvey={handleAnswerSurvey}
-              onViewReviews={handleViewReviews}
-              onRateSurvey={handleRateSurvey}
             />
           </div>
         ))}
