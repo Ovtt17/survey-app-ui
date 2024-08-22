@@ -4,12 +4,16 @@ import { Link } from "react-router-dom";
 import { Survey } from "../../types/survey";
 import RatingModal from './RatingModal';
 import Rating from '@mui/material/Rating';
+import IconButton from "@mui/material/IconButton";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 interface SurveyCardProps {
   survey: Survey;
+  isOwner?: boolean;
 }
 
-const SurveyCard: React.FC<SurveyCardProps> = ({ survey}) => {
+const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner }) => {
   const [openRatingModal, setOpenRatingModal] = React.useState(false);
   const [userRating, setUserRating] = React.useState(survey.rating);
 
@@ -20,6 +24,14 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey}) => {
     setUserRating(rating);
   };
 
+  const handleEdit = (id: number) => {
+
+  }
+
+  const handleDelete = (id: number) => {
+
+  }
+
   const creatorFullName = `${survey.creator.firstName} ${survey.creator.lastName}`;
 
   return (
@@ -29,8 +41,18 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey}) => {
         title="Woman holding a mug"
       >
       </div>
-      <div className="h-72 shadow-xl bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
-        <div className="mb-8">
+      <div className="relative h-72 shadow-xl bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+        {isOwner && (
+          <div className="absolute top-2 right-1 flex space-x-2">
+            <IconButton onClick={() => handleEdit(survey.id)} aria-label="edit" size="small">
+              <EditIcon fontSize="small" />
+            </IconButton>
+            <IconButton onClick={() => handleDelete(survey.id)} aria-label="delete" size="small">
+              <DeleteIcon fontSize="small" />
+            </IconButton>
+          </div>
+        )}
+        <div className="mb-6 mt-2">
           <p className="text-sm text-gray-600 flex items-center">
             <svg className="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
               <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />

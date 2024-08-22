@@ -4,6 +4,7 @@ import Home from '../pages/Home';
 import AnswerSurvey from '../components/survey/AnswerSurvey';
 import CreateSurveyForm from '../components/survey/CreateSurveyForm';
 import Login from '../components/user/Login';
+import UserSurveys from '../components/user/UserSurveys';
 
 const AppRoutes = () => {
   return (
@@ -12,7 +13,8 @@ const AppRoutes = () => {
       <Route path='/login' element={ <Login /> } />
       <Route path="/surveys" element={<Home />} />
       <Route path='/surveys/create' element={ <CreateSurveyForm /> } />
-      <Route path="/surveys/:id" element={<AnswerSurvey /> } />
+      <Route path="/surveys/:id" element={<AnswerSurvey />} />
+      <Route path="/:username/surveys" element={ <UserSurveys /> } />
     </Routes>
   );
 };

@@ -16,7 +16,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navigation() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -104,17 +104,22 @@ export default function Navigation() {
                   <>
                     <MenuItem>
                       <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                        Your Profile
+                        Perfil
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link to={`/${user?.username}/surveys`} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                        Mis Encuestas
                       </Link>
                     </MenuItem>
                     <MenuItem>
                       <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                        Settings
+                        Configuración
                       </Link>
                     </MenuItem>
                     <MenuItem>
                       <Link to="/" onClick={logout} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                        Sign out
+                        Cerrar Sesión
                       </Link>
                     </MenuItem>
                   </>
