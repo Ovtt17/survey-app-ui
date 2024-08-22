@@ -11,7 +11,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Radio from '@mui/material/Radio';
 import Button from '@mui/material/Button';
 import { Survey } from '../../types/survey';
-import { getSurvey } from '../../services/surveyService';
+import { getSurveyById } from '../../services/surveyService';
 import { NewAnswer } from '../../types/answer';
 import { createAnswer } from '../../services/answerService';
 import Rating from '@mui/material/Rating';
@@ -83,7 +83,7 @@ const AnswerSurvey = () => {
       }
 
       try {
-        const fetchedSurvey = await getSurvey(id);
+        const fetchedSurvey = await getSurveyById(id);
         setSurvey(fetchedSurvey);
       } catch (error) {
         setError('Error fetching survey');

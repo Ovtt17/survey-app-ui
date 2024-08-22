@@ -46,7 +46,7 @@ export const getSurveys = async (): Promise<Survey[]> => {
   }
 }
 
-export const getSurvey = async (id: string): Promise<Survey> => {
+export const getSurveyById = async (id: string): Promise<Survey> => {
   try {
     const response = await fetch(`${BASE_URL}/${id}`, {
       method: 'GET',
