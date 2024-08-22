@@ -1,25 +1,31 @@
 import React from "react";
 import Button from '@mui/material/Button';
-import { Modal, Rating, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { Survey } from "../../types/survey";
+import RatingModal from './RatingModal';
+import Rating from '@mui/material/Rating';
 
 interface SurveyCardProps {
   survey: Survey;
   onAnswerSurvey: () => void;
   onViewReviews: () => void;
-  onRateSurvey: () => void;
+  onRateSurvey: (rating: number) => void;
 }
 
 const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onAnswerSurvey, onViewReviews, onRateSurvey }) => {
-  const [openRatingModel, setOpenRatingModel] = React.useState(false);
+  const [openRatingModal, setOpenRatingModal] = React.useState(false);
   const [userRating, setUserRating] = React.useState(survey.rating);
 
-  const handleOpen = () => setOpenRatingModel(true);
-  const handleClose = () => setOpenRatingModel(false);
+  const handleOpen = () => setOpenRatingModal(true);
+  const handleClose = () => setOpenRatingModal(false);
+
+  const handleRate = (rating: number) => {
+    setUserRating(rating);
+    onRateSurvey(rating);
+  };
 
   const creatorFullName = `${survey.creator.firstName} ${survey.creator.lastName}`;
-  
+
   return (
     <div className="max-w-sm w-full lg:max-w-full lg:flex mb-5">
       <div className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
@@ -87,38 +93,12 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onAnswerSurvey, onViewR
           </Button>
         </div>
       </div>
-      <Modal
-        open={openRatingModel}
+      <RatingModal
+        open={openRatingModal}
         onClose={handleClose}
-        aria-labelledby="modal-title"
-        aria-describedby="modal-description"
-      >
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white border-2 border-black shadow-24 p-10">
-          <Typography id="modal-title" variant="h6" component="h2">
-            Valorar
-          </Typography>
-          <Rating
-            name="user-rating"
-            value={userRating}
-            onChange={(_, newValue) => {
-              setUserRating(newValue || 2.5);
-            }}
-            precision={0.5}
-          />
-          <div className="mt-4">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => {
-                onRateSurvey();
-                handleClose();
-              }}
-            >
-              Guardar
-            </Button>
-          </div>
-        </div>
-      </Modal>
+        userRating={userRating}
+        onRate={handleRate}
+      />
     </div>
   );
 };
