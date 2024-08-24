@@ -1,4 +1,4 @@
 export enum QuestionType {
-  OPCION_UNICA = "Opción Única",
+  SELECCION_UNICA = "Selección Única",
   TEXTO = "Texto"
 }

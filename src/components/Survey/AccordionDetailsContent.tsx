@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -7,6 +7,8 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { Question } from '../../types/question';
 import OptionList from './OptionList';
+import { QuestionType } from '../../types/questionType';
+import { QuestionOption } from '../../types/questionOption';
 
 interface AccordionDetailsContentProps {
   question: Question;
@@ -16,10 +18,20 @@ interface AccordionDetailsContentProps {
 
 const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ question, onTextChange, onTypeChange }) => {
   const [isCorrect, setIsCorrect] = useState(false);
+  const [options, setOptions] = useState<QuestionOption[]>(question.options || []);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsCorrect(event.target.checked);
   };
+
+  const handleOptionsChange = (newOptions: QuestionOption[]) => {
+    setOptions(newOptions);
+    question.options = newOptions;
+  };
+
+  useEffect(() => {
+    setOptions(question.options || []);
+  }, [question]);
 
   return (
     <div>
@@ -41,8 +53,8 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
           displayEmpty
           fullWidth
         >
-          <MenuItem value="Texto">Texto</MenuItem>
-          <MenuItem value="Opción Única">Opción Única</MenuItem>
+          <MenuItem value={QuestionType.TEXTO}>{QuestionType.TEXTO}</MenuItem>
+          <MenuItem value={QuestionType.SELECCION_UNICA}>{QuestionType.SELECCION_UNICA}</MenuItem>
         </Select>
       </div>
       <div className='my-6'>
@@ -57,7 +69,12 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
           label="¿Las respuestas deben ser correctas?"
         />
       </div>
-      <OptionList isCorrect={isCorrect} />
+      <OptionList
+        options={options}
+        isCorrect={isCorrect}
+        questionType={question.type}
+        onOptionsChange={handleOptionsChange}
+      />
     </div>
   );
 };

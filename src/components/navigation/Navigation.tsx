@@ -1,8 +1,10 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { Button } from '@mui/material'
-import { Add } from '@mui/icons-material';
+import Button from '@mui/material/Button';
+import Add from '@mui/icons-material/Add';
 import { Link } from 'react-router-dom';
+import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
+import { useAuthContext } from '../../context/AuthContext';
 
 
 const navigation = [
@@ -14,6 +16,8 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navigation() {
+  const { isAuthenticated, logout, user } = useAuthContext();
+
   return (
     <Disclosure as="nav" className="bg-gray-800">
       <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -28,13 +32,15 @@ export default function Navigation() {
             </DisclosureButton>
           </div>
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-            <div className="flex flex-shrink-0 items-center">
-              <img
-                alt="Your Company"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
-                className="h-8 w-auto"
-              />
-            </div>
+            <Link to={'/'}>
+              <div className="flex flex-shrink-0 items-center">
+                <img
+                  alt="Your Company"
+                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                  className="h-8 w-auto"
+                />
+              </div>
+            </Link>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
@@ -76,32 +82,54 @@ export default function Navigation() {
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
-                  <img
-                    alt=""
-                    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                    className="h-8 w-8 rounded-full"
-                  />
+                  {isAuthenticated ? (
+                    <img
+                      alt=""
+                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      className="h-8 w-8 rounded-full"
+                    />
+                  ) : (
+                    <span className="h-8 w-8 rounded-full flex items-center justify-center text-white">
+                      <AccountCircleRoundedIcon />
+                    </span>
+
+                  )}
                 </MenuButton>
               </div>
               <MenuItems
                 transition
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
               >
-                <MenuItem>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                    Your Profile
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                    Settings
-                  </a>
-                </MenuItem>
-                <MenuItem>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                    Sign out
-                  </a>
-                </MenuItem>
+                {isAuthenticated ? (
+                  <>
+                    <MenuItem>
+                      <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                        Perfil
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link to={`/${user?.username}/surveys`} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                        Mis Encuestas
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                        Configuración
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
+                      <Link to="/" onClick={logout} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                        Cerrar Sesión
+                      </Link>
+                    </MenuItem>
+                  </>
+                ) : (
+                  <MenuItem>
+                    <Link to="/login" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                      Sign In
+                    </Link>
+                  </MenuItem>
+                )}
               </MenuItems>
             </Menu>
           </div>

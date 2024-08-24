@@ -1,9 +1,12 @@
+import { Question } from "./question";
+import { User } from "./user";
+
 export interface Survey {
-  id: number;
+  id?: number;
   title: string;
   description: string;
-  creatorId: number;
-  creator: string;
-  rating: number;
+  creator?: User;
+  rating?: number;
   creationDate?: string;
+  questions: Question[];
 }

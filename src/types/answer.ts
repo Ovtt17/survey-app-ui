@@ -1,7 +1,6 @@
 export interface Answer {
-  id: number;
-  userId: number;
+  id?: number;
+  surveyId: number;
   questionId: number;
   answerText: string;
-  answerOptionId?: number;
 }
