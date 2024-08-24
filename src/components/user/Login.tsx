@@ -51,9 +51,6 @@ const Login = () => {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 pb-2">
-                Email / Username
-              </label>
               <TextField
                 id="usernameOrEmail"
                 label="Email / Username"
@@ -67,10 +64,7 @@ const Login = () => {
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900 pb-2">
-                  Contraseña
-                </label>
+              <div className="flex justify-end">
                 <div className="text-sm">
                   <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
                     Olvidaste la Contraseña?
@@ -100,9 +94,9 @@ const Login = () => {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{' '}
+            No tienes cuenta?{' '}
             <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-              Start a 14 day free trial
+              Regístrate
             </a>
           </p>
         </div>
