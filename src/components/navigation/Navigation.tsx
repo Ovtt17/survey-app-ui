@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
 import { Link } from 'react-router-dom';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../../context/AuthContext';
 
 
 const navigation = [
@@ -16,7 +16,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navigation() {
-  const { isAuthenticated, logout, user } = useAuth();
+  const { isAuthenticated, logout, user } = useAuthContext();
 
   return (
     <Disclosure as="nav" className="bg-gray-800">

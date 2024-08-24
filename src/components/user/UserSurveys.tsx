@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { getSurveyByUser } from "../../services/surveyService";
 import { Survey } from "../../types/survey";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
 import SurveyCard from "../survey/SurveyCard";
+import { useAuthContext } from "../../context/AuthContext";
 
 const UserSurveys = () => {
-  const { username } = useParams<{ username: string }>();
+  const { user } = useAuthContext();
   const [surveys, setSurveys] = useState<Survey[] | null>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -50,7 +50,7 @@ const UserSurveys = () => {
           <div className="App flex flex-col items-center">
             <div className="flex flex-wrap justify-start">
               {surveys?.map((survey, index) => {
-                const isOwner = survey.creator.username === username;
+                const isOwner = survey.creator?.username === user?.username;
                 return (
                   <div key={index} className="w-full sm:w-1/2 p-2">
                     <SurveyCard survey={survey} isOwner={isOwner} />

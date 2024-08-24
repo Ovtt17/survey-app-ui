@@ -3,11 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { login } from "../../services/authService";
 import TextField from '@mui/material/TextField';
 import { getToken } from '../../utils/auth';
-import { useAuth } from '../../context/AuthContext';
+import { useAuthContext } from '../../context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login: setAuth } = useAuth();
+  const { login: setAuth } = useAuthContext();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
