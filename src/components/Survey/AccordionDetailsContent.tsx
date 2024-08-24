@@ -18,7 +18,7 @@ interface AccordionDetailsContentProps {
 
 const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ question, onTextChange, onTypeChange }) => {
   const [isCorrect, setIsCorrect] = useState(false);
-  const [_options, setOptions] = useState<QuestionOption[]>(question.options || []);
+  const [options, setOptions] = useState<QuestionOption[]>(question.options || []);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsCorrect(event.target.checked);
@@ -70,6 +70,7 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
         />
       </div>
       <OptionList
+        options={options}
         isCorrect={isCorrect}
         questionType={question.type}
         onOptionsChange={handleOptionsChange}

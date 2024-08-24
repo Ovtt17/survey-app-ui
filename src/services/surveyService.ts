@@ -27,6 +27,24 @@ export const createSurvey = async (survey: Survey): Promise<Survey> => {
   }
 }
 
+export const updateSurvey = async (survey: Survey): Promise<Survey> => {
+  try {
+    const response = await fetch(`${BASE_URL}/${survey.id}`, {
+      method: 'PUT',
+      headers: getHeaders(),
+      body: JSON.stringify(survey)
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    const updatedSurvey: Survey = await response.json();
+    return updatedSurvey;
+  } catch (error) {
+    console.error('Error updating survey:', error);
+    throw error;
+  }
+}
+
 export const getSurveys = async (): Promise<Survey[]> => {
   try {
     const response = await fetch(BASE_URL, {

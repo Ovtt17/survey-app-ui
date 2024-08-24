@@ -11,7 +11,7 @@ interface EditContextProps {
 const EditSurveyContext = createContext<EditContextProps | undefined>(undefined);
 
 export const EditProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isEditable, setIsEditable] = useState(true);
+  const [isEditable, setIsEditable] = useState(false);
   const [survey, setSurvey] = useState<Survey | null>(null);
 
   return (

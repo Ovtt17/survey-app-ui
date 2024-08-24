@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Checkbox from '@mui/material/Checkbox';
@@ -9,31 +9,28 @@ import { QuestionType } from '../../types/questionType';
 import { QuestionOption } from '../../types/questionOption';
 
 interface OptionListProps {
+  options: QuestionOption[];
+  onOptionsChange: (options: QuestionOption[]) => void;
   isCorrect: boolean;
   questionType: string;
-  onOptionsChange: (options: QuestionOption[]) => void;
 }
 
-const OptionList: React.FC<OptionListProps> = ({ isCorrect, questionType, onOptionsChange }) => {
+const OptionList: React.FC<OptionListProps> = ({ options, onOptionsChange, isCorrect, questionType,  }) => {
   const defaultOption: QuestionOption = { text: '', isCorrect: false };
-  const [options, setOptions] = useState<QuestionOption[]>([defaultOption]);
 
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];
     newOptions[index].text = value;
-    setOptions(newOptions);
     onOptionsChange(newOptions);
   };
 
   const handleAddOption = () => {
     const newOptions = [...options, defaultOption];
-    setOptions(newOptions);
     onOptionsChange(newOptions);
   };
 
   const handleRemoveOption = (index: number) => {
     const newOptions = options.filter((_, i) => i !== index);
-    setOptions(newOptions);
     onOptionsChange(newOptions);
   };
 
@@ -42,7 +39,6 @@ const OptionList: React.FC<OptionListProps> = ({ isCorrect, questionType, onOpti
       ...option,
       isCorrect: i === index ? checked : false,
     }));
-    setOptions(newOptions);
     onOptionsChange(newOptions);
   };
 
