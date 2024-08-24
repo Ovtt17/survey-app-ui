@@ -1,31 +1,60 @@
 import Button from '@mui/material/Button';
 import { SelectChangeEvent } from '@mui/material/Select';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AccordionList from './AccordionList';
-import { NewQuestion, Question } from '../../types/question';
+import { Question } from '../../types/question';
 import { QuestionType } from '../../types/questionType';
-import { NewSurvey } from '../../types/survey';
-import { createSurvey } from '../../services/surveyService';
-import { NewQuestionOption } from '../../types/questionOption';
+import { Survey } from '../../types/survey';
+import { createSurvey, getSurveyById } from '../../services/surveyService';
+import { QuestionOption } from '../../types/questionOption';
+import { useParams } from 'react-router-dom';
+import { useEditSurveyContext } from '../../context/EditSurveyContext';
 
 interface AccordionState {
   id: number;
   expanded: boolean;
-  question: NewQuestion;
+  question: Question;
 }
 
-const CreateSurveyForm: React.FC = () => {
+const CreateSurveyForm = () => {
+  const { isEditable } = useEditSurveyContext();
+  const { id } = useParams<{ id: string }>();
   const [accordions, setAccordions] = useState<AccordionState[]>([
-    { id: 1, expanded: false, question: { text: '', type: QuestionType.SELECCION_UNICA as QuestionType, options: [] as NewQuestionOption[] } }
+    { id: 1, expanded: false, question: { text: '', type: QuestionType.SELECCION_UNICA as QuestionType, options: [] as QuestionOption[] } }
   ]);
 
-  const [formData, setFormData] = useState<NewSurvey>(
+  const [formData, setFormData] = useState<Survey>(
     {
       title: '',
       description: '',
       questions: []
     }
   );
+
+  useEffect(() => {
+    if (isEditable && id) {
+      const fetchSurveyData = async () => {
+        try {
+          const surveyData = await getSurveyById(id);
+          setFormData(
+            {
+              title: surveyData.title,
+              description: surveyData.description,
+              questions: surveyData.questions
+            });
+          setAccordions(surveyData.questions.map((question: any, index: number) => ({
+            id: index + 1,
+            expanded: false,
+            question
+          })));
+        } catch (error) {
+          console.error('Error fetching survey data:', error);
+        }
+      };
+
+      fetchSurveyData();
+    }
+  }, [isEditable, id]);
 
   const handleExpansion = (panelId: number) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
     setAccordions((prevAccordions) =>
@@ -55,7 +84,7 @@ const CreateSurveyForm: React.FC = () => {
   const addAccordion = () => {
     setAccordions((prevAccordions) => [
       ...prevAccordions,
-      { id: prevAccordions.length + 1, expanded: false, question: { text: '', type: 'Texto' as QuestionType, options: [] as NewQuestionOption[] } },
+      { id: prevAccordions.length + 1, expanded: false, question: { text: '', type: 'Texto' as QuestionType, options: [] as QuestionOption[] } },
     ]);
   };
 
@@ -64,16 +93,20 @@ const CreateSurveyForm: React.FC = () => {
   };
 
   const createNewSurvey = () => {
-    const survey: NewSurvey = {
+    const survey: Survey = {
       ...formData,
       questions: accordions.map((accordion) => accordion.question)
     };
-    createSurvey(survey);
+    if (isEditable) {
+
+    } else {
+      createSurvey(survey);
+    }
   };
 
   return (
     <div>
-      <h2 className='text-2xl font-bold mb-5'>Nueva Encuesta</h2>
+      <h2 className='text-2xl font-bold mb-5'>{isEditable ? 'Editar Encuesta' : 'Crear Encuesta' }</h2>
       <div className='flex justify-center items-center'>
         <div className='w-11/12 bg-white p-8 rounded-lg shadow-xl'>
           <form onSubmit={createNewSurvey}>

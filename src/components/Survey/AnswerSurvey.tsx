@@ -12,7 +12,7 @@ import Radio from '@mui/material/Radio';
 import Button from '@mui/material/Button';
 import { Survey } from '../../types/survey';
 import { getSurveyById } from '../../services/surveyService';
-import { NewAnswer } from '../../types/answer';
+import { Answer } from '../../types/answer';
 import { createAnswer } from '../../services/answerService';
 import Rating from '@mui/material/Rating';
 import RatingModal from './RatingModal';
@@ -21,14 +21,14 @@ const AnswerSurvey = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const [survey, setSurvey] = useState<Survey | null>(null);
-  const [answers, setAnswers] = useState<NewAnswer[]>([]);
+  const [answers, setAnswers] = useState<Answer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<boolean>(false);
   const [unansweredQuestions, setUnansweredQuestions] = useState<number[]>([]);
   const [ratingModalOpen, setRatingModalOpen] = useState<boolean>(false);
 
-  const handleAnswerChange = (questionId: number, answer: NewAnswer) => {
+  const handleAnswerChange = (questionId: number, answer: Answer) => {
     setAnswers((prevAnswers) => {
       const existingAnswerIndex = prevAnswers.findIndex(
         (a) => a.questionId === questionId
@@ -50,7 +50,7 @@ const AnswerSurvey = () => {
         .map((question) => question.id);
 
       if (unanswered.length > 0) {
-        setUnansweredQuestions(unanswered);
+        setUnansweredQuestions(unanswered as number[]);
         setError('Por favor, responda todas las preguntas.');
         window.scrollTo(0, 0);
         return;
@@ -119,7 +119,7 @@ const AnswerSurvey = () => {
           <div className="flex items-center pb-5">
             <img className="w-10 h-10 rounded-full mr-4" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt={`Avatar of ${survey.creator}`} />
             <div className="text-sm">
-              <p className="text-gray-900">{survey.creator.firstName} {survey.creator.lastName}</p>
+              <p className="text-gray-900">{survey.creator?.firstName} {survey.creator?.lastName}</p>
               <div>
                 <span className=" text-gray-600 flex items-center">
                   Rating:
@@ -146,51 +146,52 @@ const AnswerSurvey = () => {
             </Typography>
           )}
           <div>
-            {survey.questions.map((question) => (
-              <div
-                className={`border rounded-lg shadow-md my-5 p-5 ${unansweredQuestions.includes(question.id) ? 'bg-red-100 border-red-500' : 'bg-slate-200'}`}
-                key={question.id}
-              >
-                <FormControl component="fieldset">
-                  <FormLabel component="legend">
-                    <Typography variant="h6" gutterBottom>
-                      {question.text}
-                    </Typography>
-                  </FormLabel>
-                  <RadioGroup>
-                    {question.options?.map((option) => (
-                      <FormControlLabel
-                        key={option.id}
-                        value={option.id}
-                        control={
-                          <Radio
-                            checked={answers.some(
-                              (a) => a.questionId === question.id && a.answerText === option.text
-                            )}
-                            onChange={() =>
-                              handleAnswerChange(question.id, { questionId: question.id, surveyId: survey.id, answerText: option.text })
-                            }
-                          />
-                        }
-                        label={option.text}
-                      />
-                    ))}
-                  </RadioGroup>
-                </FormControl>
-              </div>
-            ))}
+            {
+              survey && survey.questions && survey.questions.map((question) => (
+                <div
+                  className={`border rounded-lg shadow-md my-5 p-5 ${unansweredQuestions.includes(question.id || 0) ? 'bg-red-100 border-red-500' : 'bg-slate-200'}`}
+                  key={question.id}
+                >
+                  <FormControl component="fieldset">
+                    <FormLabel component="legend">
+                      <Typography variant="h6" gutterBottom>
+                        {question.text}
+                      </Typography>
+                    </FormLabel>
+                    <RadioGroup>
+                      {question.options?.map((option) => (
+                        <FormControlLabel
+                          key={option.id}
+                          value={option.id}
+                          control={
+                            <Radio
+                              checked={answers.some(
+                                (a) => a.questionId === question.id && a.answerText === option.text
+                              )}
+                              onChange={() =>
+                                handleAnswerChange(question.id || 0, { questionId: question.id || 0, surveyId: survey.id || 0, answerText: option.text })
+                              }
+                            />
+                          }
+                          label={option.text}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                </div>
+              ))}
           </div>
           <div className='flex justify-end items-end'>
             <Button variant='contained' color='success' onClick={handleSubmit}>
               ENVIAR
             </Button>
           </div>
-            <RatingModal
-              open={ratingModalOpen}
-              onClose={() => setRatingModalOpen(false)}
-              userRating={survey.rating || 0}
-              onRate={handleRatingSubmit}
-            />
+          <RatingModal
+            open={ratingModalOpen}
+            onClose={() => setRatingModalOpen(false)}
+            userRating={survey.rating || 0}
+            onRate={handleRatingSubmit}
+          />
         </>
       )}
     </Container>

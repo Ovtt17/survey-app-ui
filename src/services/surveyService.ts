@@ -1,4 +1,4 @@
-import { NewSurvey, Survey } from "../types/survey";
+import { Survey } from "../types/survey";
 import { getToken } from "../utils/auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys`;
@@ -9,7 +9,7 @@ const getHeaders = () => ({
   'Authorization': `Bearer ${getToken()}`
 });
 
-export const createSurvey = async (survey: NewSurvey): Promise<Survey> => {
+export const createSurvey = async (survey: Survey): Promise<Survey> => {
   try {
     const response = await fetch(BASE_URL, {
       method: 'POST',

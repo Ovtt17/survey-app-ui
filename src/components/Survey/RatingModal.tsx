@@ -4,7 +4,7 @@ import { Modal, Rating, Typography, Button } from "@mui/material";
 interface RatingModalProps {
   open: boolean;
   onClose: () => void;
-  userRating: number;
+  userRating?: number;
   onRate: (rating: number) => void;
 }
 
@@ -12,7 +12,7 @@ const RatingModal: React.FC<RatingModalProps> = ({ open, onClose, userRating, on
   const [localRating, setLocalRating] = React.useState(userRating);
 
   const handleSave = () => {
-    onRate(localRating);
+    onRate(localRating || 0);
     onClose();
   };
 

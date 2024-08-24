@@ -24,15 +24,11 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner }) => {
     setUserRating(rating);
   };
 
-  const handleEdit = (id: number) => {
-
+  const handleDelete = (id?: number) => {
+    console.log('Deleting survey with id:', id);
   }
 
-  const handleDelete = (id: number) => {
-
-  }
-
-  const creatorFullName = `${survey.creator.firstName} ${survey.creator.lastName}`;
+  const creatorFullName = `${survey.creator?.firstName} ${survey.creator?.lastName}`;
 
   return (
     <div className="max-w-sm w-full lg:max-w-full lg:flex mb-5">
@@ -44,9 +40,11 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner }) => {
       <div className="relative h-72 shadow-xl bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
         {isOwner && (
           <div className="absolute top-2 right-1 flex space-x-2">
-            <IconButton onClick={() => handleEdit(survey.id)} aria-label="edit" size="small">
-              <EditIcon fontSize="small" />
-            </IconButton>
+            <Link to={`/${survey.creator?.username}/surveys/${survey.id}`}>
+              <IconButton aria-label="edit" size="small">
+                <EditIcon fontSize="small" />
+              </IconButton>
+            </Link>
             <IconButton onClick={() => handleDelete(survey.id)} aria-label="delete" size="small">
               <DeleteIcon fontSize="small" />
             </IconButton>

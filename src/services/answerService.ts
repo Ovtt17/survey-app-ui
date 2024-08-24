@@ -1,9 +1,9 @@
-import { Answer, NewAnswer } from "../types/answer";
+import { Answer } from "../types/answer";
 import { getToken } from "../utils/auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys/answers`;
 
-export const createAnswer = async (answer: NewAnswer): Promise<NewAnswer> => {
+export const createAnswer = async (answer: Answer): Promise<Answer> => {
   try {
     const response = await fetch(BASE_URL, {
       method: 'POST',

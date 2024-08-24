@@ -6,17 +6,17 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Add from '@mui/icons-material/Add';
 import Remove from '@mui/icons-material/Remove';
 import { QuestionType } from '../../types/questionType';
-import { NewQuestionOption } from '../../types/questionOption';
+import { QuestionOption } from '../../types/questionOption';
 
 interface OptionListProps {
   isCorrect: boolean;
   questionType: string;
-  onOptionsChange: (options: NewQuestionOption[]) => void;
+  onOptionsChange: (options: QuestionOption[]) => void;
 }
 
 const OptionList: React.FC<OptionListProps> = ({ isCorrect, questionType, onOptionsChange }) => {
-  const defaultOption: NewQuestionOption = { text: '', isCorrect: false };
-  const [options, setOptions] = useState<NewQuestionOption[]>([defaultOption]);
+  const defaultOption: QuestionOption = { text: '', isCorrect: false };
+  const [options, setOptions] = useState<QuestionOption[]>([defaultOption]);
 
   const handleOptionChange = (index: number, value: string) => {
     const newOptions = [...options];

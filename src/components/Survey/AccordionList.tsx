@@ -8,20 +8,20 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AccordionDetailsContent from './AccordionDetailsContent';
-import { NewQuestion } from '../../types/question';
+import { Question } from '../../types/question';
 import { SelectChangeEvent } from '@mui/material/Select';
 
 interface AccordionState {
   id: number;
   expanded: boolean;
-  question: NewQuestion;
+  question: Question;
 }
 
 interface AccordionListProps {
   accordions: AccordionState[];
   handleExpansion: (panelId: number) => (_event: React.SyntheticEvent, isExpanded: boolean) => void;
   handleInputChange: (id: number, value: string) => void;
-  handleTypeChange: (id: number, event: SelectChangeEvent<NewQuestion['type']>) => void;
+  handleTypeChange: (id: number, event: SelectChangeEvent<Question['type']>) => void;
   addAccordion: () => void;
   removeAccordion: (id: number) => void;
 }
@@ -34,6 +34,7 @@ const AccordionList: React.FC<AccordionListProps> = ({
   addAccordion,
   removeAccordion,
 }) => {
+
   return (
     <div>
       {accordions.map((accordion, index) => (

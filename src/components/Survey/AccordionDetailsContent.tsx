@@ -5,26 +5,26 @@ import MenuItem from '@mui/material/MenuItem';
 import { SelectChangeEvent } from '@mui/material/Select';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { NewQuestion } from '../../types/question';
+import { Question } from '../../types/question';
 import OptionList from './OptionList';
 import { QuestionType } from '../../types/questionType';
-import { NewQuestionOption } from '../../types/questionOption';
+import { QuestionOption } from '../../types/questionOption';
 
 interface AccordionDetailsContentProps {
-  question: NewQuestion;
+  question: Question;
   onTextChange: (value: string) => void;
-  onTypeChange: (event: SelectChangeEvent<NewQuestion['type']>) => void;
+  onTypeChange: (event: SelectChangeEvent<Question['type']>) => void;
 }
 
 const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ question, onTextChange, onTypeChange }) => {
   const [isCorrect, setIsCorrect] = useState(false);
-  const [_options, setOptions] = useState<NewQuestionOption[]>(question.options || []);
+  const [_options, setOptions] = useState<QuestionOption[]>(question.options || []);
 
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsCorrect(event.target.checked);
   };
 
-  const handleOptionsChange = (newOptions: NewQuestionOption[]) => {
+  const handleOptionsChange = (newOptions: QuestionOption[]) => {
     setOptions(newOptions);
     question.options = newOptions;
   };
