@@ -27,6 +27,7 @@ const AnswerSurvey = () => {
   const [success, setSuccess] = useState<boolean>(false);
   const [unansweredQuestions, setUnansweredQuestions] = useState<number[]>([]);
   const [ratingModalOpen, setRatingModalOpen] = useState<boolean>(false);
+  const [shouldScroll, setShouldScroll] = useState<boolean>(false);
 
   const handleAnswerChange = (questionId: number, answer: Answer) => {
     setAnswers((prevAnswers) => {
@@ -61,18 +62,24 @@ const AnswerSurvey = () => {
       await Promise.all(answers.map((a) => createAnswer(a)));
       setSuccess(true);
       setRatingModalOpen(true);
+      setShouldScroll(true);
     } catch {
       setError('Error al responder la encuesta.');
     }
   };
 
   const handleRatingSubmit = (rating: number) => {
-    // Handle the rating submission (e.g., send to the server)
-    console.log('User rating:', rating);
     setTimeout(() => {
       navigate('/');
     }, 2000);
   };
+
+  useEffect(() => {
+    if (!ratingModalOpen && shouldScroll) {
+      window.scrollTo(0, 0);
+      setShouldScroll(false);
+    }
+  }, [ratingModalOpen, shouldScroll]);
 
   useEffect(() => {
     const fetchSurvey = async () => {
@@ -126,7 +133,7 @@ const AnswerSurvey = () => {
                   <Rating
                     name="read-only ml-1"
                     size="small"
-                    value={survey.rating}
+                    value={survey.averageRating}
                     readOnly
                     precision={0.5}
                   />
@@ -189,7 +196,7 @@ const AnswerSurvey = () => {
           <RatingModal
             open={ratingModalOpen}
             onClose={() => setRatingModalOpen(false)}
-            userRating={survey.rating || 0}
+            userRating={survey.averageRating || 0}
             onRate={handleRatingSubmit}
           />
         </>
