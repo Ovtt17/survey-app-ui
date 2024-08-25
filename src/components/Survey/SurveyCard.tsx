@@ -28,8 +28,6 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner }) => {
     console.log('Deleting survey with id:', id);
   }
 
-  const creatorFullName = `${survey.creator?.firstName} ${survey.creator?.lastName}`;
-
   return (
     <div className="max-w-sm w-full lg:max-w-full lg:flex mb-5">
       <div className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
@@ -65,7 +63,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner }) => {
         <div className="flex items-center">
           <img className="w-10 h-10 rounded-full mr-4" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt={`Avatar of ${survey.creator}`} />
           <div className="text-sm">
-            <p className="text-gray-900">{creatorFullName}</p>
+            <p className="text-gray-900">{survey.creator?.fullName}</p>
             <div>
               <span className="text-gray-600 flex items-center">
                 Rating:
