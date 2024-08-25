@@ -158,7 +158,7 @@ const CreateSurveyForm = () => {
 
             <div className='pt-10'>
               <Button type="submit" variant="contained" color="success" sx={{ marginTop: 2 }}>
-                Crear Encuesta
+                {isEditable ? 'Editar encuesta' : 'Crear encuesta'}
               </Button>
             </div>
           </form>
