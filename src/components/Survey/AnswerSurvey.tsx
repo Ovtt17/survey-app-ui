@@ -4,11 +4,6 @@ import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
-import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
-import RadioGroup from '@mui/material/RadioGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Radio from '@mui/material/Radio';
 import Button from '@mui/material/Button';
 import { Survey } from '../../types/survey';
 import { getSurveyById } from '../../services/surveyService';
@@ -16,6 +11,9 @@ import { Answer } from '../../types/answer';
 import { createAnswer } from '../../services/answerService';
 import Rating from '@mui/material/Rating';
 import RatingModal from './RatingModal';
+import { createRating } from '../../services/ratingService';
+import { Rating as RatingType } from '../../types/rating';
+import AnswerCard from './AnswerCard';
 
 const AnswerSurvey = () => {
   const navigate = useNavigate();
@@ -28,6 +26,7 @@ const AnswerSurvey = () => {
   const [unansweredQuestions, setUnansweredQuestions] = useState<number[]>([]);
   const [ratingModalOpen, setRatingModalOpen] = useState<boolean>(false);
   const [shouldScroll, setShouldScroll] = useState<boolean>(false);
+  const [rating, setRating] = useState<RatingType>();
 
   const handleAnswerChange = (questionId: number, answer: Answer) => {
     setAnswers((prevAnswers) => {
@@ -68,7 +67,9 @@ const AnswerSurvey = () => {
     }
   };
 
-  const handleRatingSubmit = (rating: number) => {
+  const handleRatingSubmit = async (ratingValue: number) => {
+    setRating({ surveyId: survey?.id || 0, rating: ratingValue });
+    if (rating) await createRating(rating);
     setTimeout(() => {
       navigate('/');
     }, 2000);
@@ -99,7 +100,6 @@ const AnswerSurvey = () => {
         setLoading(false);
       }
     };
-
     fetchSurvey();
   }, [id]);
 
@@ -155,37 +155,14 @@ const AnswerSurvey = () => {
           <div>
             {
               survey && survey.questions && survey.questions.map((question) => (
-                <div
-                  className={`border rounded-lg shadow-md my-5 p-5 ${unansweredQuestions.includes(question.id || 0) ? 'bg-red-100 border-red-500' : 'bg-slate-200'}`}
+                <AnswerCard
                   key={question.id}
-                >
-                  <FormControl component="fieldset">
-                    <FormLabel component="legend">
-                      <Typography variant="h6" gutterBottom>
-                        {question.text}
-                      </Typography>
-                    </FormLabel>
-                    <RadioGroup>
-                      {question.options?.map((option) => (
-                        <FormControlLabel
-                          key={option.id}
-                          value={option.id}
-                          control={
-                            <Radio
-                              checked={answers.some(
-                                (a) => a.questionId === question.id && a.answerText === option.text
-                              )}
-                              onChange={() =>
-                                handleAnswerChange(question.id || 0, { questionId: question.id || 0, surveyId: survey.id || 0, answerText: option.text })
-                              }
-                            />
-                          }
-                          label={option.text}
-                        />
-                      ))}
-                    </RadioGroup>
-                  </FormControl>
-                </div>
+                  surveyId={survey.id || 0}
+                  question={question}
+                  answers={answers}
+                  unansweredQuestions={unansweredQuestions}
+                  handleAnswerChange={handleAnswerChange}
+                />
               ))}
           </div>
           <div className='flex justify-end items-end'>
@@ -196,7 +173,7 @@ const AnswerSurvey = () => {
           <RatingModal
             open={ratingModalOpen}
             onClose={() => setRatingModalOpen(false)}
-            userRating={survey.averageRating || 0}
+            userRating={0}
             onRate={handleRatingSubmit}
           />
         </>

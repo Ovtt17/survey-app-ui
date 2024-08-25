@@ -17,7 +17,7 @@ interface SurveyCardProps {
 
 const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) => {
   const [openRatingModal, setOpenRatingModal] = React.useState(false);
-  const [userRating, setUserRating] = React.useState(survey.rating);
+  const [userRating, setUserRating] = React.useState(survey.averageRating);
 
   const handleOpen = () => setOpenRatingModal(true);
   const handleClose = () => setOpenRatingModal(false);
@@ -73,7 +73,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
                 <Rating
                   name="read-only ml-1"
                   size="small"
-                  value={survey.rating}
+                  value={survey.averageRating}
                   readOnly
                   precision={0.5}
                 />
