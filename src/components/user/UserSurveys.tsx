@@ -9,7 +9,7 @@ import { useAuthContext } from "../../context/AuthContext";
 
 const UserSurveys = () => {
   const { user } = useAuthContext();
-  const [surveys, setSurveys] = useState<Survey[] | null>([]);
+  const [surveys, setSurveys] = useState<Survey[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -20,7 +20,6 @@ const UserSurveys = () => {
         setSurveys(fetchedSurvey);
       } catch (error) {
         setError('Error obteniendo las encuestas');
-        console.error('Error obteniendo las encuestas:', error);
       } finally {
         setLoading(false);
       }
@@ -28,6 +27,10 @@ const UserSurveys = () => {
 
     fetchSurveys();
   }, []);
+
+  const handleSurveyDeleted = (id: number) => {
+    setSurveys(prevSurveys => prevSurveys.filter(survey => survey.id !== id));
+  }
 
   if (loading) {
     return (
@@ -54,7 +57,11 @@ const UserSurveys = () => {
                 const isOwner = survey.creator?.username === user?.username;
                 return (
                   <div key={index} className="w-full sm:w-1/2 p-2">
-                    <SurveyCard survey={survey} isOwner={isOwner} />
+                    <SurveyCard
+                      survey={survey}
+                      isOwner={isOwner}
+                      onDelete={handleSurveyDeleted}
+                    />
                   </div>
                 );
               })}
