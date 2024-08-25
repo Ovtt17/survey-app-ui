@@ -6,6 +6,7 @@ import CreateSurveyForm from '../components/survey/CreateSurveyForm';
 import Login from '../components/user/Login';
 import UserSurveys from '../components/user/UserSurveys';
 import { EditProvider } from '../context/EditSurveyContext';
+import Reviews from '../components/reviews/Reviews';
 
 const AppRoutes = () => {
   return (
@@ -26,6 +27,7 @@ const AppRoutes = () => {
           <CreateSurveyForm />
         </EditProvider>
       } />
+      <Route path='/surveys/:id/reviews' element={ <Reviews /> } />
     </Routes>
   );
 };

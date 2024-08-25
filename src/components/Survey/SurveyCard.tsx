@@ -96,13 +96,15 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
               Responder Encuesta
             </Button>
           </Link>
-          <Button
-            variant="contained"
-            color="secondary"
-            style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
-          >
-            Ver Reseñas
-          </Button>
+          <Link to={`/surveys/${survey.id}/reviews`}>
+            <Button
+              variant="contained"
+              color="secondary"
+              style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
+            >
+              Ver Reseñas
+            </Button>
+          </Link>
           <Button
             variant="contained"
             color="warning"
