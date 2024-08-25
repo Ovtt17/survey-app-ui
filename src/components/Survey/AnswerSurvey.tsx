@@ -12,7 +12,6 @@ import { createAnswer } from '../../services/answerService';
 import Rating from '@mui/material/Rating';
 import RatingModal from './RatingModal';
 import { createRating } from '../../services/ratingService';
-import { Rating as RatingType } from '../../types/rating';
 import AnswerCard from './AnswerCard';
 
 const AnswerSurvey = () => {
@@ -26,7 +25,6 @@ const AnswerSurvey = () => {
   const [unansweredQuestions, setUnansweredQuestions] = useState<number[]>([]);
   const [ratingModalOpen, setRatingModalOpen] = useState<boolean>(false);
   const [shouldScroll, setShouldScroll] = useState<boolean>(false);
-  const [rating, setRating] = useState<RatingType>();
 
   const handleAnswerChange = (questionId: number, answer: Answer) => {
     setAnswers((prevAnswers) => {
@@ -67,12 +65,15 @@ const AnswerSurvey = () => {
     }
   };
 
-  const handleRatingSubmit = async (ratingValue: number) => {
-    setRating({ surveyId: survey?.id || 0, rating: ratingValue });
-    if (rating) await createRating(rating);
-    setTimeout(() => {
-      navigate('/');
-    }, 2000);
+  const handleRatingSubmit = async (rated: number) => {
+    try {
+      await createRating({ surveyId: survey?.id || 0, rating: rated });
+      setTimeout(() => {
+        navigate('/');
+      }, 2000);
+    } catch (error) {
+      console.error("Failed to submit rating", error);
+    }
   };
 
   useEffect(() => {

@@ -8,6 +8,7 @@ import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteSurvey } from "../../services/surveyService";
+import { createRating } from "../../services/ratingService";
 
 interface SurveyCardProps {
   survey: Survey;
@@ -17,13 +18,17 @@ interface SurveyCardProps {
 
 const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) => {
   const [openRatingModal, setOpenRatingModal] = React.useState(false);
-  const [userRating, setUserRating] = React.useState(survey.averageRating);
 
   const handleOpen = () => setOpenRatingModal(true);
   const handleClose = () => setOpenRatingModal(false);
 
-  const handleRate = (rating: number) => {
-    setUserRating(rating);
+  const handleRate = async (rated: number) => {
+    try {
+      await createRating({ surveyId: survey.id || 0, rating: rated });
+    } catch (error) {
+      console.error("Failed to submit rating", error);
+    }
+    handleClose();
   };
 
   const handleDelete = async (id: number = 0) => {
@@ -111,7 +116,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
       <RatingModal
         open={openRatingModal}
         onClose={handleClose}
-        userRating={userRating}
+        userRating={survey.averageRating}
         onRate={handleRate}
       />
     </div>
