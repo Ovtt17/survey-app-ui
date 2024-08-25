@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/authService";
 import TextField from '@mui/material/TextField';
 import { getToken } from '../../utils/auth';
 import { useAuthContext } from '../../context/AuthContext';
+import Alert from '@mui/material/Alert';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login: setAuth } = useAuthContext();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -22,7 +24,7 @@ const Login = () => {
       navigate('/');
     } catch (error) {
       console.error('Login failed:', error);
-      // Handle login error
+      setErrorMessage('Credenciales incorrectas. Por favor, inténtalo de nuevo.');
     }
   };
 
@@ -82,7 +84,11 @@ const Login = () => {
                 className="w-full"
               />
             </div>
-
+            {errorMessage && (
+              <Alert severity="error" className="mb-4">
+                {errorMessage}
+              </Alert>
+            )}
             <div>
               <button
                 type="submit"
