@@ -7,13 +7,15 @@ import Rating from '@mui/material/Rating';
 import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { deleteSurvey } from "../../services/surveyService";
 
 interface SurveyCardProps {
   survey: Survey;
   isOwner?: boolean;
+  onDelete?: (id: number) => void;
 }
 
-const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner }) => {
+const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) => {
   const [openRatingModal, setOpenRatingModal] = React.useState(false);
   const [userRating, setUserRating] = React.useState(survey.rating);
 
@@ -24,8 +26,9 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner }) => {
     setUserRating(rating);
   };
 
-  const handleDelete = (id?: number) => {
-    console.log('Deleting survey with id:', id);
+  const handleDelete = async (id: number = 0) => {
+    await deleteSurvey(id);
+    if (onDelete) onDelete(id);
   }
 
   return (
