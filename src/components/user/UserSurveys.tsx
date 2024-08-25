@@ -48,6 +48,7 @@ const UserSurveys = () => {
         <Alert severity="warning">No se encontró ninguna encuesta.</Alert>
       ) : (
           <div className="App flex flex-col items-center">
+            <h2 className="text-2xl font-bold">Mis Encuestas</h2>
             <div className="flex flex-wrap justify-start">
               {surveys?.map((survey, index) => {
                 const isOwner = survey.creator?.username === user?.username;
