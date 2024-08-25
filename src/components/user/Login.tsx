@@ -1,13 +1,15 @@
-import React, { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { login } from "../../services/authService";
 import TextField from '@mui/material/TextField';
 import { getToken } from '../../utils/auth';
 import { useAuthContext } from '../../context/AuthContext';
+import Alert from '@mui/material/Alert';
 
 const Login = () => {
   const navigate = useNavigate();
   const { login: setAuth } = useAuthContext();
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -22,7 +24,7 @@ const Login = () => {
       navigate('/');
     } catch (error) {
       console.error('Login failed:', error);
-      // Handle login error
+      setErrorMessage('Credenciales incorrectas. Por favor, inténtalo de nuevo.');
     }
   };
 
@@ -51,9 +53,6 @@ const Login = () => {
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 pb-2">
-                Email / Username
-              </label>
               <TextField
                 id="usernameOrEmail"
                 label="Email / Username"
@@ -67,10 +66,7 @@ const Login = () => {
             </div>
 
             <div>
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900 pb-2">
-                  Contraseña
-                </label>
+              <div className="flex justify-end">
                 <div className="text-sm">
                   <a href="#" className="font-semibold text-indigo-600 hover:text-indigo-500">
                     Olvidaste la Contraseña?
@@ -88,7 +84,11 @@ const Login = () => {
                 className="w-full"
               />
             </div>
-
+            {errorMessage && (
+              <Alert severity="error" className="mb-4">
+                {errorMessage}
+              </Alert>
+            )}
             <div>
               <button
                 type="submit"
@@ -100,9 +100,9 @@ const Login = () => {
           </form>
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            Not a member?{' '}
+            No tienes cuenta?{' '}
             <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
-              Start a 14 day free trial
+              Regístrate
             </a>
           </p>
         </div>

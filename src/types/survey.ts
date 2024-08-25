@@ -6,7 +6,8 @@ export interface Survey {
   title: string;
   description: string;
   creator?: User;
-  rating?: number;
+  averageRating?: number;
+  ratingCount?: number;
   creationDate?: string;
   questions: Question[];
 }

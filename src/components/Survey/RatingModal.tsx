@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Modal, Rating, Typography, Button } from "@mui/material";
 
 interface RatingModalProps {
@@ -11,8 +11,18 @@ interface RatingModalProps {
 const RatingModal: React.FC<RatingModalProps> = ({ open, onClose, userRating, onRate }) => {
   const [localRating, setLocalRating] = React.useState(userRating);
 
+  useEffect(() => {
+    if (open) {
+      setLocalRating(userRating || 0);
+    }
+  }, [open, userRating]);
+
   const handleSave = () => {
-    onRate(localRating || 0);
+    if (localRating !== undefined && localRating >= 1 && localRating <= 5) {
+      onRate(localRating);
+    } else {
+      console.error("Rating is invalid or out of bounds.");
+    }
     onClose();
   };
 

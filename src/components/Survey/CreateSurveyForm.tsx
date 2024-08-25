@@ -7,7 +7,7 @@ import { QuestionType } from '../../types/questionType';
 import { Survey } from '../../types/survey';
 import { createSurvey, getSurveyById, updateSurvey } from '../../services/surveyService';
 import { QuestionOption } from '../../types/questionOption';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useEditSurveyContext } from '../../context/EditSurveyContext';
 import { useAuthContext } from '../../context/AuthContext';
 
@@ -18,6 +18,7 @@ interface AccordionState {
 }
 
 const CreateSurveyForm = () => {
+  const navigate = useNavigate();
   const { isAuthenticated, user } = useAuthContext();
   const { id, username } = useParams<{ id: string, username: string }>();
   const { isEditable, setIsEditable } = useEditSurveyContext();
@@ -100,17 +101,18 @@ const CreateSurveyForm = () => {
     setAccordions((prevAccordions) => prevAccordions.filter((accordion) => accordion.id !== id));
   };
 
-  const createOrUpdateSurvey = (event: React.FormEvent) => {
+  const createOrUpdateSurvey = async (event: React.FormEvent) => {
     event?.preventDefault();
     const survey: Survey = {
       ...formData,
       questions: accordions.map((accordion) => accordion.question)
     };
     if (isEditable) {
-      updateSurvey(survey);
-      console.log('Survey updated:', survey);
+      await updateSurvey(survey);
+      navigate(`/${user?.username}/surveys`);
     } else {
-      createSurvey(survey);
+      await createSurvey(survey);
+      navigate('/');
     }
   };
 
@@ -158,7 +160,7 @@ const CreateSurveyForm = () => {
 
             <div className='pt-10'>
               <Button type="submit" variant="contained" color="success" sx={{ marginTop: 2 }}>
-                Crear Encuesta
+                {isEditable ? 'Editar encuesta' : 'Crear encuesta'}
               </Button>
             </div>
           </form>

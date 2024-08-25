@@ -7,28 +7,34 @@ import Rating from '@mui/material/Rating';
 import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { deleteSurvey } from "../../services/surveyService";
+import { createRating } from "../../services/ratingService";
 
 interface SurveyCardProps {
   survey: Survey;
   isOwner?: boolean;
+  onDelete?: (id: number) => void;
 }
 
-const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner }) => {
+const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) => {
   const [openRatingModal, setOpenRatingModal] = React.useState(false);
-  const [userRating, setUserRating] = React.useState(survey.rating);
 
   const handleOpen = () => setOpenRatingModal(true);
   const handleClose = () => setOpenRatingModal(false);
 
-  const handleRate = (rating: number) => {
-    setUserRating(rating);
+  const handleRate = async (rated: number) => {
+    try {
+      await createRating({ surveyId: survey.id || 0, rating: rated });
+    } catch (error) {
+      console.error("Failed to submit rating", error);
+    }
+    handleClose();
   };
 
-  const handleDelete = (id?: number) => {
-    console.log('Deleting survey with id:', id);
+  const handleDelete = async (id: number = 0) => {
+    await deleteSurvey(id);
+    if (onDelete) onDelete(id);
   }
-
-  const creatorFullName = `${survey.creator?.firstName} ${survey.creator?.lastName}`;
 
   return (
     <div className="max-w-sm w-full lg:max-w-full lg:flex mb-5">
@@ -65,14 +71,14 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner }) => {
         <div className="flex items-center">
           <img className="w-10 h-10 rounded-full mr-4" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt={`Avatar of ${survey.creator}`} />
           <div className="text-sm">
-            <p className="text-gray-900">{creatorFullName}</p>
+            <p className="text-gray-900">{survey.creator?.fullName}</p>
             <div>
               <span className="text-gray-600 flex items-center">
                 Rating:
                 <Rating
                   name="read-only ml-1"
                   size="small"
-                  value={survey.rating}
+                  value={survey.averageRating}
                   readOnly
                   precision={0.5}
                 />
@@ -110,7 +116,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner }) => {
       <RatingModal
         open={openRatingModal}
         onClose={handleClose}
-        userRating={userRating}
+        userRating={survey.averageRating}
         onRate={handleRate}
       />
     </div>
