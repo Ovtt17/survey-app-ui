@@ -45,6 +45,21 @@ export const updateSurvey = async (survey: Survey): Promise<Survey> => {
   }
 }
 
+export const deleteSurvey = async (id: number): Promise<void> => {
+  try {
+    const response = await fetch(`${BASE_URL}/${id}`, {
+      method: 'DELETE',
+      headers: getHeaders()
+    });
+    if (!response) {
+      throw new Error('Network response was not ok ' + response);
+    }
+  } catch (error) {
+    console.error('Error updating survey:', error);
+    throw error;
+  }
+}
+
 export const getSurveys = async (): Promise<Survey[]> => {
   try {
     const response = await fetch(BASE_URL, {
