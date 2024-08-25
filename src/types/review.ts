@@ -7,5 +7,5 @@ export interface Review {
   surveyId: number;
   author?: string;
   rating: Rating;
-  createdAt?: string;
+  createdDate?: string;
 }

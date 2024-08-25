@@ -9,6 +9,22 @@ const getHeaders = () => ({
   'Authorization': `Bearer ${getToken()}`
 });
 
+export const saveReview = async (review: Review): Promise<void> => {
+  try {
+    const response = await fetch(BASE_URL, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(review)
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+  } catch (error) {
+    console.error('Error creating review:', error);
+    throw error;
+  }
+};
+
 export const getReviews = async (surveyId: string): Promise<Review[]> => {
   try {
     const response = await fetch(BASE_URL + `/${surveyId}`, {

@@ -1,10 +1,20 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
+import { Survey } from '../../types/survey';
+import { getSurveyById } from '../../services/surveyService';
 
 interface ReviewSummaryProps {
-  
+  surveyId: string;
 }
 
-export const ReviewSummary: FC<ReviewSummaryProps> = ({  }) => {
+export const ReviewSummary: FC<ReviewSummaryProps> = ({ surveyId }) => {
+  const [survey, setSurvey] = useState<Survey>();
+  useEffect(() => {
+    const fetchSurveys = async () => {
+      const surveys = await getSurveyById(surveyId);
+      setSurvey(surveys);
+    };
+    fetchSurveys();
+  }, []);
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-11 pb-11 border-b border-gray-100 max-xl:max-w-2xl max-xl:mx-auto">
       {/* Rating Count */}
@@ -113,7 +123,8 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({  }) => {
       {/* Rating average */}
       <div className="p-8 bg-amber-50 rounded-3xl flex items-center justify-center flex-col">
         <h2 className="font-manrope font-bold text-5xl text-amber-400 mb-6">
-          4.3</h2>
+          { survey?.averageRating }
+        </h2>
         <div className="flex items-center justify-center gap-2 sm:gap-6 mb-4">
           <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44"
             fill="none">
