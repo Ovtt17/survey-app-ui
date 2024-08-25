@@ -4,14 +4,13 @@ import { Survey } from "../types/survey";
 import { getSurveys } from "../services/surveyService";
 
 const Home = () => {
-  const [surveys, setSurveys] = useState<Survey[] | null>([]);
+  const [surveys, setSurveys] = useState<Survey[]>([]);
 
   useEffect(() => {
     const fetchSurveys = async () => {
       const surveys = await getSurveys();
       setSurveys(surveys);
     };
-
     fetchSurveys();
   }, []);
 
