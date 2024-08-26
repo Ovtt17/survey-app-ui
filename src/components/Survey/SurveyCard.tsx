@@ -10,6 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteSurvey } from "../../services/surveyService";
 import { createRating } from "../../services/ratingService";
 import ExcelIcon from '../../assets/icon-excel.svg';
+import { downloadSurveyAnswersReport } from "../../services/reportService";
 
 interface SurveyCardProps {
   survey: Survey;
@@ -37,6 +38,12 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
     if (onDelete) onDelete(id);
   }
 
+  const downloadAnswersReport = async () => {
+    if (survey.id) {
+      await downloadSurveyAnswersReport(survey.id);
+    }
+  }
+
   return (
     <div className="max-w-sm w-full lg:max-w-full lg:flex mb-5">
       <div className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
@@ -47,7 +54,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
       <div className="relative h-72 shadow-xl bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
         {isOwner && (
           <div className="absolute top-2 right-1 flex space-x-2">
-            <div className="cursor-pointer h-8 w-8 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
+            <div onClick={downloadAnswersReport} className="cursor-pointer h-8 w-8 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
               style={{ backgroundImage: `url(${ExcelIcon})` }}
               title="Exportar a Excel"
             >
