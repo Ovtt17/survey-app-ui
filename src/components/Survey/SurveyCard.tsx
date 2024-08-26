@@ -9,6 +9,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteSurvey } from "../../services/surveyService";
 import { createRating } from "../../services/ratingService";
+import ExcelIcon from '../../assets/icon-excel.svg';
 
 interface SurveyCardProps {
   survey: Survey;
@@ -46,6 +47,11 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
       <div className="relative h-72 shadow-xl bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
         {isOwner && (
           <div className="absolute top-2 right-1 flex space-x-2">
+            <div className="cursor-pointer h-8 w-8 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
+              style={{ backgroundImage: `url(${ExcelIcon})` }}
+              title="Woman holding a mug"
+            >
+            </div>
             <Link to={`/${survey.creator?.username}/surveys/${survey.id}`}>
               <IconButton aria-label="edit" size="small">
                 <EditIcon fontSize="small" />
