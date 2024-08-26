@@ -1,7 +1,7 @@
 // src/routes.tsx
 import { Route, Routes } from 'react-router-dom';
 import Home from '../pages/Home';
-import AnswerSurvey from '../components/survey/AnswerSurvey';
+import AnswerSurvey from '../components/answer/AnswerSurvey';
 import CreateSurveyForm from '../components/survey/CreateSurveyForm';
 import Login from '../components/user/Login';
 import UserSurveys from '../components/user/UserSurveys';
@@ -27,7 +27,7 @@ const AppRoutes = () => {
       <Route path="/surveys/:id" element={<AnswerSurvey />} />
       <Route path="/:username/surveys" element={<UserSurveys />} />
 
-      <Route path='/:username/surveys/:id/answers' element={ <SurveyParticipants /> } />
+      <Route path='/:username/surveys/:id/participations' element={<SurveyParticipants />} />
 
       <Route path="/:username/surveys/:id" element={
         <EditProvider>
