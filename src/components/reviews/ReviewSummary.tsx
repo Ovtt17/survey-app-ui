@@ -153,7 +153,7 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({ surveyId }) => {
             </defs>
           </svg>
         </div>
-        <p className="font-medium text-xl leading-8 text-gray-900 text-center">46 Ratings</p>
+        <p className="font-medium text-xl leading-8 text-gray-900 text-center">{survey?.ratingCount} Ratings</p>
       </div>
     </div>
   );
