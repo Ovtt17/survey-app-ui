@@ -41,7 +41,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
     <div className="max-w-sm w-full lg:max-w-full lg:flex mb-5">
       <div className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
         style={{ backgroundImage: "url('https://plus.unsplash.com/premium_photo-1673306778968-5aab577a7365?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmFja2dyb3VuZCUyMGltYWdlfDB8fDB8fHww')" }}
-        title="Woman holding a mug"
+        title="Imagen de fondo"
       >
       </div>
       <div className="relative h-72 shadow-xl bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
@@ -49,15 +49,15 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
           <div className="absolute top-2 right-1 flex space-x-2">
             <div className="cursor-pointer h-8 w-8 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
               style={{ backgroundImage: `url(${ExcelIcon})` }}
-              title="Woman holding a mug"
+              title="Exportar a Excel"
             >
             </div>
-            <Link to={`/${survey.creator?.username}/surveys/${survey.id}`}>
+            <Link title="Editar" to={`/${survey.creator?.username}/surveys/${survey.id}`}>
               <IconButton aria-label="edit" size="small">
                 <EditIcon fontSize="small" />
               </IconButton>
             </Link>
-            <IconButton onClick={() => handleDelete(survey.id)} aria-label="delete" size="small">
+            <IconButton onClick={() => handleDelete(survey.id)} aria-label="delete" title="Eliminar" size="small">
               <DeleteIcon fontSize="small" />
             </IconButton>
           </div>
