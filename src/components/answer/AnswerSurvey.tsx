@@ -10,7 +10,7 @@ import { getSurveyById } from '../../services/surveyService';
 import { Answer } from '../../types/answer';
 import { createAnswer } from '../../services/answerService';
 import Rating from '@mui/material/Rating';
-import RatingModal from './RatingModal';
+import RatingModal from '../survey/RatingModal';
 import { createRating } from '../../services/ratingService';
 import AnswerCard from './AnswerCard';
 
