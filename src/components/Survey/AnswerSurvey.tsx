@@ -56,7 +56,7 @@ const AnswerSurvey = () => {
     }
 
     try {
-      await Promise.all(answers.map((a) => createAnswer(a)));
+      await createAnswer(answers);
       setSuccess(true);
       setRatingModalOpen(true);
       setShouldScroll(true);
