@@ -124,11 +124,16 @@ export default function Navigation() {
                     </MenuItem>
                   </>
                 ) : (
-                  <MenuItem>
-                    <Link to="/login" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                      Sign In
+                  <>
+                    <MenuItem>
+                      <Link to="/login" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                        Sign In
+                      </Link>
+                    </MenuItem>
+                    <Link to="/register" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                      Register
                     </Link>
-                  </MenuItem>
+                  </>
                 )}
               </MenuItems>
             </Menu>
