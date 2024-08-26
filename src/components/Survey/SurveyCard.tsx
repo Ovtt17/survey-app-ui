@@ -60,7 +60,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
               title="Exportar a Excel"
             >
             </div>
-            <Link title="Ver Respuestas" to={`/${survey.creator?.username}/surveys/${survey.id}/answers`}>
+            <Link title="Ver Respuestas" to={`/${survey.creator?.username}/surveys/${survey.id}/participations`}>
               <IconButton aria-label="view" size="small">
                 <VisibilityIcon fontSize="small" />
               </IconButton>
