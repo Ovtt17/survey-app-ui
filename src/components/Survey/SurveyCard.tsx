@@ -11,6 +11,7 @@ import { deleteSurvey } from "../../services/surveyService";
 import { createRating } from "../../services/ratingService";
 import ExcelIcon from '../../assets/icon-excel.svg';
 import { downloadSurveyAnswersReport } from "../../services/reportService";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 interface SurveyCardProps {
   survey: Survey;
@@ -59,6 +60,11 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
               title="Exportar a Excel"
             >
             </div>
+            <Link title="Ver Respuestas" to={`/${survey.creator?.username}/surveys/${survey.id}/answers`}>
+              <IconButton aria-label="view" size="small">
+                <VisibilityIcon fontSize="small" />
+              </IconButton>
+            </Link>
             <Link title="Editar" to={`/${survey.creator?.username}/surveys/${survey.id}`}>
               <IconButton aria-label="edit" size="small">
                 <EditIcon fontSize="small" />
