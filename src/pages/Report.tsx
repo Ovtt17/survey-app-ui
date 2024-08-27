@@ -6,7 +6,7 @@ import { Report as ReportType } from '../types/report';
 import SurveyModal from '../components/survey/SurveyModal';
 import { Survey } from '../types/survey';
 import { downloadReportSelected } from '../services/reportService';
-import { getSurveys } from '../services/surveyService';
+import { getSurveyByUser } from '../services/surveyService';
 const Report = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reportSelected, setReportSelected] = useState<ReportType | null>(null);
@@ -29,7 +29,7 @@ const Report = () => {
   const handleConfirmDownload = () => {
     try {
       const fetchSurveys = async () => {
-        const surveyResponse = await getSurveys();
+        const surveyResponse = await getSurveyByUser();
         setSurveys(surveyResponse);
       }
       fetchSurveys();
