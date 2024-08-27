@@ -1,7 +1,7 @@
 import { Alert, TextField, Button, Box, Typography } from '@mui/material';
 import { FC, useState } from 'react';
-import { activateUser } from '../../services/authService';
 import { useNavigate } from 'react-router-dom';
+import { activateUser } from '../services/authService';
 
 const ActivateAccount: FC = () => {
   const navigate = useNavigate();

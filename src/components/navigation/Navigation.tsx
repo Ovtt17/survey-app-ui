@@ -113,6 +113,11 @@ export default function Navigation() {
                       </Link>
                     </MenuItem>
                     <MenuItem>
+                      <Link to={`/${user?.username}/reports`} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                        Generar Reportes
+                      </Link>
+                    </MenuItem>
+                    <MenuItem>
                       <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
                         Configuración
                       </Link>

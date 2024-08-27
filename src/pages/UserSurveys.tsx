@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { getSurveyByUser } from "../../services/surveyService";
-import { Survey } from "../../types/survey";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
-import SurveyCard from "../survey/SurveyCard";
-import { useAuthContext } from "../../context/AuthContext";
+import { useAuthContext } from "../context/AuthContext";
+import { Survey } from "../types/survey";
+import { getSurveyByUser } from "../services/surveyService";
+import SurveyCard from "../components/survey/SurveyCard";
 
 const UserSurveys = () => {
   const { user } = useAuthContext();

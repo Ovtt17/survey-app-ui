@@ -1,7 +1,7 @@
 import { Alert, TextField } from '@mui/material';
 import { FC, useState } from 'react';
-import { registerUser } from '../../services/authService';
-import { NewUser } from '../../types/user';
+import { registerUser } from '../services/authService';
+import { NewUser } from '../types/user';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';

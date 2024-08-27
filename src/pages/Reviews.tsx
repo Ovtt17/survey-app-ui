@@ -1,10 +1,10 @@
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import ReviewCard from "./ReviewCard";
-import { ReviewSummary } from "./ReviewSummary";
+import ReviewCard from "../components/reviews/ReviewCard";
+import { ReviewSummary } from "../components/reviews/ReviewSummary";
 import { useEffect, useState } from "react";
-import { Review } from "../../types/review";
-import { getReviews, saveReview } from "../../services/reviewService"; // Import saveReview
+import { Review } from "../types/review";
+import { getReviews, saveReview } from "../services/reviewService";
 import { useParams } from "react-router-dom";
 import { Rating } from "@mui/material";
 

@@ -1,15 +1,16 @@
 // src/routes.tsx
 import { Route, Routes } from 'react-router-dom';
 import Home from '../pages/Home';
-import AnswerSurvey from '../components/answer/AnswerSurvey';
-import CreateSurveyForm from '../components/survey/CreateSurveyForm';
+import AnswerSurvey from '../pages/AnswerSurvey';
+import CreateSurveyForm from '../pages/CreateSurveyForm';
 import Login from '../components/user/Login';
-import UserSurveys from '../components/user/UserSurveys';
 import { EditProvider } from '../context/EditSurveyContext';
-import Reviews from '../components/reviews/Reviews';
-import Register from '../components/user/Register';
-import ActivateAccount from '../components/user/ActivateAccount';
+import Reviews from '../pages/Reviews';
+import Register from '../pages/Register';
 import SurveyParticipations from '../components/survey/SurveyParticipations';
+import Report from '../pages/Report';
+import ActivateAccount from '../pages/ActivateAccount';
+import UserSurveys from '../pages/UserSurveys';
 
 const AppRoutes = () => {
   return (
@@ -26,9 +27,8 @@ const AppRoutes = () => {
       } />
       <Route path="/surveys/:id" element={<AnswerSurvey />} />
       <Route path="/:username/surveys" element={<UserSurveys />} />
-
+      <Route path='/:username/reports' element={ <Report /> } />
       <Route path='/:username/surveys/:id/participations' element={<SurveyParticipations />} />
-
       <Route path="/:username/surveys/:id" element={
         <EditProvider>
           <CreateSurveyForm />

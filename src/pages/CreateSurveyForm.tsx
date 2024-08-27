@@ -1,15 +1,15 @@
 import Button from '@mui/material/Button';
 import { SelectChangeEvent } from '@mui/material/Select';
 import React, { useEffect, useState } from 'react';
-import AccordionList from './AccordionList';
-import { Question } from '../../types/question';
-import { QuestionType } from '../../types/questionType';
-import { Survey } from '../../types/survey';
-import { createSurvey, getSurveyById, updateSurvey } from '../../services/surveyService';
-import { QuestionOption } from '../../types/questionOption';
+import AccordionList from '../components/survey/AccordionList';
+import { Question } from '../types/question';
+import { QuestionType } from '../types/questionType';
+import { Survey } from '../types/survey';
+import { createSurvey, getSurveyById, updateSurvey } from '../services/surveyService';
+import { QuestionOption } from '../types/questionOption';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useEditSurveyContext } from '../../context/EditSurveyContext';
-import { useAuthContext } from '../../context/AuthContext';
+import { useEditSurveyContext } from '../context/EditSurveyContext';
+import { useAuthContext } from '../context/AuthContext';
 
 interface AccordionState {
   id: number;
