@@ -42,7 +42,7 @@ const SurveyParticipations = () => {
     setIsModalOpen(true);
   }
 
-  const hanldeCloseModal = () => {
+  const handleCloseModal = () => {
     setIsModalOpen(false);
   }
 
@@ -81,7 +81,7 @@ const SurveyParticipations = () => {
       </TableContainer>
 
       {isModalOpen && (
-        <AnswersInfoModal answers={answers} handleCloseModal={hanldeCloseModal} error={error} />
+        <AnswersInfoModal answers={answers} handleCloseModal={handleCloseModal} error={error} />
       )}
     </div>
   );
