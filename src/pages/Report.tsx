@@ -3,21 +3,56 @@ import ReportCard from '../components/report/ReportCard';
 import { useState } from 'react';
 import ReportModal from '../components/report/ReportModal';
 import { Report as ReportType } from '../types/report';
+import SurveyModal from '../components/survey/SurveyModal';
+import { Survey } from '../types/survey';
+import { downloadReportSelected } from '../services/reportService';
+import { getSurveys } from '../services/surveyService';
 const Report = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedReport, setSelectedReport] = useState<ReportType | null>(null);
+  const [reportSelected, setReportSelected] = useState<ReportType | null>(null);
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [surveySelected, setSurveySelected] = useState<Survey | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleOpenModal = (report: ReportType) => {
-    setSelectedReport(report);
+    setReportSelected(report);
     setIsModalOpen(true);
   };
 
+  const handleCloseModal = () => {
+    setReportSelected(null);
+    setIsModalOpen(false);
+    setIsConfirmed(false);
+  }
+
   const handleConfirmDownload = () => {
-    if (selectedReport) downloadReport(selectedReport.id);
+    try {
+      const fetchSurveys = async () => {
+        const surveyResponse = await getSurveys();
+        setSurveys(surveyResponse);
+      }
+      fetchSurveys();
+      setIsConfirmed(true);
+    } catch (error) {
+      console.error("Failed to fetch surveys", error);
+      setError("Failed to fetch surveys");
+    }
   };
 
-  const downloadReport = (reportId: number) => {
-    
+  const handleSurveySelected = (survey: Survey) => {
+    setSurveySelected(survey);
+    if (reportSelected && surveySelected && surveySelected.id)
+      downloadReport(reportSelected.id, reportSelected.title, surveySelected.id);
+  };
+
+  const downloadReport = async (reportId: number, reportTitle: string, surveyId: number) => {
+    try {
+      await downloadReportSelected(reportId, reportTitle, surveyId);
+    } catch (error) {
+      console.error("Failed to download report selected", error);
+      setError("Failed to download report selected");
+    }
   };
 
   return (
@@ -37,9 +72,20 @@ const Report = () => {
             open={isModalOpen}
             setOpen={setIsModalOpen}
             onConfirm={handleConfirmDownload}
-            report={selectedReport}
+            report={reportSelected}
           />
         )}
+
+      {
+        isConfirmed && (
+          <SurveyModal
+            surveys={surveys}
+            handleSurveySelected={handleSurveySelected}
+            handleCloseModal={handleCloseModal}
+            error={error}
+          />
+        )
+      }
     </div>
   );
 }

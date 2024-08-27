@@ -26,3 +26,28 @@ export const downloadSurveyAnswersReport = async (surveyId: number): Promise<voi
     throw error;
   }
 };
+
+export const downloadReportSelected = async (reportId: number, reportTitle: string, surveyId: number): Promise<void> => {
+  try {
+    const response = await fetch(`${BASE_URL}/${reportId}/${surveyId}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Authorization': `Bearer ${getToken()}`
+      }
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${reportTitle}.xlsx`;
+    a.click();
+    a.remove();
+  } catch (error) {
+    console.error('Error downloading survey answers report:', error);
+    throw error;
+  }
+};
