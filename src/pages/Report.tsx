@@ -1,12 +1,26 @@
-import { FC } from 'react';
+import { reports } from '../data/Reports';
+import ReportCard from '../components/report/ReportCard';
+import { useState } from 'react';
+import ReportModal from '../components/report/ReportModal';
+const Report = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-interface ReportProps {
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  }
 
-}
-
-const Report: FC<ReportProps> = ({ }) => {
   return (
-    <p>asdf</p>
+    <div className="flex flex-col items-center">
+      <div className="flex flex-wrap justify-center gap-10">
+        {reports.map((report, index) => (
+          <ReportCard key={index} report={report} handleOpenModal={handleOpenModal}/>
+        ))}
+      </div>
+      {
+        isModalOpen && (
+          <ReportModal open={isModalOpen} setOpen={setIsModalOpen}/>
+        )}
+    </div>
   );
 }
 
