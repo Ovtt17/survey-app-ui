@@ -2,16 +2,21 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getSurveyParticipants } from "../../services/surveyService";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
-import { Participant } from "../../types/participant";
+import { Participation } from "../../types/participation";
 import { format } from "date-fns";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import AnswersInfoModal from "../answer/AnswersInfoModal";
+import { Answer } from "../../types/answer";
+import { getAnswersBySurveyIdAndUserId } from "../../services/answerService";
 
 
-const SurveyParticipants = () => {
+const SurveyParticipations = () => {
   const { id: surveyId } = useParams<{ id: string }>();
-  const [participants, setParticipants] = useState<Participant[]>([]);
+  const [participations, setParticipations] = useState<Participation[]>([]);
   const [surveyTitle, setSurveyTitle] = useState<string>("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [answers, setAnswers] = useState<Answer[]>([]);
 
   useEffect(() => {
     const fetchSurveyDetails = async () => {
@@ -21,17 +26,24 @@ const SurveyParticipants = () => {
           if (fetchSurveys.length > 0) {
             setSurveyTitle(fetchSurveys[0].surveyTitle);
           }
-          setParticipants(fetchSurveys);
+          setParticipations(fetchSurveys);
         } catch (error) {
           console.error("Failed to fetch survey details or participants", error);
+          setError("Failed to fetch survey details or participants");
         }
       }
     };
     fetchSurveyDetails();
   }, [surveyId]);
 
-  const handleViewAnswers = () => {
+  const handleModalAnswers = async (surveyId: number, userId: number, participationId: number) => {
+    const fetchAnswers = await getAnswersBySurveyIdAndUserId(surveyId, userId, participationId);
+    setAnswers(fetchAnswers);
     setIsModalOpen(true);
+  }
+
+  const hanldeCloseModal = () => {
+    setIsModalOpen(false);
   }
 
   return (
@@ -52,13 +64,13 @@ const SurveyParticipants = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {participants.map((p) => (
+            {participations.map((p) => (
               <TableRow key={p.id}>
                 <TableCell align="center">{p.id}</TableCell>
                 <TableCell align="center">{p.username}</TableCell>
                 <TableCell align="center">{format(p.participatedDate, "dd-MM-yyyy HH:mm:ss")}</TableCell>
                 <TableCell align="center">
-                  <IconButton onClick={handleViewAnswers} aria-label="view" size="small">
+                  <IconButton onClick={() => handleModalAnswers (p.surveyId, p.userId, p.id)} aria-label="view" size="small">
                     <VisibilityIcon fontSize="medium" color="success" />
                   </IconButton>
                 </TableCell>
@@ -67,8 +79,12 @@ const SurveyParticipants = () => {
           </TableBody>
         </Table>
       </TableContainer>
+
+      {isModalOpen && (
+        <AnswersInfoModal answers={answers} handleCloseModal={hanldeCloseModal} error={error} />
+      )}
     </div>
   );
 }
 
-export default SurveyParticipants;
+export default SurveyParticipations;

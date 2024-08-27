@@ -9,7 +9,7 @@ import { EditProvider } from '../context/EditSurveyContext';
 import Reviews from '../components/reviews/Reviews';
 import Register from '../components/user/Register';
 import ActivateAccount from '../components/user/ActivateAccount';
-import SurveyParticipants from '../components/survey/SurveyParticipants';
+import SurveyParticipations from '../components/survey/SurveyParticipations';
 
 const AppRoutes = () => {
   return (
@@ -27,7 +27,7 @@ const AppRoutes = () => {
       <Route path="/surveys/:id" element={<AnswerSurvey />} />
       <Route path="/:username/surveys" element={<UserSurveys />} />
 
-      <Route path='/:username/surveys/:id/participations' element={<SurveyParticipants />} />
+      <Route path='/:username/surveys/:id/participations' element={<SurveyParticipations />} />
 
       <Route path="/:username/surveys/:id" element={
         <EditProvider>
