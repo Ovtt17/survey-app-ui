@@ -23,6 +23,7 @@ const Report = () => {
     setReportSelected(null);
     setIsModalOpen(false);
     setIsConfirmed(false);
+    setError(null);
   }
 
   const handleConfirmDownload = async () => {
