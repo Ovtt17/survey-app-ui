@@ -36,5 +36,11 @@ export const reports: Report[] = [
     title: "Reporte de Satisfacción de Usuarios",
     description: "Este informe evalúa las calificaciones promedio otorgadas por los usuarios en las encuestas, identificando las encuestas con mayor o menor grado de satisfacción.",
     requiresSurvey: false,
+  },
+  {
+    id: 7,
+    title: "Reporte de Reseñas de Usuarios",
+    description: "Este informe recopila y presenta las reseñas y comentarios de los usuarios en las encuestas, permitiendo identificar patrones y opiniones comunes.",
+    requiresSurvey: true,
   }
 ];
