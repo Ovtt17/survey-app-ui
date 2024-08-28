@@ -9,7 +9,7 @@ export const reports: Report[] = [
   },
   {
     id: 2,
-    title: "Reporte de Participación",
+    title: "Reporte de Participación propia en Encuestas",
     description: "Un informe que muestra la participación del usuario en diferentes encuestas, incluyendo detalles como el número de encuestas completadas.",
     requiresSurvey: false,
   },
@@ -27,9 +27,9 @@ export const reports: Report[] = [
   },
   {
     id: 5,
-    title: "Reporte de Participación de Usuarios",
-    description: "Un informe que muestra la participación de los usuarios en diferentes encuestas, incluyendo detalles como el número de encuestas completadas por cada usuario.",
-    requiresSurvey: true,
+    title: "Reporte de Participación de Usuarios en nuestras Encuestas",
+    description: "Un informe que muestra la participación de los usuarios en nuestras encuestas, incluyendo detalles como el número de encuestas completadas por cada usuario.",
+    requiresSurvey: false,
   },
   {
     id: 6,

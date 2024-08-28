@@ -10,7 +10,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteSurvey } from "../../services/surveyService";
 import { createRating } from "../../services/ratingService";
 import ExcelIcon from '../../assets/icon-excel.svg';
-import { downloadReportSelected } from "../../services/reportService";
+import { downloadReportWithSurvey } from "../../services/reportService";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { reports } from "../../data/Reports";
 
@@ -44,7 +44,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
     if (survey.id) {
       const report = reports.find(report => report.id === 1);
       if (report) {
-        await downloadReportSelected(report.id, report.title, survey.id);
+        await downloadReportWithSurvey(report.id, report.title, survey.id);
       }
     }
   }
