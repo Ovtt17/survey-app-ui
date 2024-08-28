@@ -4,37 +4,37 @@ export const reports: Report[] = [
   {
     id: 1,
     title: "Reporte de Respuestas por Encuesta",
-    description: "Un informe que muestra todas las respuestas de una encuesta específica.",
+    description: "Este informe detalla todas las respuestas recopiladas de una encuesta específica, proporcionando un análisis completo de las opiniones de los participantes.",
     requiresSurvey: true,
   },
   {
     id: 2,
-    title: "Reporte de Participación propia en Encuestas",
-    description: "Un informe que muestra la participación del usuario en diferentes encuestas, incluyendo detalles como el número de encuestas completadas.",
+    title: "Reporte de Participación en Encuestas",
+    description: "Este informe presenta un resumen de la participación del usuario en diversas encuestas, incluyendo la fecha de la participación.",
     requiresSurvey: false,
   },
   {
     id: 3,
     title: "Reporte de Tendencias de Respuestas",
-    description: "Un informe que muestra las tendencias de las respuestas a lo largo del tiempo, útil para ver cómo cambian las opiniones de los usuarios.",
+    description: "Este informe identifica y visualiza las tendencias en las respuestas a lo largo del tiempo, ayudando a comprender la evolución de las opiniones de los usuarios.",
     requiresSurvey: true,
   },
   {
     id: 4,
     title: "Reporte de Encuestas Populares",
-    description: "Un informe que muestra las encuestas más populares, basado en el número de participaciones o respuestas.",
+    description: "Este informe enumera las encuestas más populares, basadas en el número de participaciones o respuestas, destacando aquellas que han captado mayor interés.",
     requiresSurvey: false,
   },
   {
     id: 5,
-    title: "Reporte de Participación de Usuarios en nuestras Encuestas",
-    description: "Un informe que muestra la participación de los usuarios en nuestras encuestas, incluyendo detalles como el número de encuestas completadas por cada usuario.",
+    title: "Reporte de Participación de Usuarios",
+    description: "Este informe ofrece un análisis detallado de la participación de los usuarios en nuestras encuestas.",
     requiresSurvey: false,
   },
   {
     id: 6,
     title: "Reporte de Satisfacción de Usuarios",
-    description: "Un informe que analiza las calificaciones promedio dadas por los usuarios en las encuestas, permitiendo identificar encuestas con alta o baja satisfacción.",
+    description: "Este informe evalúa las calificaciones promedio otorgadas por los usuarios en las encuestas, identificando las encuestas con mayor o menor grado de satisfacción.",
     requiresSurvey: false,
   }
 ];
