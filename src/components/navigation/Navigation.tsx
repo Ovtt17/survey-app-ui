@@ -2,13 +2,15 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { useAuthContext } from '../../context/AuthContext';
+import { useEffect, useState } from 'react';
 
 
 const navigation = [
-  { name: 'Encuestas', href: '/surveys', current: true },
+  { name: 'Encuestas', href: '/surveys' },
+  { name: 'Reportes', href: '/reports' },
 ]
 
 function classNames(...classes: string[]) {
@@ -17,6 +19,13 @@ function classNames(...classes: string[]) {
 
 export default function Navigation() {
   const { isAuthenticated, logout, user } = useAuthContext();
+
+  const location = useLocation();
+  const [currentPath, setCurrentPath] = useState(location.pathname);
+
+  useEffect(() => {
+    setCurrentPath(location.pathname);
+  }, [location.pathname]);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -44,17 +53,16 @@ export default function Navigation() {
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
-                  <a
+                  <Link
                     key={item.name}
-                    href={item.href}
-                    aria-current={item.current ? 'page' : undefined}
+                    to={item.href}
                     className={classNames(
-                      item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'rounded-md px-3 py-2 text-sm font-medium',
+                      item.href === currentPath ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                      'px-3 py-2 rounded-md text-sm font-medium'
                     )}
                   >
                     {item.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -153,9 +161,9 @@ export default function Navigation() {
               key={item.name}
               as="a"
               href={item.href}
-              aria-current={item.current ? 'page' : undefined}
+              aria-current={item.href === currentPath ? 'page' : undefined}
               className={classNames(
-                item.current ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                item.href === currentPath ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                 'block rounded-md px-3 py-2 text-base font-medium',
               )}
             >
