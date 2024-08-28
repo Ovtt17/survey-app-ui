@@ -1,3 +1,4 @@
+import { Participation } from "../types/participation";
 import { Survey } from "../types/survey";
 import { getToken } from "../utils/auth";
 
@@ -110,3 +111,17 @@ export const getSurveyByUser = async (): Promise<Survey[]> => {
     throw error;
   }
 }
+
+export const getSurveyParticipants = async (id: string): Promise<Participation[]> => {
+  try {
+    const response = await fetch(`${BASE_URL}/${id}/participants`, {
+      method: 'GET',
+      headers: getHeaders()
+    });
+    const participants: Participation[] = await response.json();
+    return participants;
+  } catch (error) {
+    console.error('Error creating survey:', error);
+    throw error;
+  }
+};

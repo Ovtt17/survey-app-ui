@@ -9,6 +9,10 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteSurvey } from "../../services/surveyService";
 import { createRating } from "../../services/ratingService";
+import ExcelIcon from '../../assets/icon-excel.svg';
+import { downloadReportWithSurvey } from "../../services/reportService";
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import { reports } from "../../data/Reports";
 
 interface SurveyCardProps {
   survey: Survey;
@@ -36,22 +40,41 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
     if (onDelete) onDelete(id);
   }
 
+  const downloadAnswersReport = async () => {
+    if (survey.id) {
+      const report = reports.find(report => report.id === 1);
+      if (report) {
+        await downloadReportWithSurvey(report.id, report.title, survey.id);
+      }
+    }
+  }
+
   return (
     <div className="max-w-sm w-full lg:max-w-full lg:flex mb-5">
       <div className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
         style={{ backgroundImage: "url('https://plus.unsplash.com/premium_photo-1673306778968-5aab577a7365?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmFja2dyb3VuZCUyMGltYWdlfDB8fDB8fHww')" }}
-        title="Woman holding a mug"
+        title="Imagen de fondo"
       >
       </div>
       <div className="relative h-72 shadow-xl bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
         {isOwner && (
           <div className="absolute top-2 right-1 flex space-x-2">
-            <Link to={`/${survey.creator?.username}/surveys/${survey.id}`}>
+            <div onClick={downloadAnswersReport} className="cursor-pointer h-8 w-8 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
+              style={{ backgroundImage: `url(${ExcelIcon})` }}
+              title="Exportar a Excel"
+            >
+            </div>
+            <Link title="Ver Respuestas" to={`/${survey.creator?.username}/surveys/${survey.id}/participations`}>
+              <IconButton aria-label="view" size="small">
+                <VisibilityIcon fontSize="small" />
+              </IconButton>
+            </Link>
+            <Link title="Editar" to={`/${survey.creator?.username}/surveys/${survey.id}`}>
               <IconButton aria-label="edit" size="small">
                 <EditIcon fontSize="small" />
               </IconButton>
             </Link>
-            <IconButton onClick={() => handleDelete(survey.id)} aria-label="delete" size="small">
+            <IconButton onClick={() => handleDelete(survey.id)} aria-label="delete" title="Eliminar" size="small">
               <DeleteIcon fontSize="small" />
             </IconButton>
           </div>
@@ -96,13 +119,15 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
               Responder Encuesta
             </Button>
           </Link>
-          <Button
-            variant="contained"
-            color="secondary"
-            style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
-          >
-            Ver Reseñas
-          </Button>
+          <Link to={`/surveys/${survey.id}/reviews`}>
+            <Button
+              variant="contained"
+              color="secondary"
+              style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
+            >
+              Ver Reseñas
+            </Button>
+          </Link>
           <Button
             variant="contained"
             color="warning"

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
-import { getSurveyByUser } from "../../services/surveyService";
-import { Survey } from "../../types/survey";
 import CircularProgress from "@mui/material/CircularProgress";
 import Container from "@mui/material/Container";
 import Alert from "@mui/material/Alert";
-import SurveyCard from "../survey/SurveyCard";
-import { useAuthContext } from "../../context/AuthContext";
+import { useAuthContext } from "../context/AuthContext";
+import { Survey } from "../types/survey";
+import { getSurveyByUser } from "../services/surveyService";
+import SurveyCard from "../components/survey/SurveyCard";
 
 const UserSurveys = () => {
   const { user } = useAuthContext();
@@ -42,6 +42,9 @@ const UserSurveys = () => {
 
   return (
     <div>
+      <div className="flex flex-col items-center">
+        <h2 className="text-2xl font-bold">Mis Encuestas</h2>
+      </div>
       {error && (
         <Alert severity="error" className="mb-4">
           {error}
@@ -50,8 +53,7 @@ const UserSurveys = () => {
       {!surveys ? (
         <Alert severity="warning">No se encontró ninguna encuesta.</Alert>
       ) : (
-          <div className="App flex flex-col items-center">
-            <h2 className="text-2xl font-bold">Mis Encuestas</h2>
+          <div className="App">
             <div className="flex flex-wrap justify-start">
               {surveys?.map((survey, index) => {
                 const isOwner = survey.creator?.username === user?.username;

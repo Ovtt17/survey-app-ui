@@ -1,5 +1,8 @@
 export interface Participation {
   id: number;
+  userId: number
+  username: string;
   surveyId: number;
-  participationDate: string;
+  surveyTitle: string
+  participatedDate: Date;
 }

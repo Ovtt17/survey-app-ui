@@ -3,24 +3,42 @@ import { getToken } from "../utils/auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys/answers`;
 
-export const createAnswer = async (answer: Answer): Promise<Answer> => {
+const getHeaders = () => {
+  return {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${getToken()}`
+  }
+};
+export const createAnswer = async (answer: Answer[]): Promise<void> => {
   try {
     const response = await fetch(BASE_URL, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${getToken()}`
-      },
+      headers: getHeaders(),
       body: JSON.stringify(answer)
     });
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
     }
-    const answerCreated: Answer = await response.json();
-    return answerCreated;
   } catch (error) {
     console.error('Error creating survey:', error);
     throw error;
   }
+}
+
+export const getAnswersBySurveyIdAndUserId = async (surveyId: number, userId: number, participationId: number): Promise<Answer[]> => {
+  try {
+    const response = await fetch(`${BASE_URL}/${surveyId}/${userId}/${participationId}`, {
+      method: 'GET',
+      headers: getHeaders()
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok ' + response.statusText);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching answers:', error);
+    throw error;
+  }
+
 }

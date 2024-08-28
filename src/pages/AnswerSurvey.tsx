@@ -5,14 +5,14 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import { Survey } from '../../types/survey';
-import { getSurveyById } from '../../services/surveyService';
-import { Answer } from '../../types/answer';
-import { createAnswer } from '../../services/answerService';
+import { Survey } from '../types/survey';
+import { getSurveyById } from '../services/surveyService';
+import { Answer } from '../types/answer';
+import { createAnswer } from '../services/answerService';
 import Rating from '@mui/material/Rating';
-import RatingModal from './RatingModal';
-import { createRating } from '../../services/ratingService';
-import AnswerCard from './AnswerCard';
+import RatingModal from '../components/survey/RatingModal';
+import { createRating } from '../services/ratingService';
+import AnswerCard from '../components/answer/AnswerCard';
 
 const AnswerSurvey = () => {
   const navigate = useNavigate();
@@ -56,7 +56,7 @@ const AnswerSurvey = () => {
     }
 
     try {
-      await Promise.all(answers.map((a) => createAnswer(a)));
+      await createAnswer(answers);
       setSuccess(true);
       setRatingModalOpen(true);
       setShouldScroll(true);

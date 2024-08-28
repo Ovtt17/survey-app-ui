@@ -1,0 +1,106 @@
+import { reports } from '../data/Reports';
+import ReportCard from '../components/report/ReportCard';
+import { useState } from 'react';
+import ReportModal from '../components/report/ReportModal';
+import { Report as ReportType } from '../types/report';
+import SurveyModal from '../components/survey/SurveyModal';
+import { Survey } from '../types/survey';
+import { downloadReportWhitoutSurvey, downloadReportWithSurvey } from '../services/reportService';
+import { getSurveyByUser } from '../services/surveyService';
+const Report = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reportSelected, setReportSelected] = useState<ReportType | null>(null);
+  const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
+  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleOpenModal = (report: ReportType) => {
+    setReportSelected(report);
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setReportSelected(null);
+    setIsModalOpen(false);
+    setIsConfirmed(false);
+    setError(null);
+  }
+
+  const handleConfirmDownload = async () => {
+    try {
+      if (reportSelected?.requiresSurvey) {
+        const surveyResponse = await getSurveyByUser();
+        setSurveys(surveyResponse);
+        setIsConfirmed(true);
+      } else{
+        if (reportSelected) {
+          downloadReport(reportSelected.id, reportSelected.title);
+          setIsModalOpen(false);
+        }
+      }
+    } catch (error) {
+      console.error("Error during report download process", error);
+      setError("An error occurred while processing your request. Please try again.");
+    }
+  };
+
+  const handleSurveySelected = (survey: Survey) => {
+    if (reportSelected && survey.id) {
+      downloadReportBySurvey(reportSelected.id, reportSelected.title, survey.id);
+    }
+  };
+
+  const downloadReportBySurvey = async (reportId: number, reportTitle: string, surveyId: number) => {
+    try {
+      await downloadReportWithSurvey(reportId, reportTitle, surveyId);
+    } catch (error) {
+      console.error("Failed to download report selected", error);
+      setError("Failed to download report selected");
+    }
+  };
+
+  const downloadReport = async (reportId: number, reportTitle: string) => {
+    try {
+      await downloadReportWhitoutSurvey(reportId, reportTitle);
+    } catch (error) {
+      console.error("Failed to download report selected", error);
+      setError("Failed to download report selected");
+    }
+  }
+
+  return (
+    <div className="flex flex-col items-center">
+      <div className="flex flex-wrap justify-center gap-10">
+        {reports.map((report, index) => (
+          <ReportCard
+            key={index}
+            report={report}
+            handleOpenModal={() => handleOpenModal(report)}
+          />
+        ))}
+      </div>
+      {
+        isModalOpen && (
+          <ReportModal
+            open={isModalOpen}
+            setOpen={setIsModalOpen}
+            onConfirm={handleConfirmDownload}
+            report={reportSelected}
+          />
+        )}
+
+      {
+        isConfirmed && (
+          <SurveyModal
+            surveys={surveys}
+            handleSurveySelected={handleSurveySelected}
+            handleCloseModal={handleCloseModal}
+            error={error}
+          />
+        )
+      }
+    </div>
+  );
+}
+
+export default Report;
