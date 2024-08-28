@@ -1,7 +1,7 @@
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { FC } from 'react';
 import { Survey } from '../../types/survey';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import PrintIcon from '@mui/icons-material/Print';
 
 
 interface SurveyModalProps {
@@ -36,7 +36,7 @@ const SurveyModal: FC<SurveyModalProps> = ({ surveys, handleSurveySelected, hand
                   <TableCell align="center">{survey.creator?.fullName}</TableCell>
                   <TableCell align="center">
                     <IconButton onClick={() => handleSurveySelected(survey)} aria-label="view" size="small">
-                      <CheckCircleIcon fontSize="medium" color="success" />
+                      <PrintIcon fontSize="medium" color="action" />
                     </IconButton>
                   </TableCell>
                 </TableRow>
