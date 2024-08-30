@@ -65,7 +65,10 @@ export const getSurveys = async (): Promise<Survey[]> => {
   try {
     const response = await fetch(BASE_URL, {
       method: 'GET',
-      headers: getHeaders()
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      }
     });
     if (!response.ok) {
       throw new Error('Network response was not ok ' + response.statusText);
