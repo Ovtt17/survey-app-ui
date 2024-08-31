@@ -1,4 +1,3 @@
-// src/routes.tsx
 import { Route, Routes } from 'react-router-dom';
 import Home from '../pages/Home';
 import AnswerSurvey from '../pages/AnswerSurvey';
@@ -19,6 +18,7 @@ const AppRoutes = () => {
       <Route path="/register" element={<Register />} />
       <Route path="/activate-account" element={<ActivateAccount />} />
       <Route path='/login' element={<Login />} />
+      <Route path='/reports' element={<Report />} />
       <Route path="/surveys" element={<Home />} />
       <Route path='/surveys/create' element={
         <EditProvider>
