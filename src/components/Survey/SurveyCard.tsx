@@ -25,7 +25,7 @@ interface SurveyCardProps {
 const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) => {
   const [openRatingModal, setOpenRatingModal] = useState(false);
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
-  const { isAuthenticated } = useAuthContext();
+  const { verifySession } = useAuthContext();
   const navigate = useNavigate();
 
   const handleOpenRatingModal = () => setOpenRatingModal(true);
@@ -36,15 +36,6 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
   const handleConfirmLogin = () => {
     setOpenErrorModal(false);
     navigate("/login");
-  };
-
-  const verifySession = (e: React.MouseEvent<HTMLElement, MouseEvent>, callback: () => void) => {
-    if (!isAuthenticated) {
-      e.preventDefault();
-      handleOpenErrorModal();
-    } else {
-      callback();
-    }
   };
 
   const handleRate = async (rated: number) => {
@@ -133,7 +124,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
         <div className="mt-4 flex space-x-2">
           <Link
             to={`/surveys/${survey.id}`}
-            onClick={(e) => verifySession(e, () => { })}
+            onClick={(e) => verifySession(e, handleOpenErrorModal,() => { })}
           >
             <Button
               variant="contained"
@@ -145,7 +136,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
           </Link>
           <Link
             to={`/surveys/${survey.id}/reviews`}
-            onClick={(e) => verifySession(e, () => { })}
+            onClick={(e) => verifySession(e, handleOpenErrorModal,() => { })}
           >
             <Button
               variant="contained"
@@ -158,7 +149,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
           <Button
             variant="contained"
             color="warning"
-            onClick={(e) => verifySession(e, handleOpenRatingModal)}
+            onClick={(e) => verifySession(e, handleOpenErrorModal, handleOpenRatingModal)}
             style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
           >
             Valorar
