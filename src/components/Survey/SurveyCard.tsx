@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Button from '@mui/material/Button';
 import { Link, useNavigate } from "react-router-dom";
 import { Survey } from "../../types/survey";
 import RatingModal from './RatingModal';
@@ -15,6 +14,9 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { reports } from "../../data/Reports";
 import { useAuthContext } from "../../context/AuthContext";
 import ErrorModal from "../error/ErrorModal";
+import ReviewsIcon from '@mui/icons-material/Reviews';
+import StarRateIcon from '@mui/icons-material/StarRate';
+import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 
 interface SurveyCardProps {
   survey: Survey;
@@ -62,8 +64,8 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
   }
 
   return (
-    <div className="max-w-sm w-full lg:max-w-full lg:flex mb-5">
-      <div className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
+    <div className="w-full mb-5">
+      <div className="h-48 flex-none bg-cover rounded-t rounded-l text-center overflow-hidden"
         style={{ backgroundImage: "url('https://plus.unsplash.com/premium_photo-1673306778968-5aab577a7365?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmFja2dyb3VuZCUyMGltYWdlfDB8fDB8fHww')" }}
         title="Portada de la encuesta"
       >
@@ -123,40 +125,31 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
             </div>
           </div>
         </div>
-        <div className="mt-4 flex space-x-2">
-          <Link
-            to={`/surveys/${survey.id}`}
-            onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
-            >
-              Responder Encuesta
-            </Button>
+        <div className="mt-4 flex justify-around">
+          <Link to={`/surveys/${survey.id}`} onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}>
+            <button className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300">
+              <ChecklistRtlIcon className="mr-1" />
+              <span className="hidden md:inline md:text-base">Responder</span>
+            </button>
           </Link>
-          <Link
-            to={`/surveys/${survey.id}/reviews`}
-            onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}
-          >
-            <Button
-              variant="contained"
-              color="secondary"
-              style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
-            >
-              Ver Reseñas
-            </Button>
+
+          <Link to={`/surveys/${survey.id}/reviews`} onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}>
+            <button className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300">
+              <ReviewsIcon className="mr-1" />
+              <span className="hidden md:inline md:text-base">Reseñas</span>
+            </button>
           </Link>
-          <Button
-            variant="contained"
-            color="warning"
+
+          <button
+            className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300"
             onClick={(e) => verifySession(e, handleOpenErrorModal, handleOpenRatingModal)}
-            style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
           >
-            Valorar
-          </Button>
+            <StarRateIcon className="mr-1" />
+            <span className="hidden md:inline md:text-base">Valorar</span>
+          </button>
         </div>
+
+
       </div>
       <RatingModal
         open={openRatingModal}
