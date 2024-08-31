@@ -69,7 +69,7 @@ const Reviews = () => {
   return (
     <div className="border-2 p-10 rounded-md">
       <h2 className="font-manrope font-bold text-4xl text-black mb-8 text-center">
-        Our customer reviews
+        Reseñas de la encuesta
       </h2>
       <div className="pt-8">
         <ReviewSummary surveyId={ surveyId || ''} />
