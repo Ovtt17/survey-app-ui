@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from '@mui/material/Button';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Survey } from "../../types/survey";
 import RatingModal from './RatingModal';
 import Rating from '@mui/material/Rating';
@@ -13,6 +13,8 @@ import ExcelIcon from '../../assets/icon-excel.svg';
 import { downloadReportWithSurvey } from "../../services/reportService";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import { reports } from "../../data/Reports";
+import { useAuthContext } from "../../context/AuthContext";
+import ErrorModal from "../error/ErrorModal";
 
 interface SurveyCardProps {
   survey: Survey;
@@ -21,10 +23,29 @@ interface SurveyCardProps {
 }
 
 const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) => {
-  const [openRatingModal, setOpenRatingModal] = React.useState(false);
+  const [openRatingModal, setOpenRatingModal] = useState(false);
+  const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
+  const { isAuthenticated } = useAuthContext();
+  const navigate = useNavigate();
 
-  const handleOpen = () => setOpenRatingModal(true);
-  const handleClose = () => setOpenRatingModal(false);
+  const handleOpenRatingModal = () => setOpenRatingModal(true);
+  const handleCloseRatingModal = () => setOpenRatingModal(false);
+
+  const handleOpenErrorModal = () => setOpenErrorModal(true);
+
+  const handleConfirmLogin = () => {
+    setOpenErrorModal(false);
+    navigate("/login");
+  };
+
+  const verifySession = (e: React.MouseEvent<HTMLElement, MouseEvent>, callback: () => void) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      handleOpenErrorModal();
+    } else {
+      callback();
+    }
+  };
 
   const handleRate = async (rated: number) => {
     try {
@@ -32,7 +53,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
     } catch (error) {
       console.error("Failed to submit rating", error);
     }
-    handleClose();
+    handleCloseRatingModal();
   };
 
   const handleDelete = async (id: number = 0) => {
@@ -110,7 +131,10 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
           </div>
         </div>
         <div className="mt-4 flex space-x-2">
-          <Link to={`/surveys/${survey.id}`}>
+          <Link
+            to={`/surveys/${survey.id}`}
+            onClick={(e) => verifySession(e, () => { })}
+          >
             <Button
               variant="contained"
               color="primary"
@@ -119,7 +143,10 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
               Responder Encuesta
             </Button>
           </Link>
-          <Link to={`/surveys/${survey.id}/reviews`}>
+          <Link
+            to={`/surveys/${survey.id}/reviews`}
+            onClick={(e) => verifySession(e, () => { })}
+          >
             <Button
               variant="contained"
               color="secondary"
@@ -131,7 +158,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
           <Button
             variant="contained"
             color="warning"
-            onClick={handleOpen}
+            onClick={(e) => verifySession(e, handleOpenRatingModal)}
             style={{ margin: '0 8px', textTransform: 'none', width: '150px', padding: '10px 0' }}
           >
             Valorar
@@ -140,9 +167,18 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
       </div>
       <RatingModal
         open={openRatingModal}
-        onClose={handleClose}
+        onClose={handleCloseRatingModal}
         userRating={survey.averageRating}
         onRate={handleRate}
+      />
+
+      <ErrorModal
+        open={openErrorModal}
+        setOpen={setOpenErrorModal}
+        title="Error"
+        message="Para realizar esta acción es necesario iniciar sesión"
+        confirmText="Iniciar Sesión"
+        onConfirm={handleConfirmLogin}
       />
     </div>
   );
