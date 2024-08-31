@@ -25,7 +25,7 @@ interface SurveyCardProps {
 const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) => {
   const [openRatingModal, setOpenRatingModal] = useState(false);
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
-  const { verifySession } = useAuthContext();
+  const { verifySession, isAuthenticated } = useAuthContext();
   const navigate = useNavigate();
 
   const handleOpenRatingModal = () => setOpenRatingModal(true);
@@ -92,12 +92,14 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
           </div>
         )}
         <div className="mb-6 mt-2">
-          <p className="text-sm text-gray-600 flex items-center">
-            <svg className="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-              <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
-            </svg>
-            Members only
-          </p>
+          {!isAuthenticated && (
+            <p className="text-sm text-gray-600 flex items-center">
+              <svg className="fill-current text-gray-500 w-3 h-3 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                <path d="M4 8V6a6 6 0 1 1 12 0v2h1a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-8c0-1.1.9-2 2-2h1zm5 6.73V17h2v-2.27a2 2 0 1 0-2 0zM7 6v2h6V6a3 3 0 0 0-6 0z" />
+              </svg>
+              Members only
+            </p>
+          )}
           <div className="text-gray-900 font-bold text-xl mb-2">{survey.title}</div>
           <p className="text-gray-700 text-base overflow-hidden" style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
             {survey.description}
@@ -124,7 +126,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
         <div className="mt-4 flex space-x-2">
           <Link
             to={`/surveys/${survey.id}`}
-            onClick={(e) => verifySession(e, handleOpenErrorModal,() => { })}
+            onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}
           >
             <Button
               variant="contained"
@@ -136,7 +138,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
           </Link>
           <Link
             to={`/surveys/${survey.id}/reviews`}
-            onClick={(e) => verifySession(e, handleOpenErrorModal,() => { })}
+            onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}
           >
             <Button
               variant="contained"
