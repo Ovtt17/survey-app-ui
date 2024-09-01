@@ -64,13 +64,13 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
   }
 
   return (
-    <div className="w-full mb-5">
+    <div className="w-full pb-5">
       <div className="h-48 flex-none bg-cover rounded-t rounded-l text-center overflow-hidden"
         style={{ backgroundImage: "url('https://plus.unsplash.com/premium_photo-1673306778968-5aab577a7365?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmFja2dyb3VuZCUyMGltYWdlfDB8fDB8fHww')" }}
         title="Portada de la encuesta"
       >
       </div>
-      <div className="relative h-72 shadow-xl bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+      <div className="relative min-h-72 shadow-xl bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
         {isOwner && (
           <div className="absolute top-2 right-1 flex space-x-2">
             <div onClick={downloadAnswersReport} className="cursor-pointer h-8 w-8 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
@@ -102,7 +102,9 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
               Members only
             </p>
           )}
-          <div className="text-gray-900 font-bold text-xl mb-2">{survey.title}</div>
+          <div className="text-gray-900 font-bold text-xl mb-2 mt-4">
+            <p>{survey.title}</p>
+          </div>
           <p className="text-gray-700 text-base overflow-hidden" style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
             {survey.description}
           </p>
@@ -125,7 +127,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
             </div>
           </div>
         </div>
-        <div className="mt-4 flex justify-around">
+        <div className="pt-4 flex justify-around">
           <Link to={`/surveys/${survey.id}`} onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}>
             <button className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300">
               <ChecklistRtlIcon className="mr-1" />
