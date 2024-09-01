@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Survey } from "../../types/survey";
-import RatingModal from './RatingModal';
+import RatingModal from '../rating/RatingModal';
 import Rating from '@mui/material/Rating';
 import IconButton from "@mui/material/IconButton";
 import EditIcon from '@mui/icons-material/Edit';
