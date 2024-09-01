@@ -4,3 +4,8 @@ export interface Rating {
   username?: number;
   surveyId: number;
 }
+
+export interface RatingGroup {
+  rating: number;
+  count: number;
+}
