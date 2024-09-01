@@ -16,7 +16,7 @@ const SurveyModal: FC<SurveyModalProps> = ({ surveys, handleSurveySelected, hand
     <div className="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 flex justify-center items-center">
       <div className="bg-white rounded-2xl py-4 px-5 w-[90%]">
         <div>
-          <h2 className="text-2xl font-semibold pb-5">Respuestas</h2>
+          <h2 className="text-2xl font-semibold pb-5">Encuestas</h2>
         </div>
         <TableContainer component={Paper} style={{ maxHeight: '60vh', overflowY: 'auto' }}>
           <Table>
