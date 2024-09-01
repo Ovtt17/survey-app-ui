@@ -1,4 +1,4 @@
-import { Rating } from "../types/rating";
+import { Rating, RatingGroup } from "../types/rating";
 import { getToken } from "../utils/auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/ratings`;
@@ -20,4 +20,18 @@ export const createRating = async (rating: Rating): Promise<void> => {
     console.error('Error creating rating:', error);
     throw error;
   }
-}
+};
+
+export const getRatingGroupBySurveyId = async (surveyId: number): Promise<RatingGroup[]> => {
+  try {
+    const response = await fetch(BASE_URL + `/grouped/${surveyId}`, {
+      method: 'GET',
+      headers: getHeaders()
+    });
+    const ratings = await response.json();
+    return ratings;
+  } catch (error) {
+    console.error('Error getting ratings:', error);
+    throw error;
+  }
+};
