@@ -72,7 +72,7 @@ const Reviews = () => {
         Reseñas de la encuesta
       </h2>
       <div className="pt-8">
-        <ReviewSummary surveyId={ surveyId || ''} />
+        <ReviewSummary surveyId={Number(surveyId)} />
       </div>
       <div>
         {reviews.map((review) => (
