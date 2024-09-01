@@ -6,7 +6,7 @@ import ScrollToTop from "./utils/ScrollToTop";
 function App() {
   return (
     <AuthProvider>
-      <div className="min-h-screen">
+      <div className="min-h-screen flex flex-col">
         <ScrollToTop />
         <header>
           <Navigation />
