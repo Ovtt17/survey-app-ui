@@ -1,8 +1,9 @@
 export interface User {
   username: string;
   firstName: string;
-  fullName: string;
   lastName: string;
+  fullName: string;
+  profilePictureUrl: string;
 }
 
 export interface NewUser {

@@ -1,8 +1,9 @@
+import { AuthenticationResponse } from "../types/authenticationResponse";
 import { NewUser } from "../types/user";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/auth`;
 
-export const login = async (usernameOrEmail: string, password: string) => {
+export const login = async (usernameOrEmail: string, password: string): Promise<AuthenticationResponse> => {
   const data = { usernameOrEmail, password };
 
   try {
@@ -16,9 +17,11 @@ export const login = async (usernameOrEmail: string, password: string) => {
     });
 
     if (response.ok) {
-      const result = await response.json();
-      localStorage.setItem('token', result.token);
-      return result;
+      const authResponse: AuthenticationResponse = await response.json();
+      localStorage.setItem('token', authResponse.token);
+      console.log(authResponse);
+      console.log(authResponse.user.profilePictureUrl);
+      return authResponse;
     } else {
       throw new Error('Login failed: ' + response.statusText);
     }
