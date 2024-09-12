@@ -1,13 +1,13 @@
 import { TextField } from '@mui/material';
 import React, { FC } from 'react';
 
-interface UserContactAndDOBStepProps {
+interface UserDOBStepProps {
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const UserContactAndDOBStep: FC<UserContactAndDOBStepProps> = ({ handleChange }) => {
+const UserDOBStep: FC<UserDOBStepProps> = ({ handleChange }) => {
   return (
-    <div className="container mt-4">
+    <div className="container lg:flex mt-4">
       <div className="item w-full p-2">
         <TextField
           id="dob-day"
@@ -67,4 +67,4 @@ const UserContactAndDOBStep: FC<UserContactAndDOBStepProps> = ({ handleChange })
   );
 }
 
-export default UserContactAndDOBStep;
+export default UserDOBStep;

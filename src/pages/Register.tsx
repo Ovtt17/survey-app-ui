@@ -4,7 +4,7 @@ import { registerUser } from '../services/authService';
 import { NewUser } from '../types/user';
 import { useNavigate } from 'react-router-dom';
 import UserPersonalDetailsStep from '../components/register/UserPersonalDetailsStep';
-import UserContactAndDOBStep from '../components/register/UserContactAndDOBStep';
+import UserAndDOBStep from '../components/register/UserDOBStep';
 
 const ERROR_MESSAGES = {
   requiredFields: 'Por favor, completa todos los campos.',
@@ -72,7 +72,7 @@ const Register: FC<RegisterProps> = () => {
       handleChange={handleChange}
       fieldErrors={fieldErrors}
     />,
-    <UserContactAndDOBStep handleChange={handleChange} />,
+    <UserAndDOBStep handleChange={handleChange} />,
   ];
 
   const handleNextStep = () => {
