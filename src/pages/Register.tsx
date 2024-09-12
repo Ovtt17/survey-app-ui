@@ -1,18 +1,23 @@
-import { Alert, TextField } from '@mui/material';
+import { Alert } from '@mui/material';
 import { FC, useState } from 'react';
 import { registerUser } from '../services/authService';
 import { NewUser } from '../types/user';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-import dayjs, { Dayjs } from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import UserPersonalDetailsStep from '../components/register/UserPersonalDetailsStep';
+import UserContactAndDOBStep from '../components/register/UserContactAndDOBStep';
+
+const ERROR_MESSAGES = {
+  requiredFields: 'Por favor, completa todos los campos.',
+  passwordMismatch: 'Las contraseñas no coinciden',
+  registrationFailed: 'Registration failed. Please try again',
+};
 
 interface RegisterProps { }
 
-const Register: FC<RegisterProps> = ({ }) => {
+const Register: FC<RegisterProps> = () => {
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const [step, setStep] = useState<number>(0);
   const [formData, setFormData] = useState<NewUser>({
     username: '',
     firstName: '',
@@ -23,27 +28,65 @@ const Register: FC<RegisterProps> = ({ }) => {
     password: '',
     confirmPassword: '',
   });
+  const [fieldErrors, setFieldErrors] = useState({
+    firstName: false,
+    lastName: false,
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+    setFieldErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: false,
+    }));
   };
 
-  const handleDateChange = (date: Dayjs | null) => {
-    if (date) {
-      setFormData({
-        ...formData,
-        dateOfBirth: date.toDate(),
-      });
+  const validateStep = (): boolean => {
+    let errors = { ...fieldErrors };
+    let isValid = true;
+
+    if (step === 0) {
+      if (!formData.firstName.trim()) {
+        errors.firstName = true;
+        isValid = false;
+      }
+      if (!formData.lastName.trim()) {
+        errors.lastName = true;
+        isValid = false;
+      }
+    }
+
+    setFieldErrors(errors);
+    setErrorMessage(isValid ? '' : ERROR_MESSAGES.requiredFields);
+    return isValid;
+  };
+
+  const steps = [
+    <UserPersonalDetailsStep
+      firstName={formData.firstName}
+      lastName={formData.lastName}
+      handleChange={handleChange}
+      fieldErrors={fieldErrors}
+    />,
+    <UserContactAndDOBStep handleChange={handleChange} />,
+  ];
+
+  const handleNextStep = () => {
+    if (validateStep()) {
+      setStep((prevStep) => prevStep + 1);
     }
   };
+
+  const handlePrevStep = () => setStep((prevStep) => prevStep - 1);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (formData.password !== formData.confirmPassword) {
-      setErrorMessage('Las contraseñas no coinciden');
+      setErrorMessage(ERROR_MESSAGES.passwordMismatch);
       return;
     }
     try {
@@ -51,145 +94,66 @@ const Register: FC<RegisterProps> = ({ }) => {
       navigate('/activate-account');
     } catch (error) {
       console.error('Registration failed:', error);
-      setErrorMessage('Registration failed. Please try again');
+      setErrorMessage(ERROR_MESSAGES.registrationFailed);
     }
   };
 
   return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            alt="Your Company"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-            className="mx-auto h-10 w-auto"
-          />
-          <h2 className="mt-10 text-center text-4xl font-bold leading-9 tracking-tight text-gray-900">
-            Crear Cuenta
-          </h2>
-        </div>
+    <section className="flex min-h-screen flex-col justify-center items-center bg-gray-50">
+      <div className="w-full max-w-md lg:max-w-5xl bg-white rounded-md shadow-md">
+        <div className="relative lg:grid lg:grid-cols-2 lg:gap-6 pt-16 lg:pt-24 pb-10 px-10">
+          <div className="text-center lg:text-left">
+            <img
+              alt="Your Company"
+              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+              className="lg:absolute lg:top-10 lg:left-10 mx-auto lg:mx-0 h-10 w-auto mb-4"
+            />
+            <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+              Crear Cuenta
+            </h2>
+            <p className="mt-2 text-md text-gray-600">
+              Completa la información para crear tu cuenta
+            </p>
+          </div>
+          <div className="relative">
+            <form
+              onSubmit={handleSubmit}
+              className="mt-8 lg:mt-0 space-y-6 lg:gap-6"
+            >
+              <div>{steps[step]}</div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="flex gap-4">
-              <TextField
-                id="firstName"
-                label="First Name"
-                variant="outlined"
-                name="firstName"
-                type="text"
-                required
-                className="w-full"
-                value={formData.firstName}
-                onChange={handleChange}
-              />
-              <TextField
-                id="lastName"
-                label="Last Name"
-                variant="outlined"
-                name="lastName"
-                type="text"
-                required
-                className="w-full"
-                value={formData.lastName}
-                onChange={handleChange}
-              />
-            </div>
+              {errorMessage && (
+                <Alert severity="error" className="mb-4">
+                  {errorMessage}
+                </Alert>
+              )}
 
-            <div className="flex gap-4">
-              <TextField
-                id="username"
-                label="Username"
-                variant="outlined"
-                name="username"
-                type="text"
-                required
-                autoComplete="username"
-                className="w-full"
-                value={formData.username}
-                onChange={handleChange}
-              />
-              <TextField
-                id="email"
-                label="Email"
-                variant="outlined"
-                name="email"
-                type="email"
-                required
-                autoComplete="email"
-                className="w-full"
-                value={formData.email}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="flex gap-4">
-              <TextField
-                id="password"
-                label="Password"
-                variant="outlined"
-                name="password"
-                type="password"
-                required
-                autoComplete="new-password"
-                className="w-full"
-                value={formData.password}
-                onChange={handleChange}
-              />
-              <TextField
-                id="confirmPassword"
-                label="Confirm Password"
-                variant="outlined"
-                name="confirmPassword"
-                type="password"
-                required
-                autoComplete="new-password"
-                className="w-full"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
-            </div>
-
-            <div className="flex gap-4">
-              <TextField
-                id="phone"
-                label="Phone"
-                variant="outlined"
-                name="phone"
-                type="tel"
-                required
-                className="w-full"
-                value={formData.phone}
-                onChange={handleChange}
-              />
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                  className="w-full"
-                  label="Date of Birth"
-                  value={formData.dateOfBirth ? dayjs(formData.dateOfBirth) : null}
-                  onChange={handleDateChange}
-                />
-              </LocalizationProvider>
-            </div>
-
-            {errorMessage && (
-              <Alert severity="error" className="mb-4">
-                {errorMessage}
-              </Alert>
-            )}
-            <div>
-              <button
-                type="submit"
-                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Regístrate
-              </button>
-            </div>
-          </form>
+              <div className="flex justify-between items-center lg:col-span-2">
+                {step > 0 && (
+                  <button
+                    type="button"
+                    onClick={handlePrevStep}
+                    className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                  >
+                    Atrás
+                  </button>
+                )}
+                <div className="flex-1 text-right">
+                  <button
+                    type="button"
+                    onClick={handleNextStep}
+                    className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    Continuar
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </>
+    </section>
   );
-}
+};
 
 export default Register;

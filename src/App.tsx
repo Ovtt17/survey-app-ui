@@ -11,7 +11,7 @@ function App() {
         <header>
           <Navigation />
         </header>
-        <main className="flex-grow p-4">
+        <main className="flex-grow p-4 bg-[#F0F4F9]">
           <AppRoutes />
         </main>
         <footer className="bg-gray-800 p-4">
