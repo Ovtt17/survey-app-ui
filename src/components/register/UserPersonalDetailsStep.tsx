@@ -45,11 +45,11 @@ const UserPersonalDetailsStep: FC<UserPersonalDetailsStepProps> = ({
     switch (error) {
       case 'maxDate':
       case 'minDate': {
-        return 'Por favor, selecciona una fecha entre 15 y 100 años de edad';
+        return 'Solo se permiten edades entre 15 y 100 años.';
       }
 
       case 'invalidDate': {
-        return 'Por favor, selecciona una fecha válida';
+        return 'Por favor, selecciona una fecha válida.';
       }
 
       default: {
