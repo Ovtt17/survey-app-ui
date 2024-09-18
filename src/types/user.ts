@@ -10,7 +10,7 @@ export interface NewUser {
   username: string;
   firstName: string;
   lastName: string;
-  dateOfBirth: Date;
+  dateOfBirth?: Date;
   phone: number;
   email: string;
   password: string;

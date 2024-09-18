@@ -1,37 +1,87 @@
+import React, { FC, useState } from 'react';
 import { Alert } from '@mui/material';
-import { FC, useState } from 'react';
 import { registerUser } from '../services/authService';
 import { NewUser } from '../types/user';
 import { useNavigate } from 'react-router-dom';
 import UserPersonalDetailsStep from '../components/register/UserPersonalDetailsStep';
-import UserAndDOBStep from '../components/register/UserDOBStep';
+import dayjs, { Dayjs } from 'dayjs';
 
 const ERROR_MESSAGES = {
-  requiredFields: 'Por favor, completa todos los campos.',
+  requiredFields: 'Por favor, completa todos los campos correctamente.',
   passwordMismatch: 'Las contraseñas no coinciden',
   registrationFailed: 'Registration failed. Please try again',
 };
 
-interface RegisterProps { }
+interface FieldErrors {
+  firstName: boolean;
+  lastName: boolean;
+  dateOfBirth: boolean;
+}
 
-const Register: FC<RegisterProps> = () => {
+export interface FieldErrorsHandler {
+  fieldErrors: FieldErrors;
+  setFieldError: (field: keyof FieldErrors, value: boolean) => void;
+}
+
+const Register: FC = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [step, setStep] = useState<number>(0);
+  const [dateOfBirth, setDateOfBirth] = useState<Dayjs>(dayjs('01-01-2000'));
+
+  const minDate = dayjs().subtract(100, 'year');
+  const maxDate = dayjs().subtract(15, 'year');
+
   const [formData, setFormData] = useState<NewUser>({
     username: '',
     firstName: '',
     lastName: '',
-    dateOfBirth: new Date(),
+    dateOfBirth: dateOfBirth.toDate(),
     phone: 0,
     email: '',
     password: '',
     confirmPassword: '',
   });
-  const [fieldErrors, setFieldErrors] = useState({
+
+
+  const handleChangeDate = (newDateOfBirth: Dayjs | null) => {
+    if (newDateOfBirth?.isAfter(minDate) && newDateOfBirth?.isBefore(maxDate)) {
+      setDateOfBirth(newDateOfBirth);
+      setFormData((prevData) => ({
+        ...prevData,
+        dateOfBirth: newDateOfBirth.toDate(),
+      }));
+      setFieldErrors((prevErrors) => ({
+        ...prevErrors,
+        dateOfBirth: false,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        dateOfBirth: undefined,
+      }));
+      setFieldErrors((prevErrors) => ({
+        ...prevErrors,
+        dateOfBirth: true,
+      }));
+    }
+  };
+
+
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({
     firstName: false,
     lastName: false,
+    dateOfBirth: false,
   });
+
+  const setFieldError = (field: keyof FieldErrors, value: boolean) => {
+    setFieldErrors(prev => ({ ...prev, [field]: value }));
+  };
+
+  const fieldErrorsHandler: FieldErrorsHandler = {
+    fieldErrors,
+    setFieldError,
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -45,39 +95,24 @@ const Register: FC<RegisterProps> = () => {
     }));
   };
 
-  const validateStep = (): boolean => {
-    let errors = { ...fieldErrors };
-    let isValid = true;
-
-    if (step === 0) {
-      if (!formData.firstName.trim()) {
-        errors.firstName = true;
-        isValid = false;
-      }
-      if (!formData.lastName.trim()) {
-        errors.lastName = true;
-        isValid = false;
-      }
-    }
-
-    setFieldErrors(errors);
-    setErrorMessage(isValid ? '' : ERROR_MESSAGES.requiredFields);
-    return isValid;
-  };
-
-  const steps = [
-    <UserPersonalDetailsStep
-      firstName={formData.firstName}
-      lastName={formData.lastName}
-      handleChange={handleChange}
-      fieldErrors={fieldErrors}
-    />,
-    <UserAndDOBStep handleChange={handleChange} />,
-  ];
-
   const handleNextStep = () => {
-    if (validateStep()) {
-      setStep((prevStep) => prevStep + 1);
+    const newFieldErrors = {
+      firstName: !formData.firstName.trim(),
+      lastName: !formData.lastName.trim(),
+      dateOfBirth: !formData.dateOfBirth,
+    };
+
+    setFieldErrors(newFieldErrors);
+
+    console.log(formData);
+    console.log(fieldErrors);
+
+    if (Object.values(newFieldErrors).every(error => error === false)) {
+      setErrorMessage('');
+      setStep(prev => prev + 1);
+    } else {
+      setErrorMessage(ERROR_MESSAGES.requiredFields);
+      return;
     }
   };
 
@@ -85,10 +120,12 @@ const Register: FC<RegisterProps> = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
     if (formData.password !== formData.confirmPassword) {
       setErrorMessage(ERROR_MESSAGES.passwordMismatch);
       return;
-    }
+    };
+
     try {
       await registerUser(formData);
       navigate('/activate-account');
@@ -97,6 +134,19 @@ const Register: FC<RegisterProps> = () => {
       setErrorMessage(ERROR_MESSAGES.registrationFailed);
     }
   };
+
+  const steps = [
+    <UserPersonalDetailsStep
+      firstName={formData.firstName}
+      lastName={formData.lastName}
+      dateOfBirth={dateOfBirth}
+      handleChange={handleChange}
+      handleChangeDate={handleChangeDate}
+      fieldErrorsHandler={fieldErrorsHandler}
+      minDate={minDate}
+      maxDate={maxDate}
+    />
+  ];
 
   return (
     <section className="flex min-h-screen flex-col justify-center items-center bg-gray-50">
