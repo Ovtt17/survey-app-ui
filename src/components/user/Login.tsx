@@ -37,9 +37,9 @@ const Login = () => {
   }, [navigate]);
 
   return (
-    <>
-      <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+    <section className="flex min-h-screen flex-col justify-center items-center">
+      <div className='w-full max-w-lg p-5 bg-white rounded-md shadow-md'>
+        <article className="sm:mx-auto sm:w-full sm:max-w-sm">
           <img
             alt="Your Company"
             src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -48,9 +48,9 @@ const Login = () => {
           <h2 className="mt-10 text-center text-4xl font-bold leading-9 tracking-tight text-gray-900">
             Inicia Sesión
           </h2>
-        </div>
+        </article>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <article className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <TextField
@@ -105,9 +105,9 @@ const Login = () => {
               Regístrate
             </Link>
           </p>
-        </div>
+        </article>
       </div>
-    </>
+    </section>
   );
 };
 
