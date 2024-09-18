@@ -60,6 +60,7 @@ const UserPersonalDetailsStep: FC<UserPersonalDetailsStepProps> = ({
 
   return (
     <div>
+      <h3 className='pb-2 text-2xl font-bold tracking-tight text-gray-700'>Información Personal</h3>
       <TextField
         label="Nombre"
         name="firstName"
