@@ -146,7 +146,7 @@ const Register: FC = () => {
   ];
 
   return (
-    <section className="flex min-h-screen flex-col justify-center items-center bg-gray-50">
+    <section className="flex min-h-screen flex-col justify-center items-center">
       <div className="w-full max-w-md lg:max-w-5xl bg-white rounded-md shadow-md">
         <div className="relative lg:grid lg:grid-cols-2 lg:gap-6 pt-16 lg:pt-24 pb-10 px-10">
           <div className="text-center lg:text-left">
