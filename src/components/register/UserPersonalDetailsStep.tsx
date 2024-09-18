@@ -12,7 +12,7 @@ import { FieldErrorsHandler } from '../../pages/Register';
 interface UserPersonalDetailsStepProps {
   firstName: string;
   lastName: string;
-  dateOfBirth: Dayjs;
+  dateOfBirth: Dayjs | null;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeDate: (date: Dayjs | null) => void;
   fieldErrorsHandler: FieldErrorsHandler;
