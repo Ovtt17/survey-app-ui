@@ -104,9 +104,6 @@ const Register: FC = () => {
 
     setFieldErrors(newFieldErrors);
 
-    console.log(formData);
-    console.log(fieldErrors);
-
     if (Object.values(newFieldErrors).every(error => error === false)) {
       setErrorMessage('');
       setStep(prev => prev + 1);
