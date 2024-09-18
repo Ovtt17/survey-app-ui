@@ -6,8 +6,7 @@ import { Dayjs } from 'dayjs';
 import "dayjs/locale/es";
 import { TextField } from '@mui/material';
 import { DateValidationError } from '@mui/x-date-pickers/models';
-import { FieldErrorsHandler } from '../../pages/Register';
-
+import { StepErrors } from '../../pages/Register';
 
 interface UserPersonalDetailsStepProps {
   firstName: string;
@@ -15,7 +14,9 @@ interface UserPersonalDetailsStepProps {
   dateOfBirth: Dayjs | null;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeDate: (date: Dayjs | null) => void;
-  fieldErrorsHandler: FieldErrorsHandler;
+  firstNameError: boolean;
+  lastNameError: boolean;
+  setFieldError: (field: keyof StepErrors, value: boolean) => void;
   minDate: Dayjs;
   maxDate: Dayjs;
 }
@@ -26,35 +27,26 @@ const UserPersonalDetailsStep: FC<UserPersonalDetailsStepProps> = ({
   dateOfBirth,
   handleChange,
   handleChangeDate,
-  fieldErrorsHandler,
+  firstNameError,
+  lastNameError,
+  setFieldError,
   minDate,
   maxDate
 }) => {
 
   const [error, setError] = useState<DateValidationError | null>(null);
 
-  const { fieldErrors, setFieldError } = fieldErrorsHandler;
-
   const handleDateError = (error: DateValidationError | null) => {
     setError(error);
-    setFieldError('dateOfBirth', !!error);
-
+    setFieldError('dateOfBirth', true);
   };
 
   const errorMessage = useMemo(() => {
     switch (error) {
       case 'maxDate':
-      case 'minDate': {
-        return 'Solo se permiten edades entre 15 y 100 años.';
-      }
-
-      case 'invalidDate': {
-        return 'Por favor, selecciona una fecha válida.';
-      }
-
-      default: {
-        return '';
-      }
+      case 'minDate': return 'Solo se permiten edades entre 15 y 100 años.';
+      case 'invalidDate': return 'Por favor, selecciona una fecha válida.';
+      default: return '';
     }
   }, [error]);
 
@@ -66,8 +58,9 @@ const UserPersonalDetailsStep: FC<UserPersonalDetailsStepProps> = ({
         name="firstName"
         value={firstName}
         onChange={handleChange}
-        error={fieldErrors.firstName}
-        helperText={fieldErrors.firstName ? 'Este campo es obligatorio' : ''}
+        error={firstNameError}
+        onError={() => setFieldError('firstName', true)}
+        helperText={firstNameError ? 'Este campo es obligatorio' : ''}
         fullWidth
         margin="normal"
       />
@@ -76,8 +69,9 @@ const UserPersonalDetailsStep: FC<UserPersonalDetailsStepProps> = ({
         name="lastName"
         value={lastName}
         onChange={handleChange}
-        error={fieldErrors.lastName}
-        helperText={fieldErrors.lastName ? 'Este campo es obligatorio' : ''}
+        error={lastNameError}
+        onError={() => setFieldError('lastName', true)}
+        helperText={lastNameError ? 'Este campo es obligatorio' : ''}
         fullWidth
         margin="normal"
       />

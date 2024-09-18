@@ -1,27 +1,18 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Alert } from '@mui/material';
-import { registerUser } from '../services/authService';
+import { checkExistingEmail, registerUser } from '../services/authService';
 import { NewUser } from '../types/user';
 import { useNavigate } from 'react-router-dom';
 import UserPersonalDetailsStep from '../components/register/UserPersonalDetailsStep';
 import dayjs, { Dayjs } from 'dayjs';
+import UserEmailStep from '../components/register/UserEmailStep';
 
 const ERROR_MESSAGES = {
   requiredFields: 'Por favor, completa todos los campos correctamente.',
   passwordMismatch: 'Las contraseñas no coinciden',
   registrationFailed: 'Registration failed. Please try again',
+  emailInUse: 'El email ya está en uso. Por favor, intenta con otro.',
 };
-
-interface FieldErrors {
-  firstName: boolean;
-  lastName: boolean;
-  dateOfBirth: boolean;
-}
-
-export interface FieldErrorsHandler {
-  fieldErrors: FieldErrors;
-  setFieldError: (field: keyof FieldErrors, value: boolean) => void;
-}
 
 const initialFormData: NewUser = {
   username: '',
@@ -34,11 +25,15 @@ const initialFormData: NewUser = {
   confirmPassword: '',
 };
 
-const initialFieldErrors: FieldErrors = {
-  firstName: false,
-  lastName: false,
-  dateOfBirth: false,
-};
+export interface StepErrors {
+  [key: string]: boolean;
+}
+
+const initialFieldErrors: Array<StepErrors> = [
+  { firstName: false, lastName: false, dateOfBirth: false },
+  { email: false },
+];
+
 const Register: FC = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -49,22 +44,21 @@ const Register: FC = () => {
   const maxDate = dayjs().subtract(15, 'year');
 
   const [formData, setFormData] = useState<NewUser>(initialFormData);
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>(initialFieldErrors);
+  const [errors, setErrors] = useState<Array<StepErrors>>(initialFieldErrors);
 
-  const setFieldError = (field: keyof FieldErrors, value: boolean) => {
-    setFieldErrors(prev => ({ ...prev, [field]: value }));
+  const updateError = (field: keyof StepErrors, value: boolean) => {
+    setErrors(prev => {
+      const newFieldErrors = [...prev];
+      newFieldErrors[step] = { ...newFieldErrors[step], [field]: value };
+      return newFieldErrors;
+    });
   };
 
-  const fieldErrorsHandler: FieldErrorsHandler = {
-    fieldErrors,
-    setFieldError,
-  };
-
-  const clearErrorMessageIfNoErrors = (newFieldErrors: FieldErrors) => {
-    if (Object.values(newFieldErrors).every(error => error === false)) {
+  useEffect(() => {
+    if (errors.every(stepErrors => Object.values(stepErrors).every(error => error === false))) {
       setErrorMessage('');
     }
-  };
+  }, [errors]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -72,47 +66,60 @@ const Register: FC = () => {
       ...prevData,
       [name]: value,
     }));
-    setFieldError(name as keyof FieldErrors, false);
-    clearErrorMessageIfNoErrors({
-      ...fieldErrors,
-      [name]: false,
-    });
+    updateError(name as keyof StepErrors, false);
   };
 
   const handleChangeDate = (newDateOfBirth: Dayjs | null) => {
     const isValidDate = newDateOfBirth?.isAfter(minDate) && newDateOfBirth?.isBefore(maxDate);
+    const name = 'dateOfBirth';
     setDateOfBirth(newDateOfBirth);
 
     setFormData(prevData => ({
       ...prevData,
       dateOfBirth: isValidDate ? newDateOfBirth?.toDate() : undefined,
     }));
+    updateError(name as keyof StepErrors, !isValidDate);
+  };
 
-    setFieldError('dateOfBirth', !isValidDate);
-    clearErrorMessageIfNoErrors({
-      ...fieldErrors,
-      dateOfBirth: !isValidDate,
+  const handleNextStep = async () => {
+    const emailStep = 1;
+    const currentStepErrors = errors[step];
+    const newFieldErrors: StepErrors = {};
+
+    Object.keys(currentStepErrors).forEach(field => {
+      newFieldErrors[field] = !formData[field as keyof NewUser]?.toString().trim();
     });
-  };
 
-  const handleNextStep = () => {
-    const newFieldErrors = {
-      firstName: !formData.firstName.trim(),
-      lastName: !formData.lastName.trim(),
-      dateOfBirth: !formData.dateOfBirth,
-    };
+    const updatedErrors = [...errors];
+    updatedErrors[step] = newFieldErrors;
 
-    setFieldErrors(newFieldErrors);
-    clearErrorMessageIfNoErrors(newFieldErrors);
-
-    if (Object.values(newFieldErrors).every(error => !error)) {
-      setStep(prev => prev + 1);
-    } else {
+    setErrors(updatedErrors);
+    if (!Object.values(newFieldErrors).every(error => !error)) {
       setErrorMessage(ERROR_MESSAGES.requiredFields);
+      return;
     }
+
+    if (step === emailStep) {
+      const emailAlreadyExists = await checkExistingEmail(formData.email);
+      if (emailAlreadyExists) {
+        setErrorMessage(ERROR_MESSAGES.emailInUse);
+        updateError('email', true);
+        return;
+      }
+    }
+    setErrorMessage('');
+    setStep(prev => prev + 1);
   };
 
-  const handlePrevStep = () => setStep((prevStep) => prevStep - 1);
+  const handlePrevStep = () => {
+    setErrorMessage('');
+    setErrors(prevErrors => {
+      const newErrors = [...prevErrors];
+      newErrors[step] = {};
+      return newErrors;
+    });
+    setStep((prevStep) => prevStep - 1);
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -138,10 +145,19 @@ const Register: FC = () => {
       dateOfBirth={dateOfBirth || null}
       handleChange={handleChange}
       handleChangeDate={handleChangeDate}
-      fieldErrorsHandler={fieldErrorsHandler}
+      firstNameError={errors[0].firstName}
+      lastNameError={errors[0].lastName}
+      setFieldError={updateError}
       minDate={minDate}
       maxDate={maxDate}
-    />
+    />,
+    <UserEmailStep
+      email={formData.email}
+      handleChange={handleChange}
+      emailError={errors[1].email}
+      setFieldError={updateError}
+      helperText={errors[1].email ? 'El correo electrónico ya está en uso' : 'Este campo es obligatorio'}
+    />,
   ];
 
   return (
