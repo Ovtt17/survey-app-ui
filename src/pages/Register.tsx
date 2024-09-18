@@ -23,56 +23,33 @@ export interface FieldErrorsHandler {
   setFieldError: (field: keyof FieldErrors, value: boolean) => void;
 }
 
+const initialFormData: NewUser = {
+  username: '',
+  firstName: '',
+  lastName: '',
+  dateOfBirth: undefined,
+  phone: 0,
+  email: '',
+  password: '',
+  confirmPassword: '',
+};
+
+const initialFieldErrors: FieldErrors = {
+  firstName: false,
+  lastName: false,
+  dateOfBirth: false,
+};
 const Register: FC = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [step, setStep] = useState<number>(0);
-  const [dateOfBirth, setDateOfBirth] = useState<Dayjs>(dayjs('01-01-2000'));
+  const [dateOfBirth, setDateOfBirth] = useState<Dayjs | null>(null);
 
   const minDate = dayjs().subtract(100, 'year');
   const maxDate = dayjs().subtract(15, 'year');
 
-  const [formData, setFormData] = useState<NewUser>({
-    username: '',
-    firstName: '',
-    lastName: '',
-    dateOfBirth: dateOfBirth.toDate(),
-    phone: 0,
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
-
-
-  const handleChangeDate = (newDateOfBirth: Dayjs | null) => {
-    if (newDateOfBirth?.isAfter(minDate) && newDateOfBirth?.isBefore(maxDate)) {
-      setDateOfBirth(newDateOfBirth);
-      setFormData((prevData) => ({
-        ...prevData,
-        dateOfBirth: newDateOfBirth.toDate(),
-      }));
-      setFieldErrors((prevErrors) => ({
-        ...prevErrors,
-        dateOfBirth: false,
-      }));
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        dateOfBirth: undefined,
-      }));
-      setFieldErrors((prevErrors) => ({
-        ...prevErrors,
-        dateOfBirth: true,
-      }));
-    }
-  };
-
-
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({
-    firstName: false,
-    lastName: false,
-    dateOfBirth: false,
-  });
+  const [formData, setFormData] = useState<NewUser>(initialFormData);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>(initialFieldErrors);
 
   const setFieldError = (field: keyof FieldErrors, value: boolean) => {
     setFieldErrors(prev => ({ ...prev, [field]: value }));
@@ -83,16 +60,39 @@ const Register: FC = () => {
     setFieldError,
   };
 
+  const clearErrorMessageIfNoErrors = (newFieldErrors: FieldErrors) => {
+    if (Object.values(newFieldErrors).every(error => error === false)) {
+      setErrorMessage('');
+    }
+  };
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
     }));
-    setFieldErrors((prevErrors) => ({
-      ...prevErrors,
+    setFieldError(name as keyof FieldErrors, false);
+    clearErrorMessageIfNoErrors({
+      ...fieldErrors,
       [name]: false,
+    });
+  };
+
+  const handleChangeDate = (newDateOfBirth: Dayjs | null) => {
+    const isValidDate = newDateOfBirth?.isAfter(minDate) && newDateOfBirth?.isBefore(maxDate);
+    setDateOfBirth(newDateOfBirth);
+
+    setFormData(prevData => ({
+      ...prevData,
+      dateOfBirth: isValidDate ? newDateOfBirth?.toDate() : undefined,
     }));
+
+    setFieldError('dateOfBirth', !isValidDate);
+    clearErrorMessageIfNoErrors({
+      ...fieldErrors,
+      dateOfBirth: !isValidDate,
+    });
   };
 
   const handleNextStep = () => {
@@ -103,13 +103,12 @@ const Register: FC = () => {
     };
 
     setFieldErrors(newFieldErrors);
+    clearErrorMessageIfNoErrors(newFieldErrors);
 
-    if (Object.values(newFieldErrors).every(error => error === false)) {
-      setErrorMessage('');
+    if (Object.values(newFieldErrors).every(error => !error)) {
       setStep(prev => prev + 1);
     } else {
       setErrorMessage(ERROR_MESSAGES.requiredFields);
-      return;
     }
   };
 
@@ -136,7 +135,7 @@ const Register: FC = () => {
     <UserPersonalDetailsStep
       firstName={formData.firstName}
       lastName={formData.lastName}
-      dateOfBirth={dateOfBirth}
+      dateOfBirth={dateOfBirth || null}
       handleChange={handleChange}
       handleChangeDate={handleChangeDate}
       fieldErrorsHandler={fieldErrorsHandler}
