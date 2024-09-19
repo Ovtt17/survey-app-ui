@@ -2,11 +2,25 @@ import { FC } from 'react';
 
 interface StepNavigationProps {
   step: number;
+  totalSteps: number;
   handlePrevStep: () => void;
   handleNextStep: () => void;
 }
 
-const StepNavigation: FC<StepNavigationProps> = ({ step, handlePrevStep, handleNextStep }) => {
+const StepNavigation: FC<StepNavigationProps> = ({
+  step,
+  totalSteps,
+  handlePrevStep,
+  handleNextStep,
+}) => {
+  const isLastStep = step === totalSteps - 1;
+
+  const handleClickNext = () => {
+    if (!isLastStep) {
+      handleNextStep();
+    }
+  };
+
   return (
     <div className="flex justify-between items-center lg:col-span-2">
       {step > 0 && (
@@ -22,11 +36,11 @@ const StepNavigation: FC<StepNavigationProps> = ({ step, handlePrevStep, handleN
       )}
       <div className="flex-1 text-right">
         <button
-          type="button"
-          onClick={handleNextStep}
+          type={isLastStep ? "submit" : "button"}
+          onClick={handleClickNext}
           className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
-          Continuar
+          {isLastStep ? 'Finalizar' : 'Continuar'}
         </button>
       </div>
     </div>

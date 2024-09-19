@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import dayjs, { Dayjs } from 'dayjs';
 import { ERROR_MESSAGES, initialFieldErrors, initialFormData, STEP_FIELDS, StepErrors } from '../auth/constants';
 import RegistrationForm from '../components/register/RegistrationForm';
-import { validateCurrentStep, verifyStep } from '../auth/stepValidation';
+import { validateStep, verifyStepData } from '../auth/stepValidation';
 import { LinearProgress } from '@mui/material';
 
 const Register: FC = () => {
@@ -57,22 +57,11 @@ const Register: FC = () => {
   };
 
   const handleNextStep = async () => {
-    setLoading(true);
     try {
-      const newErrors = await validateCurrentStep(step, formData, minDate, maxDate);
+      const isValid = await validateStep(step, formData, minDate, maxDate, setLoading, setErrors, setErrorMessage);
+      if (!isValid) return;
 
-      setErrors(prev => {
-        const updatedErrors = [...prev];
-        updatedErrors[step] = newErrors;
-        return updatedErrors;
-      });
-
-      if (!Object.values(newErrors).every(error => error === null)) {
-        setErrorMessage(ERROR_MESSAGES.requiredFields);
-        return;
-      }
-
-      const stepError = await verifyStep(step, formData);
+      const stepError = await verifyStepData(step, formData);
       if (stepError) {
         setErrorMessage(stepError);
         const stepFieldName = STEP_FIELDS[step][0];
@@ -101,14 +90,10 @@ const Register: FC = () => {
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (formData.password !== formData.confirmPassword) {
-      setErrorMessage(ERROR_MESSAGES.passwordMismatch);
-      return;
-    };
-
     try {
+      event.preventDefault();
+      const isValid = await validateStep(step, formData, minDate, maxDate, setLoading, setErrors, setErrorMessage);
+      if (!isValid) return;
       await registerUser(formData);
       navigate('/activate-account');
     } catch (error) {

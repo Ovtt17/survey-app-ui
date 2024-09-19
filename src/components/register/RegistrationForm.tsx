@@ -78,11 +78,20 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
     />
   ];
 
+  const totalSteps = steps.length;
+
   return (
     <form onSubmit={handleSubmit} className="space-y-3 lg:gap-6 flex flex-col h-full justify-between">
-      <div>{steps[step]}</div>
+      <div>
+        {steps[step]}
+      </div>
       {errorMessage && <ErrorMessage message={errorMessage} />}
-      <StepNavigation step={step} handlePrevStep={handlePrevStep} handleNextStep={handleNextStep} />
+      <StepNavigation
+        step={step}
+        totalSteps={totalSteps}
+        handlePrevStep={handlePrevStep}
+        handleNextStep={handleNextStep}
+      />
     </form>
   );
 };

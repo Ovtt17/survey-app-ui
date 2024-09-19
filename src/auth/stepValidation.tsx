@@ -8,7 +8,41 @@ const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 const SHORT_DELAY_MS = 500;
 const LONG_DELAY_MS = 1000;
 
-export const validateCurrentStep = async (
+export const validateStep = async (
+  step: number,
+  formData: NewUser,
+  minDate: Dayjs,
+  maxDate: Dayjs,
+  setLoading: (loading: boolean) => void,
+  setErrors: (errors: (prev: StepErrors[]) => StepErrors[]) => void,
+  setErrorMessage: (message: string) => void
+): Promise<boolean> => {
+  setLoading(true);
+  try {
+    const newErrors = await validateFieldsForStep(step, formData, minDate, maxDate);
+
+    setErrors(prev => {
+      const updatedErrors = [...prev];
+      updatedErrors[step] = newErrors;
+      return updatedErrors;
+    });
+
+    if (!Object.values(newErrors).every(error => error === null)) {
+      setErrorMessage(ERROR_MESSAGES.requiredFields);
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error('Error during step validation:', error);
+    setErrorMessage('Ocurrió un error durante la validación. Por favor, inténtalo de nuevo.');
+    return false;
+  } finally {
+    setLoading(false);
+  }
+};
+
+export const validateFieldsForStep = async (
   step: number,
   formData: NewUser,
   minDate: Dayjs,
@@ -33,21 +67,21 @@ export const validateCurrentStep = async (
   return newErrors;
 };
 
-const checkField = async (checkFunction: () => Promise<boolean>, errorMessage: string): Promise<string | null> => {
+const checkFieldExistence = async (checkFunction: () => Promise<boolean>, errorMessage: string): Promise<string | null> => {
   await delay(LONG_DELAY_MS);
   const alreadyExists = await checkFunction();
   return alreadyExists ? errorMessage : null;
 };
 
-export const verifyStep = async (step: number, formData: NewUser): Promise<string | null> => {
+export const verifyStepData = async (step: number, formData: NewUser): Promise<string | null> => {
   const EMAIL_STEP = 2;
   const USERNAME_STEP = 3;
 
   switch (step) {
     case EMAIL_STEP:
-      return await checkField(() => checkExistingEmail(formData.email), ERROR_MESSAGES.emailInUse);
+      return await checkFieldExistence(() => checkExistingEmail(formData.email), ERROR_MESSAGES.emailInUse);
     case USERNAME_STEP:
-      return await checkField(() => checkExistingUsername(formData.username), ERROR_MESSAGES.usernameInUse);
+      return await checkFieldExistence(() => checkExistingUsername(formData.username), ERROR_MESSAGES.usernameInUse);
     default:
       return null;
   }
