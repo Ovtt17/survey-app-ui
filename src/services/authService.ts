@@ -3,7 +3,7 @@ import { NewUser } from "../types/user";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/auth`;
 
-const getHeaders = () => ({
+const getJsonHeaders = () => ({
   'Content-Type': 'application/json',
   'Accept': 'application/json'
 });
@@ -14,7 +14,7 @@ export const login = async (usernameOrEmail: string, password: string): Promise<
   try {
     const response = await fetch(`${BASE_URL}/authenticate`, {
       method: 'POST',
-      headers: getHeaders(),
+      headers: getJsonHeaders(),
       body: JSON.stringify(data)
     });
 
@@ -35,10 +35,14 @@ export const login = async (usernameOrEmail: string, password: string): Promise<
 
 export const registerUser = async (user: NewUser): Promise<void> => {
   try {
+    const formData = new FormData();
+    Object.keys(user).forEach(key => {
+      const value = (user as any)[key];
+      formData.append(key, value);
+    });
     const response = await fetch(`${BASE_URL}/register`, {
       method: 'POST',
-      headers: getHeaders(),
-      body: JSON.stringify(user)
+      body: formData
     });
     if (!response.ok) {
       throw new Error('Registration failed: ' + response.statusText);
@@ -53,7 +57,7 @@ export const activateUser = async (token: string): Promise<void> => {
   try {
     const response = await fetch(`${BASE_URL}/activate-account?token=${token}`, {
       method: 'GET',
-      headers: getHeaders()
+      headers: getJsonHeaders()
     });
     if (!response.ok) {
       throw new Error('Activation failed: ' + response.statusText);
@@ -69,7 +73,7 @@ export const checkExistingEmail = async (email: string): Promise<boolean> => {
   try {
     const response = await fetch(BASE_URL + '/email/' + email, {
       method: 'GET',
-      headers: getHeaders()
+      headers: getJsonHeaders()
     });
 
     if (!response.ok) {
@@ -88,7 +92,7 @@ export const checkExistingUsername = async (username: string): Promise<boolean> 
   try {
     const response = await fetch(BASE_URL + '/username/' + username, {
       method: 'GET',
-      headers: getHeaders()
+      headers: getJsonHeaders()
     });
 
     if (!response.ok) {
