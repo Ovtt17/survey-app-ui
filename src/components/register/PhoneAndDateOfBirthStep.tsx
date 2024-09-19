@@ -6,7 +6,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StepErrors } from '../../auth/constants';
 
 
-interface UserPhoneAndDateOfBirthStepProps {
+interface PhoneAndDateOfBirthStepProps {
   phone: string;
   dateOfBirth: Dayjs | null;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -17,7 +17,7 @@ interface UserPhoneAndDateOfBirthStepProps {
   maxDate: Dayjs;
 }
 
-const UserPhoneAndDateOfBirthStep: FC<UserPhoneAndDateOfBirthStepProps> = ({
+const PhoneAndDateOfBirthStep: FC<PhoneAndDateOfBirthStepProps> = ({
   phone,
   dateOfBirth,
   handleChange,
@@ -82,4 +82,4 @@ const UserPhoneAndDateOfBirthStep: FC<UserPhoneAndDateOfBirthStepProps> = ({
   );
 }
 
-export default UserPhoneAndDateOfBirthStep;
+export default PhoneAndDateOfBirthStep;

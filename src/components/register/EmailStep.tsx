@@ -1,13 +1,13 @@
 import { TextField } from '@mui/material';
 import { FC } from 'react';
 
-interface UserEmailStepProps {
+interface EmailStepProps {
   email: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   emailError: string | null;
 }
 
-const UserEmailStep: FC<UserEmailStepProps> = ({
+const EmailStep: FC<EmailStepProps> = ({
   email,
   handleChange,
   emailError,
@@ -32,4 +32,4 @@ const UserEmailStep: FC<UserEmailStepProps> = ({
   );
 }
 
-export default UserEmailStep;
+export default EmailStep;

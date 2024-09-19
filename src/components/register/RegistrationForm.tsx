@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
-import UserPersonalDetailsStep from './UserPersonalDetailsStep';
-import UserPhoneAndDateOfBirthStep from './UserPhoneAndDateOfBirthStep';
-import UserEmailStep from './UserEmailStep';
+import PersonalDetailsStep from './PersonalDetailsStep';
+import PhoneAndDateOfBirthStep from './PhoneAndDateOfBirthStep';
+import EmailStep from './EmailStep';
 import { NewUser } from '../../types/user';
 import { Dayjs } from 'dayjs';
 import { StepErrors } from '../../auth/constants';
@@ -41,14 +41,14 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
   handleSubmit,
 }) => {
   const steps = [
-    <UserPersonalDetailsStep
+    <PersonalDetailsStep
       firstName={formData.firstName}
       lastName={formData.lastName}
       handleChange={handleChange}
       firstNameError={errors[0].firstName}
       lastNameError={errors[0].lastName}
     />,
-    <UserPhoneAndDateOfBirthStep
+    <PhoneAndDateOfBirthStep
       phone={formData.phone}
       dateOfBirth={dateOfBirth}
       handleChange={handleChange}
@@ -58,7 +58,7 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
       minDate={minDate}
       maxDate={maxDate}
     />,
-    <UserEmailStep
+    <EmailStep
       email={formData.email}
       handleChange={handleChange}
       emailError={errors[2].email}

@@ -2,7 +2,7 @@ import { FC } from 'react';
 import "dayjs/locale/es";
 import { TextField } from '@mui/material';
 
-interface UserPersonalDetailsStepProps {
+interface PersonalDetailsStepProps {
   firstName: string;
   lastName: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -10,7 +10,7 @@ interface UserPersonalDetailsStepProps {
   lastNameError: string | null;
 }
 
-const UserPersonalDetailsStep: FC<UserPersonalDetailsStepProps> = ({
+const PersonalDetailsStep: FC<PersonalDetailsStepProps> = ({
   firstName,
   lastName,
   handleChange,
@@ -53,4 +53,4 @@ const UserPersonalDetailsStep: FC<UserPersonalDetailsStepProps> = ({
   );
 };
 
-export default UserPersonalDetailsStep;
+export default PersonalDetailsStep;
