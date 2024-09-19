@@ -163,8 +163,8 @@ const Register: FC = () => {
   return (
     <section className="flex min-h-screen flex-col justify-center items-center">
       <div className="w-full max-w-md lg:max-w-5xl bg-white rounded-md shadow-md">
-        <div className="relative lg:grid lg:grid-cols-2 lg:gap-6 pt-16 lg:pt-24 pb-10 px-10">
-          <div className="text-center lg:text-left">
+        <div className="min-h-80 relative lg:grid lg:grid-cols-2 lg:gap-6 pt-16 lg:pt-24 pb-10 px-10">
+          <article className="text-center lg:text-left">
             <img
               alt="Your Company"
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
@@ -176,29 +176,30 @@ const Register: FC = () => {
             <p className="mt-2 text-md text-gray-600">
               Completa la información para crear tu cuenta
             </p>
-          </div>
-          <div className="relative">
+          </article>
+          <article className="flex flex-col justify-between">
             <form
               onSubmit={handleSubmit}
-              className="mt-8 lg:mt-0 space-y-6 lg:gap-6"
+              className="space-y-3 lg:gap-6 flex flex-col h-full justify-between"
             >
               <div>{steps[step]}</div>
 
               {errorMessage && (
-                <Alert severity="error" className="mb-4">
+                <Alert severity="error" className="pb-4">
                   {errorMessage}
                 </Alert>
               )}
-
               <div className="flex justify-between items-center lg:col-span-2">
                 {step > 0 && (
-                  <button
-                    type="button"
-                    onClick={handlePrevStep}
-                    className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
-                  >
-                    Atrás
-                  </button>
+                  <div>
+                    <button
+                      type="button"
+                      onClick={handlePrevStep}
+                      className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
+                    >
+                      Atrás
+                    </button>
+                  </div>
                 )}
                 <div className="flex-1 text-right">
                   <button
@@ -211,7 +212,7 @@ const Register: FC = () => {
                 </div>
               </div>
             </form>
-          </div>
+          </article>
         </div>
       </div>
     </section>
