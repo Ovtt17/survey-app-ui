@@ -1,36 +1,30 @@
 import { TextField } from '@mui/material';
 import { FC } from 'react';
-import { StepErrors } from '../../pages/Register';
 
 interface UserEmailStepProps {
   email: string;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  emailError: boolean;
-  setFieldError: (field: keyof StepErrors, value: boolean) => void;
-  helperText: string;
+  emailError: string | null;
 }
 
 const UserEmailStep: FC<UserEmailStepProps> = ({
   email,
   handleChange,
   emailError,
-  setFieldError,
-  helperText
 }) => {
-  const fieldName = 'email';
+  const emailField = 'email';
 
   return (
     <div>
       <TextField
         label='Email'
-        name='email'
+        name={emailField}
         type='email'
         required
         value={email}
         onChange={handleChange}
-        error={emailError}
-        onError={() => setFieldError(fieldName, true)}
-        helperText={emailError ? helperText : ''}
+        error={!!emailError}
+        helperText={emailError}
         fullWidth
         margin="normal"
       />

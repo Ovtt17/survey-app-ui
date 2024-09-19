@@ -11,7 +11,7 @@ export interface NewUser {
   firstName: string;
   lastName: string;
   dateOfBirth?: Date;
-  phone: number;
+  phone: string;
   email: string;
   password: string;
   confirmPassword?: string;

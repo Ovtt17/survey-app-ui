@@ -6,33 +6,9 @@ import { useNavigate } from 'react-router-dom';
 import UserPersonalDetailsStep from '../components/register/UserPersonalDetailsStep';
 import dayjs, { Dayjs } from 'dayjs';
 import UserEmailStep from '../components/register/UserEmailStep';
-
-const ERROR_MESSAGES = {
-  requiredFields: 'Por favor, completa todos los campos correctamente.',
-  passwordMismatch: 'Las contraseñas no coinciden',
-  registrationFailed: 'Registration failed. Please try again',
-  emailInUse: 'El email ya está en uso. Por favor, intenta con otro.',
-};
-
-const initialFormData: NewUser = {
-  username: '',
-  firstName: '',
-  lastName: '',
-  dateOfBirth: undefined,
-  phone: 0,
-  email: '',
-  password: '',
-  confirmPassword: '',
-};
-
-export interface StepErrors {
-  [key: string]: boolean;
-}
-
-const initialFieldErrors: Array<StepErrors> = [
-  { firstName: false, lastName: false, dateOfBirth: false },
-  { email: false },
-];
+import UserPhoneAndDateOfBirthStep from '../components/register/UserPhoneAndDateOfBirthStep';
+import { ERROR_MESSAGES, initialFieldErrors, initialFormData, StepErrors } from '../auth/constants';
+import { validateField } from '../auth/validationService';
 
 const Register: FC = () => {
   const navigate = useNavigate();
@@ -46,7 +22,7 @@ const Register: FC = () => {
   const [formData, setFormData] = useState<NewUser>(initialFormData);
   const [errors, setErrors] = useState<Array<StepErrors>>(initialFieldErrors);
 
-  const updateError = (field: keyof StepErrors, value: boolean) => {
+  const updateError = (field: keyof StepErrors, value: string | null) => {
     setErrors(prev => {
       const newFieldErrors = [...prev];
       newFieldErrors[step] = { ...newFieldErrors[step], [field]: value };
@@ -55,7 +31,7 @@ const Register: FC = () => {
   };
 
   useEffect(() => {
-    if (errors.every(stepErrors => Object.values(stepErrors).every(error => error === false))) {
+    if (errors.every(stepErrors => Object.values(stepErrors).every(error => error === null))) {
       setErrorMessage('');
     }
   }, [errors]);
@@ -66,7 +42,7 @@ const Register: FC = () => {
       ...prevData,
       [name]: value,
     }));
-    updateError(name as keyof StepErrors, false);
+    updateError(name as keyof StepErrors, null);
   };
 
   const handleChangeDate = (newDateOfBirth: Dayjs | null) => {
@@ -78,23 +54,38 @@ const Register: FC = () => {
       ...prevData,
       dateOfBirth: isValidDate ? newDateOfBirth?.toDate() : undefined,
     }));
-    updateError(name as keyof StepErrors, !isValidDate);
+    updateError(name as keyof StepErrors, isValidDate ? null : 'Fecha de nacimiento no válida');
   };
 
   const handleNextStep = async () => {
-    const emailStep = 1;
-    const currentStepErrors = errors[step];
-    const newFieldErrors: StepErrors = {};
+    const emailStep = 2;
+    const currentStepFields = Object.keys(errors[step]);
+    const newErrors: StepErrors = {};
 
-    Object.keys(currentStepErrors).forEach(field => {
-      newFieldErrors[field] = !formData[field as keyof NewUser]?.toString().trim();
+    if (step === 1) {
+      const isValidDate = dateOfBirth?.isAfter(minDate) && dateOfBirth?.isBefore(maxDate);
+      newErrors.dateOfBirth = isValidDate ? null : 'Fecha de nacimiento no válida';
+    }
+
+    currentStepFields.forEach(field => {
+      const fieldValue = formData[field as keyof NewUser];
+      const errorMessage = validateField(
+        field,
+        fieldValue as string | Dayjs | null,
+        formData,
+        minDate,
+        maxDate
+      );
+      newErrors[field] = errorMessage;
     });
 
-    const updatedErrors = [...errors];
-    updatedErrors[step] = newFieldErrors;
+    setErrors(prev => {
+      const updatedErrors = [...prev];
+      updatedErrors[step] = newErrors;
+      return updatedErrors;
+    });
 
-    setErrors(updatedErrors);
-    if (!Object.values(newFieldErrors).every(error => !error)) {
+    if (!Object.values(newErrors).every(error => error === null)) {
       setErrorMessage(ERROR_MESSAGES.requiredFields);
       return;
     }
@@ -103,7 +94,7 @@ const Register: FC = () => {
       const emailAlreadyExists = await checkExistingEmail(formData.email);
       if (emailAlreadyExists) {
         setErrorMessage(ERROR_MESSAGES.emailInUse);
-        updateError('email', true);
+        updateError('email', 'El correo electrónico ya está en uso');
         return;
       }
     }
@@ -142,21 +133,24 @@ const Register: FC = () => {
     <UserPersonalDetailsStep
       firstName={formData.firstName}
       lastName={formData.lastName}
-      dateOfBirth={dateOfBirth || null}
       handleChange={handleChange}
-      handleChangeDate={handleChangeDate}
       firstNameError={errors[0].firstName}
       lastNameError={errors[0].lastName}
+    />,
+    <UserPhoneAndDateOfBirthStep
+      phone={formData.phone}
+      dateOfBirth={dateOfBirth}
+      handleChange={handleChange}
+      handleChangeDate={handleChangeDate}
       setFieldError={updateError}
+      phoneError={errors[1].phone}
       minDate={minDate}
       maxDate={maxDate}
     />,
     <UserEmailStep
       email={formData.email}
       handleChange={handleChange}
-      emailError={errors[1].email}
-      setFieldError={updateError}
-      helperText={errors[1].email ? 'El correo electrónico ya está en uso' : 'Este campo es obligatorio'}
+      emailError={errors[2].email}
     />,
   ];
 
@@ -182,8 +176,9 @@ const Register: FC = () => {
               onSubmit={handleSubmit}
               className="space-y-3 lg:gap-6 flex flex-col h-full justify-between"
             >
-              <div>{steps[step]}</div>
-
+              <div>
+                {steps[step]}
+              </div>
               {errorMessage && (
                 <Alert severity="error" className="pb-4">
                   {errorMessage}
