@@ -7,6 +7,7 @@ import { Dayjs } from 'dayjs';
 import { StepErrors } from '../../auth/constants';
 import ErrorMessage from './ErrorMessage';
 import StepNavigation from './StepNavigation';
+import UsernameStep from './UsernameStep';
 
 interface RegistrationFormProps {
   formData: NewUser;
@@ -61,6 +62,11 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
       email={formData.email}
       handleChange={handleChange}
       emailError={errors[2].email}
+    />,
+    <UsernameStep
+      username={formData.username}
+      handleChange={handleChange}
+      usernameError={errors[3].username}
     />,
   ];
 

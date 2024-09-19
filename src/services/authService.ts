@@ -83,3 +83,22 @@ export const checkExistingEmail = async (email: string): Promise<boolean> => {
     throw new Error('An error occurred while checking for existing email. Please try again later.');
   }
 }
+
+export const checkExistingUsername = async (username: string): Promise<boolean> => {
+  try {
+    const response = await fetch(BASE_URL + '/username/' + username, {
+      method: 'GET',
+      headers: getHeaders()
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to check username existence: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error while checking if username already exists:', error);
+    throw new Error('An error occurred while checking for existing username. Please try again later.');
+  }
+}

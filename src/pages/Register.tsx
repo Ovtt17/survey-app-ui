@@ -1,11 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
-import { checkExistingEmail, registerUser } from '../services/authService';
+import { registerUser } from '../services/authService';
 import { NewUser } from '../types/user';
 import { useNavigate } from 'react-router-dom';
 import dayjs, { Dayjs } from 'dayjs';
-import { ERROR_MESSAGES, initialFieldErrors, initialFormData, StepErrors } from '../auth/constants';
-import { validateField } from '../auth/validationService';
+import { ERROR_MESSAGES, initialFieldErrors, initialFormData, STEP_FIELDS, StepErrors } from '../auth/constants';
 import RegistrationForm from '../components/register/RegistrationForm';
+import { validateCurrentStep, verifyStep } from '../auth/stepValidation';
 
 const Register: FC = () => {
   const navigate = useNavigate();
@@ -55,21 +55,7 @@ const Register: FC = () => {
   };
 
   const handleNextStep = async () => {
-    const emailStep = 2;
-    const currentStepFields = Object.keys(errors[step]);
-    const newErrors: StepErrors = {};
-
-    currentStepFields.forEach(field => {
-      const fieldValue = formData[field as keyof NewUser];
-      const errorMessage = validateField(
-        field,
-        fieldValue as string | Dayjs | null,
-        formData,
-        minDate,
-        maxDate
-      );
-      newErrors[field] = errorMessage;
-    });
+    const newErrors = validateCurrentStep(step, formData, minDate, maxDate);
 
     setErrors(prev => {
       const updatedErrors = [...prev];
@@ -82,14 +68,14 @@ const Register: FC = () => {
       return;
     }
 
-    if (step === emailStep) {
-      const emailAlreadyExists = await checkExistingEmail(formData.email);
-      if (emailAlreadyExists) {
-        setErrorMessage(ERROR_MESSAGES.emailInUse);
-        updateError('email', 'El correo electrónico ya está en uso');
-        return;
-      }
+    const stepError = await verifyStep(step, formData);
+    if (stepError) {
+      setErrorMessage(stepError);
+      const stepFieldName = STEP_FIELDS[step][0];
+      updateError(stepFieldName as keyof StepErrors, stepError);
+      return;
     }
+
     setErrorMessage('');
     setStep(prev => prev + 1);
   };
