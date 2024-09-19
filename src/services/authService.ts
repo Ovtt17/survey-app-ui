@@ -33,7 +33,7 @@ export const login = async (usernameOrEmail: string, password: string): Promise<
   }
 };
 
-export const registerUser = async (user: NewUser): Promise<void> => {
+export const registerUser = async (user: NewUser): Promise<boolean> => {
   try {
     const formData = new FormData();
     Object.keys(user).forEach(key => {
