@@ -25,11 +25,11 @@ export const login = async (usernameOrEmail: string, password: string): Promise<
       console.log(authResponse.user.profilePictureUrl);
       return authResponse;
     } else {
-      throw new Error('Login failed: ' + response.statusText);
+      throw new Error(`Login failed: ${response.status} ${response.statusText}`);
     }
   } catch (error) {
-    console.error('Error:', error);
-    throw error;
+    console.error('Error during login:', error);
+    throw new Error('An unexpected error occurred during login. Please try again later.');
   }
 };
 
@@ -45,11 +45,14 @@ export const registerUser = async (user: NewUser): Promise<void> => {
       body: formData
     });
     if (!response.ok) {
-      throw new Error('Registration failed: ' + response.statusText);
+      throw new Error(`Registration failed: ${response.status} ${response.statusText}`);
     }
+
+    const isRegistered = await response.json();
+    return isRegistered;
   } catch (error) {
-    console.error('Error:', error);
-    throw error;
+    console.error('Error during registration:', error);
+    throw new Error('An unexpected error occurred during registration. Please try again later.');
   }
 };
 
@@ -60,14 +63,13 @@ export const activateUser = async (token: string): Promise<void> => {
       headers: getJsonHeaders()
     });
     if (!response.ok) {
-      throw new Error('Activation failed: ' + response.statusText);
+      throw new Error(`Activation failed: ${response.status} ${response.statusText}`);
     }
   } catch (error) {
-    console.error('Error:', error);
-    throw error;
+    console.error('Error during account activation:', error);
+    throw new Error('An unexpected error occurred during account activation. Please try again later.');
   }
-}
-
+};
 
 export const checkExistingEmail = async (email: string): Promise<boolean> => {
   try {
@@ -84,9 +86,9 @@ export const checkExistingEmail = async (email: string): Promise<boolean> => {
     return data;
   } catch (error) {
     console.error('Error while checking if email already exists:', error);
-    throw new Error('An error occurred while checking for existing email. Please try again later.');
+    throw new Error('An unexpected error occurred while checking for existing email. Please try again later.');
   }
-}
+};
 
 export const checkExistingUsername = async (username: string): Promise<boolean> => {
   try {
@@ -103,6 +105,6 @@ export const checkExistingUsername = async (username: string): Promise<boolean> 
     return data;
   } catch (error) {
     console.error('Error while checking if username already exists:', error);
-    throw new Error('An error occurred while checking for existing username. Please try again later.');
+    throw new Error('An unexpected error occurred while checking for existing username. Please try again later.');
   }
-}
+};
