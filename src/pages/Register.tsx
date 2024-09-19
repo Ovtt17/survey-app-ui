@@ -1,14 +1,11 @@
 import React, { FC, useEffect, useState } from 'react';
-import { Alert } from '@mui/material';
 import { checkExistingEmail, registerUser } from '../services/authService';
 import { NewUser } from '../types/user';
 import { useNavigate } from 'react-router-dom';
-import UserPersonalDetailsStep from '../components/register/UserPersonalDetailsStep';
 import dayjs, { Dayjs } from 'dayjs';
-import UserEmailStep from '../components/register/UserEmailStep';
-import UserPhoneAndDateOfBirthStep from '../components/register/UserPhoneAndDateOfBirthStep';
 import { ERROR_MESSAGES, initialFieldErrors, initialFormData, StepErrors } from '../auth/constants';
 import { validateField } from '../auth/validationService';
+import RegistrationForm from '../components/register/RegistrationForm';
 
 const Register: FC = () => {
   const navigate = useNavigate();
@@ -61,11 +58,6 @@ const Register: FC = () => {
     const emailStep = 2;
     const currentStepFields = Object.keys(errors[step]);
     const newErrors: StepErrors = {};
-
-    if (step === 1) {
-      const isValidDate = dateOfBirth?.isAfter(minDate) && dateOfBirth?.isBefore(maxDate);
-      newErrors.dateOfBirth = isValidDate ? null : 'Fecha de nacimiento no válida';
-    }
 
     currentStepFields.forEach(field => {
       const fieldValue = formData[field as keyof NewUser];
@@ -129,31 +121,6 @@ const Register: FC = () => {
     }
   };
 
-  const steps = [
-    <UserPersonalDetailsStep
-      firstName={formData.firstName}
-      lastName={formData.lastName}
-      handleChange={handleChange}
-      firstNameError={errors[0].firstName}
-      lastNameError={errors[0].lastName}
-    />,
-    <UserPhoneAndDateOfBirthStep
-      phone={formData.phone}
-      dateOfBirth={dateOfBirth}
-      handleChange={handleChange}
-      handleChangeDate={handleChangeDate}
-      setFieldError={updateError}
-      phoneError={errors[1].phone}
-      minDate={minDate}
-      maxDate={maxDate}
-    />,
-    <UserEmailStep
-      email={formData.email}
-      handleChange={handleChange}
-      emailError={errors[2].email}
-    />,
-  ];
-
   return (
     <section className="flex min-h-screen flex-col justify-center items-center">
       <div className="w-full max-w-md lg:max-w-5xl bg-white rounded-md shadow-md">
@@ -172,41 +139,21 @@ const Register: FC = () => {
             </p>
           </article>
           <article className="flex flex-col justify-between">
-            <form
-              onSubmit={handleSubmit}
-              className="space-y-3 lg:gap-6 flex flex-col h-full justify-between"
-            >
-              <div>
-                {steps[step]}
-              </div>
-              {errorMessage && (
-                <Alert severity="error" className="pb-4">
-                  {errorMessage}
-                </Alert>
-              )}
-              <div className="flex justify-between items-center lg:col-span-2">
-                {step > 0 && (
-                  <div>
-                    <button
-                      type="button"
-                      onClick={handlePrevStep}
-                      className="rounded-full border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100"
-                    >
-                      Atrás
-                    </button>
-                  </div>
-                )}
-                <div className="flex-1 text-right">
-                  <button
-                    type="button"
-                    onClick={handleNextStep}
-                    className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                  >
-                    Continuar
-                  </button>
-                </div>
-              </div>
-            </form>
+            <RegistrationForm
+              formData={formData}
+              errors={errors}
+              dateOfBirth={dateOfBirth}
+              minDate={minDate}
+              maxDate={maxDate}
+              errorMessage={errorMessage}
+              step={step}
+              handleChange={handleChange}
+              handleChangeDate={handleChangeDate}
+              updateError={updateError}
+              handlePrevStep={handlePrevStep}
+              handleNextStep={handleNextStep}
+              handleSubmit={handleSubmit}
+            />
           </article>
         </div>
       </div>

@@ -10,7 +10,7 @@ export const validateField = (name: string, value: string | Dayjs | null, formDa
     case 'lastName':
       return isString && !value.trim() ? 'El apellido es obligatorio' : null;
     case 'phone':
-      return isString && (!/^\d{8}$/.test(value) || value.length !== 8) ? 'El número de teléfono debe tener 8 dígitos' : null;
+      return isString && (!value.trim() || !/^\d{8}$/.test(value)) ? 'El número de teléfono debe tener 8 dígitos' : null;
     case 'email':
       return isString && !/\S+@\S+\.\S+/.test(value) ? 'El correo electrónico es inválido' : null;
     case 'password':
