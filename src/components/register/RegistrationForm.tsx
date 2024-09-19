@@ -8,6 +8,7 @@ import { StepErrors } from '../../auth/constants';
 import ErrorMessage from './ErrorMessage';
 import StepNavigation from './StepNavigation';
 import UsernameStep from './UsernameStep';
+import PasswordStep from './PasswordStep';
 
 interface RegistrationFormProps {
   formData: NewUser;
@@ -68,6 +69,13 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
       handleChange={handleChange}
       usernameError={errors[3].username}
     />,
+    <PasswordStep
+      password={formData.password}
+      confirmPassword={formData.confirmPassword}
+      handleChange={handleChange}
+      passwordError={errors[4].password}
+      confirmPasswordError={errors[4].confirmPassword}
+    />
   ];
 
   return (

@@ -6,6 +6,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { ERROR_MESSAGES, initialFieldErrors, initialFormData, STEP_FIELDS, StepErrors } from '../auth/constants';
 import RegistrationForm from '../components/register/RegistrationForm';
 import { validateCurrentStep, verifyStep } from '../auth/stepValidation';
+import { LinearProgress } from '@mui/material';
 
 const Register: FC = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const Register: FC = () => {
 
   const [formData, setFormData] = useState<NewUser>(initialFormData);
   const [errors, setErrors] = useState<Array<StepErrors>>(initialFieldErrors);
+  const [loading, setLoading] = useState<boolean>(false);
 
   const updateError = (field: keyof StepErrors, value: string | null) => {
     setErrors(prev => {
@@ -55,29 +57,37 @@ const Register: FC = () => {
   };
 
   const handleNextStep = async () => {
-    const newErrors = validateCurrentStep(step, formData, minDate, maxDate);
+    setLoading(true);
+    try {
+      const newErrors = await validateCurrentStep(step, formData, minDate, maxDate);
 
-    setErrors(prev => {
-      const updatedErrors = [...prev];
-      updatedErrors[step] = newErrors;
-      return updatedErrors;
-    });
+      setErrors(prev => {
+        const updatedErrors = [...prev];
+        updatedErrors[step] = newErrors;
+        return updatedErrors;
+      });
 
-    if (!Object.values(newErrors).every(error => error === null)) {
-      setErrorMessage(ERROR_MESSAGES.requiredFields);
-      return;
+      if (!Object.values(newErrors).every(error => error === null)) {
+        setErrorMessage(ERROR_MESSAGES.requiredFields);
+        return;
+      }
+
+      const stepError = await verifyStep(step, formData);
+      if (stepError) {
+        setErrorMessage(stepError);
+        const stepFieldName = STEP_FIELDS[step][0];
+        updateError(stepFieldName as keyof StepErrors, stepError);
+        return;
+      }
+
+      setErrorMessage('');
+      setStep(prev => prev + 1);
+    } catch (error) {
+      console.error('Error during step validation:', error);
+      setErrorMessage('Ocurrió un error durante la validación. Por favor, inténtalo de nuevo.');
+    } finally {
+      setLoading(false);
     }
-
-    const stepError = await verifyStep(step, formData);
-    if (stepError) {
-      setErrorMessage(stepError);
-      const stepFieldName = STEP_FIELDS[step][0];
-      updateError(stepFieldName as keyof StepErrors, stepError);
-      return;
-    }
-
-    setErrorMessage('');
-    setStep(prev => prev + 1);
   };
 
   const handlePrevStep = () => {
@@ -108,8 +118,11 @@ const Register: FC = () => {
   };
 
   return (
-    <section className="flex min-h-screen flex-col justify-center items-center">
-      <div className="w-full max-w-md lg:max-w-5xl bg-white rounded-md shadow-md">
+    <section className="flex px-5 min-h-screen flex-col justify-center items-center">
+      <div className="w-full max-w-sm md:max-w-md lg:max-w-5xl bg-white rounded-2xl shadow-md">
+        <div className='px-2'>
+          {loading && <LinearProgress />}
+        </div>
         <div className="min-h-80 relative lg:grid lg:grid-cols-2 lg:gap-6 pt-16 lg:pt-24 pb-10 px-10">
           <article className="text-center lg:text-left">
             <img

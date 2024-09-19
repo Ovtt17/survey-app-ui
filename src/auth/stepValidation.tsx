@@ -4,15 +4,20 @@ import { validateField } from './validationService';
 import { ERROR_MESSAGES, StepErrors, STEP_FIELDS } from './constants';
 import { checkExistingEmail, checkExistingUsername } from '../services/authService';
 
-export const validateCurrentStep = (
+const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+const SHORT_DELAY_MS = 500;
+const LONG_DELAY_MS = 1000;
+
+export const validateCurrentStep = async (
   step: number,
   formData: NewUser,
   minDate: Dayjs,
   maxDate: Dayjs
-): StepErrors => {
+): Promise<StepErrors> => {
   const currentStepFields = STEP_FIELDS[step];
   const newErrors: StepErrors = {};
 
+  await delay(SHORT_DELAY_MS);
   currentStepFields.forEach(field => {
     const fieldValue = formData[field];
     const errorMessage = validateField(
@@ -28,28 +33,22 @@ export const validateCurrentStep = (
   return newErrors;
 };
 
-export const verifyStep = async (step: number, formData: NewUser): Promise<string | null> => {
-  const emailStep = 2, usernameStep = 3;
+const checkField = async (checkFunction: () => Promise<boolean>, errorMessage: string): Promise<string | null> => {
+  await delay(LONG_DELAY_MS);
+  const alreadyExists = await checkFunction();
+  return alreadyExists ? errorMessage : null;
+};
 
-  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+export const verifyStep = async (step: number, formData: NewUser): Promise<string | null> => {
+  const EMAIL_STEP = 2;
+  const USERNAME_STEP = 3;
 
   switch (step) {
-    case emailStep:
-      await delay(1500);
-      const emailAlreadyExists = await checkExistingEmail(formData.email);
-      if (emailAlreadyExists) {
-        return ERROR_MESSAGES.emailInUse;
-      }
-      break;
-    case usernameStep:
-      await delay(1500);
-      const usernameAlreadyExists = await checkExistingUsername(formData.username);
-      if (usernameAlreadyExists) {
-        return ERROR_MESSAGES.usernameInUse;
-      }
-      break;
+    case EMAIL_STEP:
+      return await checkField(() => checkExistingEmail(formData.email), ERROR_MESSAGES.emailInUse);
+    case USERNAME_STEP:
+      return await checkField(() => checkExistingUsername(formData.username), ERROR_MESSAGES.usernameInUse);
     default:
       return null;
   }
-  return null;
 };

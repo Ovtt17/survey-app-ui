@@ -32,8 +32,9 @@ export const initialFieldErrors: Array<StepErrors> = [
 ];
 
 export const STEP_FIELDS: { [key: number]: Array<keyof NewUser> } = {
-  0: ['username', 'firstName', 'lastName'],
+  0: ['firstName', 'lastName'],
   1: ['phone', 'dateOfBirth'],
   2: ['email'],
   3: ['username'],
+  4: ['password', 'confirmPassword'],
 };
