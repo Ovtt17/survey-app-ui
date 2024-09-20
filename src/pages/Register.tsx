@@ -1,14 +1,12 @@
 import React, { FC, useEffect, useState } from 'react';
 import { registerUser } from '../services/authService';
 import { NewUser } from '../types/user';
-import { Link } from 'react-router-dom';
 import dayjs, { Dayjs } from 'dayjs';
 import { ERROR_MESSAGES, initialFieldErrors, initialFormData, STEP_FIELDS, StepErrors } from '../auth/constants';
 import RegistrationForm from '../components/register/RegistrationForm';
 import { validateStep, verifyStepData } from '../auth/stepValidation';
-import { Button, LinearProgress } from '@mui/material';
-import Player from 'lottie-react';
-import checkAnimation from '../assets/lottie/Check.json';
+import { LinearProgress } from '@mui/material';
+import SuccessModal from '../components/modals/SuccessModal';
 
 const Register: FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -116,38 +114,13 @@ const Register: FC = () => {
         </div>
         <div className={`min-h-80 relative p-12 ${!isRegistered ? 'flex justify-center items-center' : 'lg:grid lg:grid-cols-2 lg:gap-6 lg:pt-24'}`}>
           {!isRegistered ? (
-            <div className="text-center lg:w-1/2">
-              {/* <CheckCircleIcon style={{ fontSize: '100px', color: 'green' }} /> */}
-              <div className='flex justify-center'>
-                <Player
-                  autoplay
-                  loop={false}
-                  animationData={checkAnimation}
-                  style={{ width: '150px', height: '150px' }}
-                  className=''
-                />
-              </div>
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900 mt-4">
-                ¡Registro exitoso!
-              </h2>
-              <p className="text-start mt-2 text-md text-gray-600">
-                Hemos enviado un correo electrónico a tu dirección de correo <b>{formData.email}</b>. Por favor, revisa tu bandeja de entrada y sigue el enlace de activación para completar el registro.
-              </p>
-              <div className='pt-10'>
-                <Link to={'/activate-account'}>
-                  <Button
-                    sx={{
-                      backgroundColor: '#1EDB17',
-                      '&:hover': {
-                        backgroundColor: '#16A314'
-                      }
-                    }}
-                    variant='contained'>
-                    Activar cuenta
-                  </Button>
-                </Link>
-              </div>
-            </div>
+            <SuccessModal
+              open={true}
+              title="¡Registro exitoso!"
+              message={`Hemos enviado un correo electrónico a tu dirección de correo "${formData.email}". Por favor, revisa tu bandeja de entrada y sigue el enlace de activación para completar el registro.`}
+              buttonText="Activar cuenta"
+              buttonLink="/activate-account"
+            />
           ) : (
             <>
               <article className="text-center lg:text-left">
