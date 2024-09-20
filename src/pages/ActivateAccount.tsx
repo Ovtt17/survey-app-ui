@@ -1,13 +1,10 @@
-import { TextField, Button, Box, Typography, Alert } from '@mui/material';
+import { TextField, Button, Box, Typography } from '@mui/material';
 import { FC, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { activateUser } from '../services/authService';
-import Player from 'lottie-react';
-import successAnimation from '../assets/lottie/Check.json';
+import SuccessModal from '../components/modals/SuccessModal';
 
 
 const ActivateAccount: FC = () => {
-  const navigate = useNavigate();
   const [code, setCode] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
@@ -42,9 +39,6 @@ const ActivateAccount: FC = () => {
     try {
       await activateUser(code);
       setSuccessMessage('Cuenta activada con éxito. ¡Gracias por confirmar tu cuenta!');
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
     } catch (error) {
       setErrorMessage('La activación de la cuenta falló. Por favor, intenta nuevamente.');
     }
@@ -83,20 +77,13 @@ const ActivateAccount: FC = () => {
             />
 
             {successMessage && (
-              <Alert
-                severity="success"
-                className="mt-4"
-                icon={
-                  <Player
-                    autoplay
-                    loop={false}
-                    animationData={successAnimation}
-                    style={{ height: '25px', width: '30px' }}
-                  />
-                }
-              >
-                {successMessage}
-              </Alert>
+              <SuccessModal
+                open={true}
+                title="¡Activación Exitosa!"
+                message={successMessage}
+                buttonText="Iniciar Sesión"
+                buttonLink="/login"
+              />
             )}
 
             <Button
