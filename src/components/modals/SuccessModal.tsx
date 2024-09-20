@@ -46,7 +46,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
               style={{ width: '150px', height: '150px' }}
             />
           </div>
-          <p className="text-justify mt-2 text-md text-gray-600">
+          <p className="mt-2 text-md text-gray-600">
             {message}
           </p>
           <div className='pt-10'>
