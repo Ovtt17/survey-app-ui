@@ -1,5 +1,6 @@
 import { TextField } from '@mui/material';
 import { FC } from 'react';
+import ErrorHelperText from '../error/ErrorHelperText';
 
 interface EmailStepProps {
   email: string;
@@ -24,7 +25,7 @@ const EmailStep: FC<EmailStepProps> = ({
         value={email}
         onChange={handleChange}
         error={!!emailError}
-        helperText={emailError}
+        helperText={emailError ? <ErrorHelperText errorMessage={emailError} /> : null}
         fullWidth
         margin="normal"
       />

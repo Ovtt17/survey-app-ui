@@ -1,5 +1,6 @@
 import { TextField } from '@mui/material';
 import React, { FC } from 'react';
+import ErrorHelperText from '../error/ErrorHelperText';
 
 interface UsernameStepProps {
   username: string;
@@ -24,7 +25,7 @@ const UsernameStep: FC<UsernameStepProps> = ({
         value={username}
         onChange={handleChange}
         error={!!usernameError}
-        helperText={usernameError}
+        helperText={usernameError ? <ErrorHelperText errorMessage={usernameError} /> : null}
         fullWidth
         margin="normal"
       />

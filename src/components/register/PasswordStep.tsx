@@ -1,5 +1,6 @@
 import { Checkbox, FormControlLabel, TextField } from '@mui/material';
 import React, { FC, useState } from 'react';
+import ErrorHelperText from '../error/ErrorHelperText';
 
 interface PasswordStepProps {
   password: string;
@@ -30,7 +31,7 @@ const PasswordStep: FC<PasswordStepProps> = ({
         name='password'
         value={password}
         error={!!passwordError}
-        helperText={passwordError}
+        helperText={passwordError ? <ErrorHelperText errorMessage={passwordError} /> : null}
         type={showPassword ? "text" : "password"}
         onChange={handleChange}
       />
@@ -42,7 +43,7 @@ const PasswordStep: FC<PasswordStepProps> = ({
         name='confirmPassword'
         value={confirmPassword}
         error={!!confirmPasswordError}
-        helperText={confirmPasswordError}
+        helperText={confirmPasswordError ? <ErrorHelperText errorMessage={confirmPasswordError} /> : null}
         type={showPassword ? "text" : "password"}
         onChange={handleChange}
       />
