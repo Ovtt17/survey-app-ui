@@ -17,7 +17,7 @@ const Register: FC = () => {
   const maxDate = dayjs().subtract(15, 'year');
 
   const [formData, setFormData] = useState<NewUser>(initialFormData);
-  const [errors, setErrors] = useState<Array<StepErrors>>(initialFieldErrors);
+  const [errors, setErrors] = useState<StepErrors[]>(initialFieldErrors);
   const [loading, setLoading] = useState<boolean>(false);
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
 
