@@ -1,7 +1,10 @@
-import { Alert, TextField, Button, Box, Typography } from '@mui/material';
+import { TextField, Button, Box, Typography, Alert } from '@mui/material';
 import { FC, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { activateUser } from '../services/authService';
+import Player from 'lottie-react';
+import successAnimation from '../assets/lottie/Check.json';
+
 
 const ActivateAccount: FC = () => {
   const navigate = useNavigate();
@@ -80,7 +83,18 @@ const ActivateAccount: FC = () => {
             />
 
             {successMessage && (
-              <Alert severity="success" className="mt-4">
+              <Alert
+                severity="success"
+                className="mt-4"
+                icon={
+                  <Player
+                    autoplay
+                    loop={false}
+                    animationData={successAnimation}
+                    style={{ height: '25px', width: '30px' }}
+                  />
+                }
+              >
                 {successMessage}
               </Alert>
             )}

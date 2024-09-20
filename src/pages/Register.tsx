@@ -7,7 +7,7 @@ import { ERROR_MESSAGES, initialFieldErrors, initialFormData, STEP_FIELDS, StepE
 import RegistrationForm from '../components/register/RegistrationForm';
 import { validateStep, verifyStepData } from '../auth/stepValidation';
 import { Button, LinearProgress } from '@mui/material';
-import Lottie from 'lottie-react';
+import Player from 'lottie-react';
 import checkAnimation from '../assets/lottie/Check.json';
 
 const Register: FC = () => {
@@ -119,7 +119,9 @@ const Register: FC = () => {
             <div className="text-center lg:w-1/2">
               {/* <CheckCircleIcon style={{ fontSize: '100px', color: 'green' }} /> */}
               <div className='flex justify-center'>
-                <Lottie
+                <Player
+                  autoplay
+                  loop={false}
                   animationData={checkAnimation}
                   style={{ width: '150px', height: '150px' }}
                   className=''
