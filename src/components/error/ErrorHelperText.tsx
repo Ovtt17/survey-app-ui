@@ -8,7 +8,7 @@ interface ErrorHelperTextProps {
 
 const ErrorHelperText: React.FC<ErrorHelperTextProps> = ({ errorMessage }) => {
   return (
-    <Box display="flex" alignItems="center">
+    <Box component="span" display="flex" alignItems="center">
       <ErrorIcon color="error" fontSize="small" style={{ marginRight: 4 }} />
       {errorMessage}
     </Box>
