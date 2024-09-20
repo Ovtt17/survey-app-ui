@@ -7,12 +7,26 @@ import SurveyModal from '../components/survey/SurveyModal';
 import { Survey } from '../types/survey';
 import { downloadReportWhitoutSurvey, downloadReportWithSurvey } from '../services/reportService';
 import { getSurveyByUser } from '../services/surveyService';
+import ErrorModal from '../components/error/ErrorModal';
+import { useNavigate } from 'react-router-dom';
 const Report = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reportSelected, setReportSelected] = useState<ReportType | null>(null);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
   const [surveys, setSurveys] = useState<Survey[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
+
+  const navigate = useNavigate();
+
+  const handleOpenErrorModal = () => {
+    setOpenErrorModal(true);
+  };
+
+  const handleConfirmLogin = () => {
+    setOpenErrorModal(false);
+    navigate("/login");
+  };
 
   const handleOpenModal = (report: ReportType) => {
     setReportSelected(report);
@@ -69,13 +83,14 @@ const Report = () => {
   }
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center p-10">
       <div className="flex flex-wrap justify-center gap-10">
         {reports.map((report, index) => (
           <ReportCard
             key={index}
             report={report}
             handleOpenModal={() => handleOpenModal(report)}
+            handleOpenErrorModal={handleOpenErrorModal}
           />
         ))}
       </div>
@@ -99,6 +114,15 @@ const Report = () => {
           />
         )
       }
+
+      <ErrorModal
+        open={openErrorModal}
+        setOpen={setOpenErrorModal}
+        title="Error"
+        message="Para realizar esta acción es necesario iniciar sesión"
+        confirmText="Iniciar Sesión"
+        onConfirm={handleConfirmLogin}
+      />
     </div>
   );
 }

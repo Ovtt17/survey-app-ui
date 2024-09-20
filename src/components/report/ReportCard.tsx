@@ -1,16 +1,28 @@
 import { FC } from 'react';
 import { Report } from '../../types/report';
 import ExcelIcon from '../../assets/icon-excel.svg';
+import { useAuthContext } from '../../context/AuthContext';
 
 interface ReportCardProps {
   report: Report;
   handleOpenModal: () => void;
+  handleOpenErrorModal: () => void;
 }
 
-const ReportCard: FC<ReportCardProps> = ({ report, handleOpenModal }) => {
+const ReportCard: FC<ReportCardProps> = ({
+  report,
+  handleOpenModal,
+  handleOpenErrorModal
+}) => {
+  const { verifySession } = useAuthContext();
+
+  const handleClick = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    verifySession(e, handleOpenErrorModal, handleOpenModal);
+  };
+
   return (
     <div
-      onClick={handleOpenModal}
+      onClick={handleClick}
       className="relative flex flex-col cursor-pointer rounded-lg bg-gray-800
                   shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]
                   md:max-w-xl md:flex-row
