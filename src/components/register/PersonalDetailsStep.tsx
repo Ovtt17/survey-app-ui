@@ -1,6 +1,8 @@
 import { FC } from 'react';
 import "dayjs/locale/es";
 import { TextField } from '@mui/material';
+import ErrorHelperText from '../error/ErrorHelperText';
+
 
 interface PersonalDetailsStepProps {
   firstName: string;
@@ -32,7 +34,7 @@ const PersonalDetailsStep: FC<PersonalDetailsStepProps> = ({
         value={firstName}
         onChange={handleChange}
         error={!!firstNameError}
-        helperText={firstNameError}
+        helperText={firstNameError ? <ErrorHelperText errorMessage={firstNameError} /> : null}
         fullWidth
         margin="normal"
       />
@@ -45,7 +47,7 @@ const PersonalDetailsStep: FC<PersonalDetailsStepProps> = ({
         value={lastName}
         onChange={handleChange}
         error={!!lastNameError}
-        helperText={lastNameError}
+        helperText={firstNameError ? <ErrorHelperText errorMessage={firstNameError} /> : null}
         fullWidth
         margin="normal"
       />

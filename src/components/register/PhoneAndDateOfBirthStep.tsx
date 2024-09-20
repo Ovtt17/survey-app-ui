@@ -4,6 +4,7 @@ import React, { FC, useMemo, useState } from 'react';
 import { DatePicker, DateValidationError, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { StepErrors } from '../../auth/constants';
+import ErrorHelperText from '../error/ErrorHelperText';
 
 
 interface PhoneAndDateOfBirthStepProps {
@@ -59,7 +60,7 @@ const PhoneAndDateOfBirthStep: FC<PhoneAndDateOfBirthStepProps> = ({
           onError={handleDateError}
           slotProps={{
             textField: {
-              helperText: errorMessage,
+              helperText: <ErrorHelperText errorMessage={errorMessage} />,
             },
           }}
           sx={{ marginTop: 2 }}
@@ -74,7 +75,7 @@ const PhoneAndDateOfBirthStep: FC<PhoneAndDateOfBirthStepProps> = ({
         value={phone}
         onChange={handleChange}
         error={!!phoneError}
-        helperText={phoneError}
+        helperText={phoneError ? <ErrorHelperText errorMessage={phoneError} /> : null}
         fullWidth
         margin="normal"
       />
