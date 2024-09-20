@@ -60,7 +60,7 @@ const PhoneAndDateOfBirthStep: FC<PhoneAndDateOfBirthStepProps> = ({
           onError={handleDateError}
           slotProps={{
             textField: {
-              helperText: <ErrorHelperText errorMessage={errorMessage} />,
+              helperText: errorMessage ? <ErrorHelperText errorMessage={errorMessage} /> : null,
             },
           }}
           sx={{ marginTop: 2 }}
