@@ -1,6 +1,38 @@
 import dayjs, { Dayjs } from 'dayjs';
 import { NewUser } from '../types/user';
 
+const errorMessages = {
+  required: 'El nombre de usuario es obligatorio',
+  noSpaces: 'El nombre de usuario no debe contener espacios',
+  noOnlyNumbers: 'El nombre de usuario no debe ser solo números',
+  noSpecialChars: 'El nombre de usuario no debe contener caracteres especiales',
+  noEmail: 'El nombre de usuario no debe ser un correo electrónico',
+  minLength: 'El nombre de usuario debe tener al menos 5 caracteres',
+  minLetters: 'El nombre de usuario debe contener al menos 4 letras',
+  minDigits: 'El nombre de usuario debe contener al menos un número',
+  consecutiveLetters: 'El nombre de usuario debe contener al menos 4 letras consecutivas'
+};
+
+const validateUsername = (username: string): string | null => {
+  const trimmedUsername = username.trim();
+
+  if (!trimmedUsername) return errorMessages.required;
+  if (/\s/.test(trimmedUsername)) return errorMessages.noSpaces;
+  if (/^\d+$/.test(trimmedUsername)) return errorMessages.noOnlyNumbers;
+  if (/[^a-zA-Z0-9]/.test(trimmedUsername)) return errorMessages.noSpecialChars;
+  if (/\S+@\S+\.\S+/.test(trimmedUsername)) return errorMessages.noEmail;
+  if (trimmedUsername.length < 5) return errorMessages.minLength;
+
+  const letterCount = (trimmedUsername.match(/[a-zA-Z]/g) || []).length;
+  const digitCount = (trimmedUsername.match(/\d/g) || []).length;
+
+  if (letterCount < 4) return errorMessages.minLetters;
+  if (digitCount < 1) return errorMessages.minDigits;
+  if (!/[a-zA-Z]{4,}/.test(trimmedUsername)) return errorMessages.consecutiveLetters;
+
+  return null;
+};
+
 export const validateField = (name: string, value: string | Dayjs | null, formData: NewUser, minDate: Dayjs, maxDate: Dayjs): string | null => {
   const isString = typeof value === 'string';
 
@@ -14,9 +46,7 @@ export const validateField = (name: string, value: string | Dayjs | null, formDa
     case 'email':
       return isString && !/\S+@\S+\.\S+/.test(value) ? 'El correo electrónico es inválido' : null;
     case 'username':
-      return isString && (!value.trim() || /\s/.test(value) || /^\d+$/.test(value) || /[^a-zA-Z0-9]/.test(value))
-        ? 'El nombre de usuario es obligatorio, no debe contener espacios, no debe ser solo números y no debe contener caracteres especiales'
-        : null;
+      return isString ? validateUsername(value) : null;
     case 'password':
       return isString && value.length < 8 ? 'La contraseña debe tener al menos 8 caracteres' : null;
     case 'confirmPassword':
