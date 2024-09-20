@@ -8,6 +8,21 @@ const getJsonHeaders = () => ({
   'Accept': 'application/json'
 });
 
+const handleResponse = async (response: Response) => {
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(`Error: ${response.status} ${response.statusText} - ${errorData.message}`);
+  }
+  return response.json();
+};
+
+const toLocalDateString = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+};
+
 export const login = async (usernameOrEmail: string, password: string): Promise<AuthenticationResponse> => {
   const data = { usernameOrEmail, password };
 
@@ -18,15 +33,9 @@ export const login = async (usernameOrEmail: string, password: string): Promise<
       body: JSON.stringify(data)
     });
 
-    if (response.ok) {
-      const authResponse: AuthenticationResponse = await response.json();
-      localStorage.setItem('token', authResponse.token);
-      console.log(authResponse);
-      console.log(authResponse.user.profilePictureUrl);
-      return authResponse;
-    } else {
-      throw new Error(`Login failed: ${response.status} ${response.statusText}`);
-    }
+    const authResponse: AuthenticationResponse = await handleResponse(response);
+    localStorage.setItem('token', authResponse.token);
+    return authResponse;
   } catch (error) {
     console.error('Error during login:', error);
     throw new Error('An unexpected error occurred during login. Please try again later.');
@@ -36,10 +45,14 @@ export const login = async (usernameOrEmail: string, password: string): Promise<
 export const registerUser = async (user: NewUser): Promise<boolean> => {
   try {
     const formData = new FormData();
-    Object.keys(user).forEach(key => {
-      const value = (user as any)[key];
-      formData.append(key, value);
-    });
+    formData.append('username', user.username);
+    formData.append('firstName', user.firstName);
+    formData.append('lastName', user.lastName);
+    formData.append('dateOfBirth', user.dateOfBirth ? toLocalDateString(user.dateOfBirth) : '');
+    formData.append('phone', user.phone);
+    formData.append('email', user.email);
+    formData.append('password', user.password);
+
     const response = await fetch(`${BASE_URL}/register`, {
       method: 'POST',
       body: formData
@@ -48,7 +61,7 @@ export const registerUser = async (user: NewUser): Promise<boolean> => {
       throw new Error(`Registration failed: ${response.status} ${response.statusText}`);
     }
 
-    const isRegistered = await response.json();
+    const isRegistered = await handleResponse(response);
     return isRegistered;
   } catch (error) {
     console.error('Error during registration:', error);
@@ -62,9 +75,8 @@ export const activateUser = async (token: string): Promise<void> => {
       method: 'GET',
       headers: getJsonHeaders()
     });
-    if (!response.ok) {
-      throw new Error(`Activation failed: ${response.status} ${response.statusText}`);
-    }
+
+    await handleResponse(response);
   } catch (error) {
     console.error('Error during account activation:', error);
     throw new Error('An unexpected error occurred during account activation. Please try again later.');
@@ -78,11 +90,7 @@ export const checkExistingEmail = async (email: string): Promise<boolean> => {
       headers: getJsonHeaders()
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to check email existence: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
+    const data = await handleResponse(response);
     return data;
   } catch (error) {
     console.error('Error while checking if email already exists:', error);
@@ -97,11 +105,7 @@ export const checkExistingUsername = async (username: string): Promise<boolean> 
       headers: getJsonHeaders()
     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to check username existence: ${response.status} ${response.statusText}`);
-    }
-
-    const data = await response.json();
+    const data = await handleResponse(response);
     return data;
   } catch (error) {
     console.error('Error while checking if username already exists:', error);
