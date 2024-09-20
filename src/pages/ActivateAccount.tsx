@@ -13,18 +13,28 @@ const ActivateAccount: FC = () => {
     setCode(e.target.value);
   };
 
-  const handleSubmit = async () => {
+  const validateCode = (code: string): string | null => {
+    if (code.length === 0) return 'El código no puede estar vacío.';
+    if (code.length !== 6) return 'El código debe tener 6 dígitos.';
+    if (!/^\d+$/.test(code)) return 'El código debe contener solo dígitos.';
+    return null;
+  };
+
+  const handleCodeValidation = (code: string) => {
+    const validationError = validateCode(code);
+    if (validationError) {
+      setErrorMessage(validationError);
+      return false;
+    }
+    return true;
+  };
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setErrorMessage('');
     setSuccessMessage('');
 
-    if (code.length === 0) {
-      setErrorMessage('El código no puede estar vacío.');
-      return;
-    }
-    if (code.length !== 6) {
-      setErrorMessage('El código debe tener 6 dígitos.');
-      return;
-    }
+    if (!handleCodeValidation(code)) return;
 
     try {
       await activateUser(code);
@@ -38,65 +48,54 @@ const ActivateAccount: FC = () => {
   };
 
   return (
-    <Box
-      className="flex min-h-full flex-1 flex-col justify-center px-6 lg:px-8"
-      component="form"
-      onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}
-    >
-      <Box className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img
-          alt="Your Company"
-          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-          className="mx-auto h-10 w-auto"
-        />
-        <Typography
-          variant="h4"
-          component="h2"
-          className="mt-10 text-center font-bold leading-9 tracking-tight text-gray-900"
+    <Box className="flex flex-col min-h-screen">
+      <Box className="flex-grow flex flex-col justify-center items-center px-6 lg:px-8">
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          className="w-full max-w-sm text-center relative"
         >
-          Confirmar Cuenta
-        </Typography>
-      </Box>
-
-      <Box className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <div className='pb-5'>
-          <TextField
-            id="code"
-            label="Código de Verificación"
-            variant="outlined"
-            name="code"
-            type="text"
-            className='pb-10'
-            required
-            fullWidth
-            value={code}
-            onChange={handleChange}
-            inputProps={{ maxLength: 6 }}
+          <img
+            alt="Logo de la Empresa"
+            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+            className="absolute -top-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-12"
           />
-        </div>
+          <Typography variant="h4" className="font-bold tracking-tight text-gray-900">
+            Activar Cuenta
+          </Typography>
 
-        {errorMessage && (
-          <Alert severity="error" className="mt-4">
-            {errorMessage}
-          </Alert>
-        )}
+          <Box className="w-full max-w-sm mt-10">
+            <TextField
+              id="code"
+              label="Código de Verificación"
+              variant="outlined"
+              fullWidth
+              required
+              value={code}
+              onChange={handleChange}
+              inputProps={{ maxLength: 6 }}
+              error={!!errorMessage}
+              helperText={errorMessage || ''}
+              sx={{ marginBottom: '20px' }}
+            />
 
-        {successMessage && (
-          <Alert severity="success" className="mt-4">
-            {successMessage}
-          </Alert>
-        )}
+            {successMessage && (
+              <Alert severity="success" className="mt-4">
+                {successMessage}
+              </Alert>
+            )}
 
-        <Button
-          onClick={handleSubmit}
-          type="submit"
-          fullWidth
-          variant="contained"
-          color="primary"
-          className="mt-6"
-        >
-          Confirmar
-        </Button>
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              color="primary"
+              sx={{ marginTop: '20px' }}
+            >
+              Confirmar
+            </Button>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

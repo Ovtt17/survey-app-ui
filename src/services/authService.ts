@@ -76,7 +76,10 @@ export const activateUser = async (token: string): Promise<void> => {
       headers: getJsonHeaders()
     });
 
-    await handleResponse(response);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(`Error: ${response.status} ${response.statusText} - ${errorData.message}`);
+    }
   } catch (error) {
     console.error('Error during account activation:', error);
     throw new Error('An unexpected error occurred during account activation. Please try again later.');
