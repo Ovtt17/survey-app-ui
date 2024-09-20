@@ -7,7 +7,8 @@ import { ERROR_MESSAGES, initialFieldErrors, initialFormData, STEP_FIELDS, StepE
 import RegistrationForm from '../components/register/RegistrationForm';
 import { validateStep, verifyStepData } from '../auth/stepValidation';
 import { Button, LinearProgress } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import Lottie from 'lottie-react';
+import checkAnimation from '../assets/lottie/Check.json';
 
 const Register: FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -113,10 +114,17 @@ const Register: FC = () => {
         <div className='px-2'>
           {loading && <LinearProgress />}
         </div>
-        <div className={`min-h-80 relative pt-16 pb-10 px-10 ${isRegistered ? 'flex justify-center items-center' : 'lg:grid lg:grid-cols-2 lg:gap-6 lg:pt-24'}`}>
-          {isRegistered ? (
+        <div className={`min-h-80 relative p-12 ${!isRegistered ? 'flex justify-center items-center' : 'lg:grid lg:grid-cols-2 lg:gap-6 lg:pt-24'}`}>
+          {!isRegistered ? (
             <div className="text-center lg:w-1/2">
-              <CheckCircleIcon style={{ fontSize: '100px', color: 'green' }} />
+              {/* <CheckCircleIcon style={{ fontSize: '100px', color: 'green' }} /> */}
+              <div className='flex justify-center'>
+                <Lottie
+                  animationData={checkAnimation}
+                  style={{ width: '150px', height: '150px' }}
+                  className=''
+                />
+              </div>
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 mt-4">
                 ¡Registro exitoso!
               </h2>
@@ -125,7 +133,14 @@ const Register: FC = () => {
               </p>
               <div className='pt-10'>
                 <Link to={'/activate-account'}>
-                  <Button color='success' variant='contained'>
+                  <Button
+                    sx={{
+                      backgroundColor: '#1EDB17',
+                      '&:hover': {
+                        backgroundColor: '#16A314'
+                      }
+                    }}
+                    variant='contained'>
                     Activar cuenta
                   </Button>
                 </Link>
