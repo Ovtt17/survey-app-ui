@@ -12,7 +12,7 @@ export const initialFormData: NewUser = {
   username: '',
   firstName: '',
   lastName: '',
-  dateOfBirth: undefined,
+  dateOfBirth: null,
   phone: '',
   email: '',
   password: '',

@@ -51,7 +51,7 @@ const Register: FC = () => {
 
     setFormData(prevData => ({
       ...prevData,
-      dateOfBirth: isValidDate ? newDateOfBirth?.toDate() : undefined,
+      dateOfBirth: isValidDate && newDateOfBirth ? newDateOfBirth.toDate() : null,
     }));
     updateError(name as keyof StepErrors, isValidDate ? null : 'Fecha de nacimiento no válida');
   };
