@@ -64,13 +64,13 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
   }
 
   return (
-    <div className="w-full pb-5">
-      <div className="h-48 flex-none bg-cover rounded-t rounded-l text-center overflow-hidden"
+    <div className="w-full pb-5 min-h-[520px]">
+      <div className=" max-md:h-48 h-52 flex-none bg-cover rounded-t text-center overflow-hidden"
         style={{ backgroundImage: "url('https://plus.unsplash.com/premium_photo-1673306778968-5aab577a7365?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmFja2dyb3VuZCUyMGltYWdlfDB8fDB8fHww')" }}
         title="Portada de la encuesta"
       >
       </div>
-      <div className="relative min-h-72 shadow-xl bg-white rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+      <div className="relative min-h-72 shadow-xl bg-white rounded-b p-4 flex flex-col justify-between leading-normal">
         {isOwner && (
           <div className="absolute top-2 right-1 flex space-x-2">
             <div onClick={downloadAnswersReport} className="cursor-pointer h-8 w-8 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
@@ -102,10 +102,10 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
               Members only
             </p>
           )}
-          <div className="text-gray-900 font-bold text-xl mb-2 mt-4">
+          <div className="text-gray-900 font-bold text-xl mb-2 mt-4 md:line-clamp-1">
             <p>{survey.title}</p>
           </div>
-          <p className="text-gray-700 text-base overflow-hidden" style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: 2 }}>
+          <p className="text-gray-700 text-base line-clamp-2">
             {survey.description}
           </p>
         </div>
