@@ -47,7 +47,7 @@ const PersonalDetailsStep: FC<PersonalDetailsStepProps> = ({
         value={lastName}
         onChange={handleChange}
         error={!!lastNameError}
-        helperText={firstNameError ? <ErrorHelperText errorMessage={firstNameError} /> : null}
+        helperText={lastNameError ? <ErrorHelperText errorMessage={lastNameError} /> : null}
         fullWidth
         margin="normal"
       />
