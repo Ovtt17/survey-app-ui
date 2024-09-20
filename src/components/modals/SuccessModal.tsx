@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Dialog, DialogContent } from '@mui/material';
-import Player from 'lottie-react';
-import checkAnimation from '../../assets/lottie/Check.json';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import SuccessCheck from '../../assets/lottie/SuccessCheck.lottie';
 
 interface SuccessModalProps {
   open: boolean;
@@ -39,10 +39,10 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
       <DialogContent>
         <div className="text-center">
           <div className='flex justify-center'>
-            <Player
-              autoplay
+            <DotLottieReact
+              src={SuccessCheck}
               loop
-              animationData={checkAnimation}
+              autoplay
               style={{ width: '150px', height: '150px' }}
             />
           </div>
