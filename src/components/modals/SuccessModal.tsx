@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Dialog, DialogContent } from '@mui/material';
 import Player from 'lottie-react';
-import checkAnimation from '../../assets/lottie/Check.json'; // Asegúrate de tener la animación Lottie en tu proyecto
+import checkAnimation from '../../assets/lottie/Check.json';
 
 interface SuccessModalProps {
   open: boolean;
