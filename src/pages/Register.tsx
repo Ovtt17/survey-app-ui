@@ -112,11 +112,11 @@ const Register: FC = () => {
         <div className='px-2'>
           {loading && <LinearProgress />}
         </div>
-        <div className={`min-h-80 relative p-12 ${!isRegistered ? 'flex justify-center items-center' : 'lg:grid lg:grid-cols-2 lg:gap-6 lg:pt-24'}`}>
-          {!isRegistered ? (
+        <div className={`min-h-80 relative p-12 ${isRegistered ? 'flex justify-center items-center' : 'lg:grid lg:grid-cols-2 lg:gap-6 lg:pt-24'}`}>
+          {isRegistered ? (
             <SuccessModal
               open={true}
-              title="¡Registro exitoso!"
+              title="¡Registro Exitoso!"
               message={`Hemos enviado un correo electrónico a tu dirección de correo "${formData.email}". Por favor, revisa tu bandeja de entrada y sigue el enlace de activación para completar el registro.`}
               buttonText="Activar cuenta"
               buttonLink="/activate-account"
