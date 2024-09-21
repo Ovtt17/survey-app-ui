@@ -11,7 +11,7 @@ const SurveyParticipations = lazy(() => import('../components/survey/SurveyParti
 const Report = lazy(() => import('../pages/Report'));
 const ActivateAccount = lazy(() => import('../pages/ActivateAccount'));
 const UserSurveys = lazy(() => import('../pages/UserSurveys'));
-const LoginIn = lazy(() => import('../components/sign-in/Login'));
+const LogIn = lazy(() => import('../pages/Login'));
 
 const AppRoutes = () => {
   return (
@@ -20,7 +20,7 @@ const AppRoutes = () => {
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
         <Route path="/activate-account" element={<ActivateAccount />} />
-        <Route path='/login' element={<LoginIn />} />
+        <Route path='/login' element={<LogIn />} />
         <Route path='/reports' element={<Report />} />
         <Route path="/surveys" element={<Home />} />
         <Route path='/surveys/create' element={
