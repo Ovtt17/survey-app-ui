@@ -12,14 +12,12 @@ const SocialLoginButtons: FC<SocialLoginButtonsProps> = ({ onGoogleLogin, onFace
     <div className='flex flex-col gap-4'>
       <SocialButton
         icon={<GoogleIcon />}
-        text='Iniciar Sesión con Google'
-        textSm='Google'
+        text='Continuar con Google'
         onClick={onGoogleLogin}
       />
       <SocialButton
         icon={<FacebookIcon />}
-        text='Iniciar Sesión con Facebook'
-        textSm='Facebook'
+        text='Continuar con Facebook'
         onClick={onFacebookLogin}
       />
     </div>

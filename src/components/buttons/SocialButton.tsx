@@ -4,11 +4,10 @@ import { FC } from 'react';
 interface SocialButtonProps {
   icon: React.ReactElement<SvgIconProps>;
   text: string;
-  textSm: string;
   onClick: () => void;
 }
 
-const SocialButton: FC<SocialButtonProps> = ({ icon, text, textSm, onClick }) => {
+const SocialButton: FC<SocialButtonProps> = ({ icon, text, onClick }) => {
   return (
     <Button
       variant="outlined"
@@ -23,8 +22,7 @@ const SocialButton: FC<SocialButtonProps> = ({ icon, text, textSm, onClick }) =>
         paddingY: 1,
       }}
     >
-      <span className="hidden sm:inline">{text}</span>
-      <span className="inline sm:hidden">{textSm}</span>
+      <span className="text-sm sm:text-base">{text}</span>
     </Button>
   );
 }
