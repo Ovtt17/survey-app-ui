@@ -40,7 +40,7 @@ const LoginForm: FC<LoginFormProps> = ({
           label="Email / Username"
           variant="outlined"
           name="email"
-          type="email"
+          type="text"
           required
           fullWidth
           error={!!errorMessage}
