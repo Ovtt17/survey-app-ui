@@ -8,9 +8,10 @@ interface LoginFormProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   passwordRef: React.RefObject<HTMLInputElement>;
   errorMessage: string;
+  handlePasswordChange: () => void;
 }
 
-const LoginForm: FC<LoginFormProps> = ({ handleSubmit, passwordRef, errorMessage }) => {
+const LoginForm: FC<LoginFormProps> = ({ handleSubmit, passwordRef, errorMessage, handlePasswordChange }) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -71,6 +72,7 @@ const LoginForm: FC<LoginFormProps> = ({ handleSubmit, passwordRef, errorMessage
               </InputAdornment>
             }
             inputRef={passwordRef}
+            onChange={handlePasswordChange}
           />
           {errorMessage && (
             <FormHelperText>

@@ -43,6 +43,8 @@ const Login = () => {
     console.log('Facebook login');
   };
 
+  const handlePasswordChange = () => setErrorMessage('');
+
   useEffect(() => {
     const token = getToken();
     if (token) {
@@ -63,6 +65,7 @@ const Login = () => {
             handleSubmit={handleSubmit}
             passwordRef={passwordRef}
             errorMessage={errorMessage}
+            handlePasswordChange={handlePasswordChange}
           />
           <OrSeparator />
           <SocialLoginButtons
