@@ -3,15 +3,23 @@ import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, Ou
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
 import ErrorHelperText from '../error/ErrorHelperText';
+import GradientCircularProgress from '../loadings/GradientCircularProgress';
 
 interface LoginFormProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   passwordRef: React.RefObject<HTMLInputElement>;
   errorMessage: string;
   handlePasswordChange: () => void;
+  isLoading: boolean;
 }
 
-const LoginForm: FC<LoginFormProps> = ({ handleSubmit, passwordRef, errorMessage, handlePasswordChange }) => {
+const LoginForm: FC<LoginFormProps> = ({
+  handleSubmit,
+  passwordRef,
+  errorMessage,
+  handlePasswordChange,
+  isLoading
+}) => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -84,7 +92,7 @@ const LoginForm: FC<LoginFormProps> = ({ handleSubmit, passwordRef, errorMessage
       <div>
         <button type="submit"
           className="flex w-full justify-center rounded-md bg-midnight-black hover:bg-gray-700 px-3 py-1.5 text-sm font-semibold leading-6 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" >
-          Iniciar Sesión
+          {isLoading ? <GradientCircularProgress /> : 'Iniciar Sesión'}
         </button>
       </div>
       <p className="mt-10 text-center text-sm text-gray-500">

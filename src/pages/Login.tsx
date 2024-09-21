@@ -12,10 +12,12 @@ const Login = () => {
   const navigate = useNavigate();
   const { login: setAuth } = useAuthContext();
   const [errorMessage, setErrorMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const passwordRef = useRef<HTMLInputElement>(null);
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setIsLoading(true);
 
     const formData = new FormData(event.currentTarget);
     const usernameOrEmail = formData.get('email') as string;
@@ -32,6 +34,8 @@ const Login = () => {
         passwordRef.current.value = '';
         passwordRef.current.focus();
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -66,6 +70,7 @@ const Login = () => {
             passwordRef={passwordRef}
             errorMessage={errorMessage}
             handlePasswordChange={handlePasswordChange}
+            isLoading={isLoading}
           />
           <OrSeparator />
           <SocialLoginButtons
