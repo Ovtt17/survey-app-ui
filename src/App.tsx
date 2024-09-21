@@ -1,8 +1,10 @@
+import { Suspense, lazy } from 'react';
 import { useLocation } from "react-router-dom";
-import Navigation from "./components/navigation/Navigation";
 import { AuthProvider } from "./context/AuthContext";
-import AppRoutes from './routes/routes';
 import ScrollToTop from "./utils/ScrollToTop";
+
+const Navigation = lazy(() => import('./components/navigation/Navigation'));
+const AppRoutes = lazy(() => import('./routes/routes'));
 
 function App() {
   const location = useLocation();
@@ -11,6 +13,7 @@ function App() {
     <AuthProvider>
       <div className="min-h-screen flex flex-col">
         <ScrollToTop />
+        <Suspense fallback={<div>Loading...</div>}></Suspense>
         {!hideNavigationAndFooter && (
           <header>
             <Navigation />
