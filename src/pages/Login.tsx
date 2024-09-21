@@ -10,6 +10,7 @@ import SocialLoginButtons from '../components/sign-in/SocialLoginButtons';
 import { DotLottieReact } from '@lottiefiles/dotlottie-react';
 import SuccessCheck from '../assets/lottie/SuccessCheck.lottie';
 import LoadingIndicator from '../components/loadings/LoadingIndicator';
+import { signInWithGoogle, signInWithFacebook } from '../services/socialAuthService';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -47,14 +48,6 @@ const Login = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
-    console.log('Google login');
-  };
-
-  const handleFacebookLogin = async () => {
-    console.log('Facebook login');
-  };
-
   const handlePasswordChange = () => setErrorMessage('');
 
   useEffect(() => {
@@ -82,8 +75,8 @@ const Login = () => {
           />
           <OrSeparator />
           <SocialLoginButtons
-            onGoogleLogin={handleGoogleLogin}
-            onFacebookLogin={handleFacebookLogin}
+            onGoogleLogin={signInWithGoogle}
+            onFacebookLogin={signInWithFacebook}
           />
         </article>
       </div>

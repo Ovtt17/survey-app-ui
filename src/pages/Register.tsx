@@ -134,7 +134,7 @@ const Register: FC = () => {
                 </h2>
                 <p className="mt-2 text-md text-gray-600">
                   Completa la información para crear tu cuenta
-                </p>
+                  </p>
               </article>
               <article className="flex flex-col justify-between">
                 <RegistrationForm
