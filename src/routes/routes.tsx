@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { EditProvider } from '../context/EditSurveyContext';
+import LoadingComponent from '../components/loadings/LoadingComponent';
 
 const Home = lazy(() => import('../pages/Home'));
 const AnswerSurvey = lazy(() => import('../pages/AnswerSurvey'));
@@ -15,7 +16,7 @@ const LogIn = lazy(() => import('../pages/Login'));
 
 const AppRoutes = () => {
   return (
-    <Suspense fallback={<div>Loading...</div>}>
+    <Suspense fallback={<LoadingComponent />}>
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register />} />
