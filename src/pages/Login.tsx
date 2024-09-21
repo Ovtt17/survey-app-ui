@@ -53,7 +53,7 @@ const Login = () => {
 
   return (
     <section className="flex min-h-screen flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
-      <div className='w-full flex justify-center max-w-lg p-6 sm:p-10 bg-white rounded-md shadow-md'>
+      <div className='w-full flex justify-center max-w-lg p-6 sm:p-8 bg-white rounded-md shadow-md'>
         <article className="flex flex-col gap-4 w-full max-w-sm">
           <SitemarkIcon />
           <h2 className="text-start text-3xl font-bold leading-9 tracking-tight text-gray-900">

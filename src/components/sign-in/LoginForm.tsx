@@ -1,7 +1,8 @@
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { Alert, FormControl, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material';
+import { FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material';
 import React, { FC, useState } from 'react';
 import { Link } from 'react-router-dom';
+import ErrorHelperText from '../error/ErrorHelperText';
 
 interface LoginFormProps {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
@@ -44,7 +45,12 @@ const LoginForm: FC<LoginFormProps> = ({ handleSubmit, passwordRef, errorMessage
             </a>
           </div>
         </div>
-        <FormControl required fullWidth variant="outlined" error={!!errorMessage}>
+        <FormControl
+          required
+          fullWidth
+          variant="outlined"
+          error={!!errorMessage}
+        >
           <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
           <OutlinedInput
             id="password"
@@ -67,9 +73,9 @@ const LoginForm: FC<LoginFormProps> = ({ handleSubmit, passwordRef, errorMessage
             inputRef={passwordRef}
           />
           {errorMessage && (
-            <Alert severity="error" className="mt-2">
-              {errorMessage}
-            </Alert>
+            <FormHelperText>
+              <ErrorHelperText errorMessage={errorMessage} />
+            </FormHelperText>
           )}
         </FormControl>
       </FormControl>
