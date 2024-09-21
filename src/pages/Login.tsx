@@ -100,7 +100,7 @@ const Login = () => {
                 autoplay
                 className='w-[300px] sm:w-[500px] h-[300px] sm:h-[500px]'
               />
-              <p className="text-3xl">¡Bienvenido {user?.fullName}!</p>
+              <p className="text-3xl text-center">¡Bienvenido {user?.fullName}!</p>
             </div>
           )}
         </div>
