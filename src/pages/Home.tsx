@@ -3,9 +3,22 @@ import SurveyCard from "../components/survey/SurveyCard";
 import { Survey } from "../types/survey";
 import { getSurveys } from "../services/surveyService";
 import CreateSurveyButton from "../components/buttons/CreateSurveyButton";
+import ErrorModal from "../components/error/ErrorModal";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate();
   const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
+
+  const handleOpenErrorModal = () => {
+    setOpenErrorModal(true);
+  };
+
+  const handleConfirmLogin = () => {
+    setOpenErrorModal(false);
+    navigate("/login");
+  };
 
   useEffect(() => {
     const fetchSurveys = async () => {
@@ -26,7 +39,15 @@ const Home = () => {
           </div>
         ))}
       </div>
-      <CreateSurveyButton />
+      <CreateSurveyButton handleOpenErrorModal={handleOpenErrorModal} />
+      <ErrorModal
+        open={openErrorModal}
+        setOpen={setOpenErrorModal}
+        title="Error"
+        message="Para realizar esta acción es necesario iniciar sesión"
+        confirmText="Iniciar Sesión"
+        onConfirm={handleConfirmLogin}
+      />
     </div>
   );
 };
