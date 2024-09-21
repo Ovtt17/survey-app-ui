@@ -1,7 +1,5 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import Button from '@mui/material/Button';
-import Add from '@mui/icons-material/Add';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { useAuthContext } from '../../context/AuthContext';
@@ -19,7 +17,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navigation() {
-  const { isAuthenticated, logout, user, verifySession } = useAuthContext();
+  const { isAuthenticated, logout, user } = useAuthContext();
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -29,10 +27,6 @@ export default function Navigation() {
   useEffect(() => {
     setCurrentPath(location.pathname);
   }, [location.pathname]);
-
-  const handleOpenErrorModal = () => {
-    setOpenErrorModal(true);
-  };
 
   const handleConfirmLogin = () => {
     setOpenErrorModal(false);
@@ -80,15 +74,6 @@ export default function Navigation() {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <Link
-              to={'surveys/create'}
-              onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}
-            >
-              <Button variant="contained" startIcon={<Add />}>
-                <span>Encuesta</span>
-              </Button>
-            </Link>
-
             {/* Notification button */}
             <button
               type="button"
