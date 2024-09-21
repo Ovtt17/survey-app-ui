@@ -19,7 +19,7 @@ function App() {
             <Navigation />
           </header>
         )}
-        <main className="flex-grow bg-[#F0F4F9]">
+        <main className="flex-grow bg-body">
           <AppRoutes />
         </main>
         {!hideNavigationAndFooter && (
