@@ -9,7 +9,6 @@ const errorMessages = {
   noEmail: 'El nombre de usuario no debe ser un correo electrónico',
   minLength: 'El nombre de usuario debe tener al menos 5 caracteres',
   minLetters: 'El nombre de usuario debe contener al menos 4 letras',
-  minDigits: 'El nombre de usuario debe contener al menos un número',
   consecutiveLetters: 'El nombre de usuario debe contener al menos 4 letras consecutivas'
 };
 
@@ -24,10 +23,8 @@ const validateUsername = (username: string): string | null => {
   if (trimmedUsername.length < 5) return errorMessages.minLength;
 
   const letterCount = (trimmedUsername.match(/[a-zA-Z]/g) || []).length;
-  const digitCount = (trimmedUsername.match(/\d/g) || []).length;
 
   if (letterCount < 4) return errorMessages.minLetters;
-  if (digitCount < 1) return errorMessages.minDigits;
   if (!/[a-zA-Z]{4,}/.test(trimmedUsername)) return errorMessages.consecutiveLetters;
 
   return null;
