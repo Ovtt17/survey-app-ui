@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import SurveyCard from "../components/survey/SurveyCard";
 import { Survey } from "../types/survey";
 import { getSurveys } from "../services/surveyService";
+import CreateSurveyButton from "../components/buttons/CreateSurveyButton";
 
 const Home = () => {
   const [surveys, setSurveys] = useState<Survey[]>([]);
@@ -25,6 +26,7 @@ const Home = () => {
           </div>
         ))}
       </div>
+      <CreateSurveyButton />
     </div>
   );
 };
