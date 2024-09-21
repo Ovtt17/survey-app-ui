@@ -11,7 +11,7 @@ const SurveyParticipations = lazy(() => import('../components/survey/SurveyParti
 const Report = lazy(() => import('../pages/Report'));
 const ActivateAccount = lazy(() => import('../pages/ActivateAccount'));
 const UserSurveys = lazy(() => import('../pages/UserSurveys'));
-const LoginIn = lazy(() => import('../components/user/Login'));
+const LoginIn = lazy(() => import('../components/sign-in/Login'));
 
 const AppRoutes = () => {
   return (
