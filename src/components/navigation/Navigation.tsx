@@ -1,11 +1,10 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import Button from '@mui/material/Button';
-import Add from '@mui/icons-material/Add';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { useAuthContext } from '../../context/AuthContext';
 import { useEffect, useState } from 'react';
+import ErrorModal from '../error/ErrorModal';
 
 
 const navigation = [
@@ -19,13 +18,20 @@ function classNames(...classes: string[]) {
 
 export default function Navigation() {
   const { isAuthenticated, logout, user } = useAuthContext();
+  const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
 
+  const navigate = useNavigate();
   const location = useLocation();
   const [currentPath, setCurrentPath] = useState(location.pathname);
 
   useEffect(() => {
     setCurrentPath(location.pathname);
   }, [location.pathname]);
+
+  const handleConfirmLogin = () => {
+    setOpenErrorModal(false);
+    navigate("/login");
+  };
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -68,12 +74,6 @@ export default function Navigation() {
             </div>
           </div>
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-            <Link to={'surveys/create'}>
-              <Button variant="contained" startIcon={<Add />}>
-                <span>Encuesta</span>
-              </Button>
-            </Link>
-
             {/* Notification button */}
             <button
               type="button"
@@ -92,8 +92,8 @@ export default function Navigation() {
                   <span className="sr-only">Open user menu</span>
                   {isAuthenticated ? (
                     <img
-                      alt=""
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      alt="Profile Picture"
+                      src={user?.profilePictureUrl}
                       className="h-8 w-8 rounded-full"
                     />
                   ) : (
@@ -172,6 +172,15 @@ export default function Navigation() {
           ))}
         </div>
       </DisclosurePanel>
+
+      <ErrorModal
+        open={openErrorModal}
+        setOpen={setOpenErrorModal}
+        title="Error"
+        message="Para realizar esta acción es necesario iniciar sesión"
+        confirmText="Iniciar Sesión"
+        onConfirm={handleConfirmLogin}
+      />
     </Disclosure>
   )
 }

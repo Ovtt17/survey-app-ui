@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { getSurveyParticipants } from "../../services/surveyService";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
 import { Participation } from "../../types/participation";
-import { format } from "date-fns";
+import dayjs from "dayjs";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import AnswersInfoModal from "../answer/AnswersInfoModal";
 import { Answer } from "../../types/answer";
@@ -68,7 +68,7 @@ const SurveyParticipations = () => {
               <TableRow key={p.id}>
                 <TableCell align="center">{p.id}</TableCell>
                 <TableCell align="center">{p.username}</TableCell>
-                <TableCell align="center">{format(p.participatedDate, "dd-MM-yyyy HH:mm:ss")}</TableCell>
+                <TableCell align="center">{dayjs(p.participatedDate).format("DD-MM-YYYY HH:mm:ss")}</TableCell>
                 <TableCell align="center">
                   <IconButton onClick={() => handleModalAnswers (p.surveyId, p.userId, p.id)} aria-label="view" size="small">
                     <VisibilityIcon fontSize="medium" color="success" />

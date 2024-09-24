@@ -8,6 +8,11 @@ interface AuthContextType {
   user: User | null;
   login: (token: string) => void;
   logout: () => void;
+  verifySession: (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    handleOpenErrorModal: () => void,
+    callback: () => void
+  ) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -53,8 +58,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     setUser(null);
   };
 
+  const verifySession = (
+    e: React.MouseEvent<HTMLElement, MouseEvent>,
+    handleOpenErrorModal: () => void,
+    callback: () => void
+  ) => {
+    if (!isAuthenticated) {
+      e.preventDefault();
+      handleOpenErrorModal();
+    } else {
+      callback();
+    }
+  };
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, verifySession }}>
       {children}
     </AuthContext.Provider>
   );

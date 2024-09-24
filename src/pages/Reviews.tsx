@@ -1,5 +1,3 @@
-import Fab from "@mui/material/Fab";
-import AddIcon from "@mui/icons-material/Add";
 import ReviewCard from "../components/reviews/ReviewCard";
 import { ReviewSummary } from "../components/reviews/ReviewSummary";
 import { useEffect, useState } from "react";
@@ -7,6 +5,7 @@ import { Review } from "../types/review";
 import { getReviews, saveReview } from "../services/reviewService";
 import { useParams } from "react-router-dom";
 import ReviewModal from "../components/reviews/ReviewModal";
+import CreateButton from "../components/buttons/CreateButton";
 
 const Reviews = () => {
   const { id: surveyId } = useParams<{ id: string }>();
@@ -69,10 +68,10 @@ const Reviews = () => {
   return (
     <div className="border-2 p-10 rounded-md">
       <h2 className="font-manrope font-bold text-4xl text-black mb-8 text-center">
-        Our customer reviews
+        Reseñas de la encuesta
       </h2>
       <div className="pt-8">
-        <ReviewSummary surveyId={ surveyId || ''} />
+        <ReviewSummary surveyId={Number(surveyId)} />
       </div>
       <div>
         {reviews.map((review) => (
@@ -80,9 +79,7 @@ const Reviews = () => {
         ))}
       </div>
       <div className="fixed bottom-10 right-10">
-        <Fab onClick={handleNewReview} color="primary" aria-label="add">
-          <AddIcon />
-        </Fab>
+        <CreateButton handleCreate={handleNewReview} />
       </div>
       {isModalOpen && (
         <ReviewModal
