@@ -10,6 +10,13 @@ const getHeaders = () => ({
   'Authorization': `Bearer ${getToken()}`
 });
 
+const handleErrorResponse = async (response: Response) => {
+  const errorData = await response.json();
+  const error = new Error(errorData.businessErrorDescription || 'Error desconocido');
+  (error as any).status = response.status;
+  throw error;
+};
+
 export const createSurvey = async (survey: Survey): Promise<Survey> => {
   try {
     const response = await fetch(BASE_URL, {
@@ -18,12 +25,12 @@ export const createSurvey = async (survey: Survey): Promise<Survey> => {
       body: JSON.stringify(survey)
     });
     if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+      await handleErrorResponse(response);
     }
     const surveyCreated: Survey = await response.json();
     return surveyCreated;
   } catch (error) {
-    console.error('Error creating survey:', error);
+    console.error('Error al crear la encuesta:', error);
     throw error;
   }
 }
@@ -36,12 +43,12 @@ export const updateSurvey = async (survey: Survey): Promise<Survey> => {
       body: JSON.stringify(survey)
     });
     if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+      await handleErrorResponse(response);
     }
     const updatedSurvey: Survey = await response.json();
     return updatedSurvey;
   } catch (error) {
-    console.error('Error updating survey:', error);
+    console.error('Error al actualizar la encuesta:', error);
     throw error;
   }
 }
@@ -52,11 +59,11 @@ export const deleteSurvey = async (id: number): Promise<void> => {
       method: 'DELETE',
       headers: getHeaders()
     });
-    if (!response) {
-      throw new Error('Network response was not ok ' + response);
+    if (!response.ok) {
+      await handleErrorResponse(response);
     }
   } catch (error) {
-    console.error('Error updating survey:', error);
+    console.error('Error al eliminar la encuesta:', error);
     throw error;
   }
 }
@@ -71,12 +78,12 @@ export const getSurveys = async (): Promise<Survey[]> => {
       }
     });
     if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+      await handleErrorResponse(response);
     }
     const surveys: Survey[] = await response.json();
     return surveys;
   } catch (error) {
-    console.error('Error creating survey:', error);
+    console.error('Error al obtener las encuestas:', error);
     throw error;
   }
 }
@@ -88,12 +95,12 @@ export const getSurveyById = async (id: string): Promise<Survey> => {
       headers: getHeaders()
     });
     if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+      await handleErrorResponse(response);
     }
     const survey: Survey = await response.json();
     return survey;
   } catch (error) {
-    console.error('Error creating survey:', error);
+    console.error('Error al obtener la encuesta:', error);
     throw error;
   }
 }
@@ -105,12 +112,12 @@ export const getSurveyByUser = async (): Promise<Survey[]> => {
       headers: getHeaders()
     });
     if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+      await handleErrorResponse(response);
     }
     const surveys: Survey[] = await response.json();
     return surveys;
   } catch (error) {
-    console.error('Error creating survey:', error);
+    console.error('Error al obtener las encuestas del usuario:', error);
     throw error;
   }
 }
@@ -121,10 +128,13 @@ export const getSurveyParticipants = async (id: string): Promise<Participation[]
       method: 'GET',
       headers: getHeaders()
     });
+    if (!response.ok) {
+      await handleErrorResponse(response);
+    }
     const participants: Participation[] = await response.json();
     return participants;
   } catch (error) {
-    console.error('Error creating survey:', error);
+    console.error('Error al obtener los participantes de la encuesta:', error);
     throw error;
   }
 };
