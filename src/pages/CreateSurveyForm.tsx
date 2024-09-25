@@ -27,10 +27,6 @@ const CreateSurveyForm = () => {
 
   const [openErrorTemplate, setOpenErrorTemplate] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const handleConfirmModal = () => {
-    setOpenErrorTemplate(false);
-    navigate("/");
-  };
 
   const [accordions, setAccordions] = useState<AccordionState[]>([
     { id: 1, expanded: false, question: { text: '', type: QuestionType.SELECCION_UNICA as QuestionType, options: [] as QuestionOption[] } }
@@ -71,7 +67,6 @@ const CreateSurveyForm = () => {
               setOpenErrorTemplate(true);
               setErrorMessage(errorMessage);
             });
-            console.error('Error fetching survey data:', error);
           }
         };
         fetchSurveyData();
@@ -137,7 +132,10 @@ const CreateSurveyForm = () => {
           title="Encuesta no encontrada"
           message={errorMessage}
           buttonText="Regresar al inicio"
-          onButtonClick={handleConfirmModal}
+          onButtonClick={() => {
+            setOpenErrorTemplate(false);
+            navigate("/");
+          }}
         />
       ) : (
         <>

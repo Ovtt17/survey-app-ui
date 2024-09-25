@@ -1,17 +1,18 @@
-import { useEffect, useState } from "react";
-import CircularProgress from "@mui/material/CircularProgress";
-import Container from "@mui/material/Container";
-import Alert from "@mui/material/Alert";
+import { startTransition, useEffect, useState } from "react"
 import { useAuthContext } from "../context/AuthContext";
 import { Survey } from "../types/survey";
 import { getSurveyByUser } from "../services/surveyService";
 import SurveyCard from "../components/survey/SurveyCard";
+import ErrorTemplate from "../components/error/ErrorTemplate";
+import { useNavigate } from "react-router-dom";
 
 const UserSurveys = () => {
   const { user } = useAuthContext();
   const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [openErrorTemplate, setOpenErrorTemplate] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSurveys = async () => {
@@ -19,9 +20,11 @@ const UserSurveys = () => {
         const fetchedSurvey = await getSurveyByUser();
         setSurveys(fetchedSurvey);
       } catch (error) {
-        setError('Error obteniendo las encuestas');
-      } finally {
-        setLoading(false);
+        const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+        startTransition(() => {
+          setErrorMessage(errorMessage);
+          setOpenErrorTemplate(true);
+        });
       }
     }
 
@@ -32,26 +35,21 @@ const UserSurveys = () => {
     setSurveys(prevSurveys => prevSurveys.filter(survey => survey.id !== id));
   }
 
-  if (loading) {
-    return (
-      <Container>
-        <CircularProgress />
-      </Container>
-    );
-  }
-
   return (
     <div>
       <div className="flex flex-col items-center">
         <h2 className="text-2xl font-bold">Mis Encuestas</h2>
       </div>
-      {error && (
-        <Alert severity="error" className="mb-4">
-          {error}
-        </Alert>
-      )}
-      {!surveys ? (
-        <Alert severity="warning">No se encontró ninguna encuesta.</Alert>
+      {surveys.length === 0 || openErrorTemplate ? (
+        <ErrorTemplate
+          title="Encuestas no encontradas."
+          message={errorMessage}
+          buttonText="Regresar al inicio"
+          onButtonClick={() => {
+            setOpenErrorTemplate(false);
+            navigate("/");
+          }}
+        />
       ) : (
           <div className="App">
             <div className="flex flex-wrap justify-start">
