@@ -13,6 +13,7 @@ interface AuthContextType {
     handleOpenErrorModal: () => void,
     callback: () => void
   ) => void;
+  isProfileOwner: (username: string) => boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,14 +28,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setToken(token);
       }
       const userData = await getUser();
-      setUser(userData);
-      setIsAuthenticated(true);
+      if (userData) {
+        setIsAuthenticated(true);
+        setUser(userData);
+      }
     } catch (error) {
       console.error('Error during authentication:', error);
       removeToken();
       setIsAuthenticated(false);
       setUser(null);
     }
+  };
+
+  const isProfileOwner = (username: string) => {
+    return isAuthenticated && user?.username === username;
   };
 
   useEffect(() => {
@@ -72,7 +79,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, verifySession }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, verifySession, isProfileOwner }}>
       {children}
     </AuthContext.Provider>
   );

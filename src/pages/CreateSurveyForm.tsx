@@ -1,6 +1,6 @@
 import Button from '@mui/material/Button';
 import { SelectChangeEvent } from '@mui/material/Select';
-import React, { useEffect, useState } from 'react';
+import React, { startTransition, useEffect, useState } from 'react';
 import AccordionList from '../components/survey/AccordionList';
 import { Question } from '../types/question';
 import { QuestionType } from '../types/questionType';
@@ -10,6 +10,7 @@ import { QuestionOption } from '../types/questionOption';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEditSurveyContext } from '../context/EditSurveyContext';
 import { useAuthContext } from '../context/AuthContext';
+import ErrorTemplate from '../components/error/ErrorTemplate';
 
 interface AccordionState {
   id: number;
@@ -21,7 +22,16 @@ const CreateSurveyForm = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuthContext();
   const { id, username } = useParams<{ id: string, username: string }>();
-  const { isEditable, setIsEditable } = useEditSurveyContext();
+  const { isSurveyOwner } = useEditSurveyContext();
+  const isEditable = username ? isSurveyOwner(username) : false;
+
+  const [openErrorTemplate, setOpenErrorTemplate] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const handleConfirmModal = () => {
+    setOpenErrorTemplate(false);
+    navigate("/");
+  };
+
   const [accordions, setAccordions] = useState<AccordionState[]>([
     { id: 1, expanded: false, question: { text: '', type: QuestionType.SELECCION_UNICA as QuestionType, options: [] as QuestionOption[] } }
   ]);
@@ -45,7 +55,6 @@ const CreateSurveyForm = () => {
         { id: 1, expanded: false, question: { text: '', type: QuestionType.SELECCION_UNICA as QuestionType, options: [] as QuestionOption[] } }
       ]);
     } else {
-      setIsEditable(Boolean(isAuthenticated && user?.username === username));
       if (isEditable) {
         const fetchSurveyData = async () => {
           try {
@@ -57,13 +66,18 @@ const CreateSurveyForm = () => {
               question
             })));
           } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
+            startTransition(() => {
+              setOpenErrorTemplate(true);
+              setErrorMessage(errorMessage);
+            });
             console.error('Error fetching survey data:', error);
           }
         };
         fetchSurveyData();
       }
     }
-  }, [id, isEditable, isAuthenticated, username, user?.username, setIsEditable]);
+  }, [id, isAuthenticated, username, user?.username]);
 
   const handleExpansion = (panelId: number) => (_event: React.SyntheticEvent, isExpanded: boolean) => {
     setAccordions((prevAccordions) =>
@@ -118,54 +132,66 @@ const CreateSurveyForm = () => {
 
   return (
     <div>
-      <h2 className='text-2xl font-bold mb-5'>{isEditable ? 'Editar Encuesta' : 'Crear Encuesta' }</h2>
-      <div className='flex justify-center items-center'>
-        <div className='w-11/12 bg-white p-8 rounded-lg shadow-xl'>
-          <form onSubmit={createOrUpdateSurvey}>
-            {/* Survey Title */}
-            <div className='mb-6'>
-              <label className="block text-gray-600 mb-2">Título</label>
-              <input
-                type="text"
-                name="Title"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                placeholder="Título de la Encuesta"
-                className="w-full border border-gray-300 rounded-lg p-3"
-              />
-            </div>
+      {openErrorTemplate ? (
+        <ErrorTemplate
+          title="Encuesta no encontrada"
+          message={errorMessage}
+          buttonText="Regresar al inicio"
+          onButtonClick={handleConfirmModal}
+        />
+      ) : (
+        <>
+          <h2 className='text-2xl font-bold mb-5'>{isEditable ? 'Editar Encuesta' : 'Crear Encuesta'}</h2>
+          <div className='flex justify-center items-center'>
+            <div className='w-11/12 bg-white p-8 rounded-lg shadow-xl'>
+              <form onSubmit={createOrUpdateSurvey}>
+                {/* Survey Title */}
+                <div className='mb-6'>
+                  <label className="block text-gray-600 mb-2">Título</label>
+                  <input
+                    type="text"
+                    name="Title"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    placeholder="Título de la Encuesta"
+                    className="w-full border border-gray-300 rounded-lg p-3"
+                  />
+                </div>
 
-            {/* Survey Description */}
-            <div className="mb-6">
-              <label className="block text-gray-600 mb-2">Descripción</label>
-              <input
-                type="text"
-                name="Description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="Descripción de la Encuesta"
-                className="w-full border border-gray-300 rounded-lg p-3"
-              />
-            </div>
+                {/* Survey Description */}
+                <div className="mb-6">
+                  <label className="block text-gray-600 mb-2">Descripción</label>
+                  <input
+                    type="text"
+                    name="Description"
+                    value={formData.description}
+                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                    placeholder="Descripción de la Encuesta"
+                    className="w-full border border-gray-300 rounded-lg p-3"
+                  />
+                </div>
 
-            {/* Questions Section */}
-            <AccordionList
-              accordions={accordions}
-              handleExpansion={handleExpansion}
-              handleInputChange={handleInputChange}
-              handleTypeChange={handleTypeChange}
-              addAccordion={addAccordion}
-              removeAccordion={removeAccordion}
-            />
+                {/* Questions Section */}
+                <AccordionList
+                  accordions={accordions}
+                  handleExpansion={handleExpansion}
+                  handleInputChange={handleInputChange}
+                  handleTypeChange={handleTypeChange}
+                  addAccordion={addAccordion}
+                  removeAccordion={removeAccordion}
+                />
 
-            <div className='pt-10'>
-              <Button type="submit" variant="contained" color="success" sx={{ marginTop: 2 }}>
-                {isEditable ? 'Editar encuesta' : 'Crear encuesta'}
-              </Button>
+                <div className='pt-10'>
+                  <Button type="submit" variant="contained" color="success" sx={{ marginTop: 2 }}>
+                    {isEditable ? 'Editar encuesta' : 'Crear encuesta'}
+                  </Button>
+                </div>
+              </form>
             </div>
-          </form>
-        </div>
-      </div>
+          </div>
+        </>
+      )}
+
     </div>
   );
 };

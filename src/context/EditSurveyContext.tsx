@@ -1,21 +1,25 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { Survey } from '../types/survey';
+import { useAuthContext } from './AuthContext';
 
 interface EditContextProps {
-  isEditable: boolean;
-  setIsEditable: (isEditable: boolean) => void;
   survey: Survey | null;
   setSurvey: (survey: Survey | null) => void;
+  isSurveyOwner: (username: string) => boolean;
 }
 
 const EditSurveyContext = createContext<EditContextProps | undefined>(undefined);
 
 export const EditProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [isEditable, setIsEditable] = useState(false);
   const [survey, setSurvey] = useState<Survey | null>(null);
+  const { isProfileOwner } = useAuthContext();
+
+  const isSurveyOwner = (username: string) => {
+    return isProfileOwner(username);
+  }
 
   return (
-    <EditSurveyContext.Provider value={{ isEditable, setIsEditable, survey, setSurvey }}>
+    <EditSurveyContext.Provider value={{ survey, setSurvey, isSurveyOwner }}>
       {children}
     </EditSurveyContext.Provider>
   );
