@@ -51,7 +51,7 @@ const UserSurveys = () => {
           }}
         />
       ) : (
-          <div className="App">
+          <div>
             <div className="flex flex-wrap justify-start">
               {surveys?.map((survey, index) => {
                 const isOwner = survey.creator?.username === user?.username;
