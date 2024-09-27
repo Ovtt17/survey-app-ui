@@ -1,11 +1,11 @@
 import Button from '@mui/material/Button';
 import { SelectChangeEvent } from '@mui/material/Select';
-import React, { startTransition, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import AccordionList from '../components/survey/AccordionList';
 import { Question } from '../types/question';
 import { QuestionType } from '../types/questionType';
 import { Survey } from '../types/survey';
-import { createSurvey, getSurveyById, updateSurvey } from '../services/surveyService';
+import { createSurvey, getSurveyByIdForOwner, updateSurvey } from '../services/surveyService';
 import { QuestionOption } from '../types/questionOption';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEditSurveyContext } from '../context/EditSurveyContext';
@@ -27,10 +27,6 @@ const CreateSurveyForm = () => {
 
   const [openErrorTemplate, setOpenErrorTemplate] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
-  const handleConfirmModal = () => {
-    setOpenErrorTemplate(false);
-    navigate("/");
-  };
 
   const [accordions, setAccordions] = useState<AccordionState[]>([
     { id: 1, expanded: false, question: { text: '', type: QuestionType.SELECCION_UNICA as QuestionType, options: [] as QuestionOption[] } }
@@ -58,7 +54,7 @@ const CreateSurveyForm = () => {
       if (isEditable) {
         const fetchSurveyData = async () => {
           try {
-            const surveyData = await getSurveyById(id);
+            const surveyData = await getSurveyByIdForOwner(id);
             setFormData(surveyData);
             setAccordions(surveyData.questions.map((question: Question, index: number) => ({
               id: index + 1,
@@ -67,11 +63,8 @@ const CreateSurveyForm = () => {
             })));
           } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
-            startTransition(() => {
-              setOpenErrorTemplate(true);
-              setErrorMessage(errorMessage);
-            });
-            console.error('Error fetching survey data:', error);
+            setOpenErrorTemplate(true);
+            setErrorMessage(errorMessage);
           }
         };
         fetchSurveyData();
@@ -137,7 +130,10 @@ const CreateSurveyForm = () => {
           title="Encuesta no encontrada"
           message={errorMessage}
           buttonText="Regresar al inicio"
-          onButtonClick={handleConfirmModal}
+          onButtonClick={() => {
+            setOpenErrorTemplate(false);
+            navigate("/");
+          }}
         />
       ) : (
         <>

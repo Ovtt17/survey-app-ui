@@ -105,6 +105,23 @@ export const getSurveyById = async (id: string): Promise<Survey> => {
   }
 }
 
+export const getSurveyByIdForOwner = async (id: string): Promise<Survey> => {
+  try {
+    const response = await fetch(`${BASE_URL}/${id}/owner`, {
+      method: 'GET',
+      headers: getHeaders()
+    });
+    if (!response.ok) {
+      await handleErrorResponse(response);
+    }
+    const survey: Survey = await response.json();
+    return survey;
+  } catch (error) {
+    console.error('Error al obtener la encuesta:', error);
+    throw error;
+  }
+}
+
 export const getSurveyByUser = async (): Promise<Survey[]> => {
   try {
     const response = await fetch(`${BASE_URL}/user`, {
