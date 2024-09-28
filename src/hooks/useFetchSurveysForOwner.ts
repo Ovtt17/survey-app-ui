@@ -1,30 +1,8 @@
-import { useState, useEffect, startTransition } from 'react';
 import { getCurrentUserSurveys } from '../services/surveyService';
-import { Survey } from '../types/survey';
+import useFetchSurveys from './useFetchSurveys';
 
 const useFetchSurveysForOwner = () => {
-  const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [openErrorTemplate, setOpenErrorTemplate] = useState(false);
-
-  useEffect(() => {
-    const fetchSurveys = async () => {
-      try {
-        const fetchedSurvey = await getCurrentUserSurveys();
-        setSurveys(fetchedSurvey);
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
-        startTransition(() => {
-          setErrorMessage(errorMessage);
-          setOpenErrorTemplate(true);
-        });
-      }
-    };
-
-    fetchSurveys();
-  }, []);
-
-  return { surveys, errorMessage, openErrorTemplate, setSurveys, setOpenErrorTemplate };
+  return useFetchSurveys(getCurrentUserSurveys);
 };
 
 export default useFetchSurveysForOwner;
