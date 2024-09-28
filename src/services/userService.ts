@@ -16,12 +16,29 @@ export const getUser = async (): Promise<User> => {
       headers: getHeaders()
     });
     if (!response.ok) {
-      throw new Error('Network response was not ok ' + response.statusText);
+      throw new Error(`Failed to fetch user data: ${response.statusText}`);
     }
     const user: User = await response.json();
     return user;
   } catch (error) {
-    console.error('Error getting user data:', error);
-    throw error;
+    console.error('Error fetching user data:', error);
+    throw new Error('An error occurred while fetching user data. Please try again later.');
   }
-}
+};
+
+export const getUserByUsername = async (username: string): Promise<User> => {
+  try {
+    const response = await fetch(BASE_URL + `/${username}`, {
+      method: 'GET',
+      headers: getHeaders()
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch data for user ${username}: ${response.statusText}`);
+    }
+    const user: User = await response.json();
+    return user;
+  } catch (error) {
+    console.error(`Error fetching data for user ${username}:`, error);
+    throw new Error(`An error occurred while fetching data for user ${username}. Please try again later.`);
+  }
+};
