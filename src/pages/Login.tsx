@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
-import { getToken } from '../utils/auth';
 import { useAuthContext } from '../context/AuthContext';
 import { SitemarkIcon } from '../icons/CustomIcons';
 import LoginForm from '../components/sign-in/LoginForm';
@@ -30,8 +29,8 @@ const Login = () => {
 
     try {
       await new Promise((resolve) => setTimeout(resolve, 2000));
-      const result = await login(usernameOrEmail, password);
-      setAuth(result.token);
+      const authReponse = await login(usernameOrEmail, password);
+      setAuth(authReponse);
       setIsSuccess(true);
       setTimeout(() => {
         navigate('/');
@@ -49,14 +48,6 @@ const Login = () => {
   };
 
   const handlePasswordChange = () => setErrorMessage('');
-
-  useEffect(() => {
-    const token = getToken();
-    if (token) {
-      setAuth(token);
-      navigate('/');
-    }
-  }, [navigate]);
 
   return (
     <section className="flex min-h-screen flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
