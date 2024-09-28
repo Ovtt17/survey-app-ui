@@ -1,35 +1,13 @@
-import { startTransition, useEffect, useState } from "react"
 import { useAuthContext } from "../context/AuthContext";
-import { Survey } from "../types/survey";
-import { getSurveyByUser } from "../services/surveyService";
 import SurveyCard from "../components/survey/SurveyCard";
 import ErrorTemplate from "../components/error/ErrorTemplate";
 import { useNavigate } from "react-router-dom";
+import useFetchSurveys from "../hooks/useFetchSurveys";
 
 const UserSurveys = () => {
   const { user } = useAuthContext();
-  const [surveys, setSurveys] = useState<Survey[]>([]);
-  const [openErrorTemplate, setOpenErrorTemplate] = useState<boolean>(false);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-
+  const { surveys, errorMessage, openErrorTemplate, setSurveys, setOpenErrorTemplate } = useFetchSurveys();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchSurveys = async () => {
-      try {
-        const fetchedSurvey = await getSurveyByUser();
-        setSurveys(fetchedSurvey);
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
-        startTransition(() => {
-          setErrorMessage(errorMessage);
-          setOpenErrorTemplate(true);
-        });
-      }
-    }
-
-    fetchSurveys();
-  }, []);
 
   const handleSurveyDeleted = (id: number) => {
     setSurveys(prevSurveys => prevSurveys.filter(survey => survey.id !== id));
