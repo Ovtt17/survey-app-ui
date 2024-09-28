@@ -2,11 +2,11 @@ import { useAuthContext } from "../context/AuthContext";
 import SurveyCard from "../components/survey/SurveyCard";
 import ErrorTemplate from "../components/error/ErrorTemplate";
 import { useNavigate } from "react-router-dom";
-import useFetchSurveys from "../hooks/useFetchSurveys";
+import useFetchSurveysForOwner from "../hooks/useFetchSurveysForOwner";
 
 const UserSurveys = () => {
   const { user } = useAuthContext();
-  const { surveys, errorMessage, openErrorTemplate, setSurveys, setOpenErrorTemplate } = useFetchSurveys();
+  const { surveys, errorMessage, openErrorTemplate, setSurveys, setOpenErrorTemplate } = useFetchSurveysForOwner();
   const navigate = useNavigate();
 
   const handleSurveyDeleted = (id: number) => {
