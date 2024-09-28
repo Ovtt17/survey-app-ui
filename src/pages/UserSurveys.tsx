@@ -18,18 +18,8 @@ const UserSurveys = () => {
       <div className="flex flex-col items-center">
         <h2 className="text-2xl font-bold">Mis Encuestas</h2>
       </div>
-      {surveys.length === 0 || openErrorTemplate ? (
-        <ErrorTemplate
-          title="Encuestas no encontradas."
-          message={errorMessage}
-          buttonText="Regresar al inicio"
-          onButtonClick={() => {
-            setOpenErrorTemplate(false);
-            navigate("/");
-          }}
-        />
-      ) : (
-          <div>
+      {surveys.length !== 0 || !openErrorTemplate ? (
+        <div>
             <div className="flex flex-wrap justify-start">
               {surveys?.map((survey, index) => {
                 const isOwner = survey.creator?.username === user?.username;
@@ -45,6 +35,17 @@ const UserSurveys = () => {
               })}
             </div>
           </div>
+        
+      ) : (
+          <ErrorTemplate
+            title="Encuestas no encontradas."
+            message={errorMessage}
+            buttonText="Regresar al inicio"
+            onButtonClick={() => {
+              setOpenErrorTemplate(false);
+              navigate("/");
+            }}
+          />
       )}
     </div>
   );
