@@ -1,5 +1,5 @@
-import { createContext, useState, useContext, ReactNode } from 'react';
-import { removeToken, setToken } from '../utils/auth';
+import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { getToken, removeToken, setToken } from '../utils/auth';
 import { User } from '../types/user';
 import { AuthenticationResponse } from '../types/authenticationResponse';
 
@@ -22,10 +22,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
 
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+    const token = getToken();
+    if (storedUser && token) {
+      setUser(JSON.parse(storedUser));
+      setIsAuthenticated(true);
+    }
+  }, []);
+
   const authenticateUser = async (authResponse: AuthenticationResponse) => {
     try {
       setToken(authResponse.token);
       setUser(authResponse.user);
+      localStorage.setItem('user', JSON.stringify(authResponse.user));
       setIsAuthenticated(true);
     } catch (error) {
       console.error('Error during authentication:', error);
@@ -45,6 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => {
     removeToken();
+    localStorage.removeItem('user');
     setIsAuthenticated(false);
     setUser(null);
   };
