@@ -1,25 +1,12 @@
-import { useAuthContext } from '../context/AuthContext';
-import { useParams } from 'react-router-dom';
+import ProfileAside from '../components/profile/ProfileAside';
+import ProfileSurveys from '../components/profile/ProfileSurveys';
 
 const Profile = () => {
-  const { username } = useParams<{ username: string }>();
-  const { isProfileOwner, user } = useAuthContext();
-
-  const isOwner = isProfileOwner(username!);
-
   return (
-    <div>
-      {isOwner ? (
-        <div>
-          <h1>Welcome, {user?.username}!</h1>
-          <p>Here is your profile information:</p>
-          <p>Username: {user?.username}</p>
-        </div>
-        
-      ) : (
-        <h1>Welcome to {username}'s profile!</h1>
-      )}
-    </div>
+    <section className="w-full flex flex-col justify-center md:flex-row gap-4 md:gap-0 p-2 md:p-5">
+      <ProfileAside />
+      <ProfileSurveys />
+    </section>
   );
 }
 
