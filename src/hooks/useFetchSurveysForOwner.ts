@@ -1,5 +1,5 @@
 import { useState, useEffect, startTransition } from 'react';
-import { getSurveyByUser } from '../services/surveyService';
+import { getCurrentUserSurveys } from '../services/surveyService';
 import { Survey } from '../types/survey';
 
 const useFetchSurveysForOwner = () => {
@@ -10,7 +10,7 @@ const useFetchSurveysForOwner = () => {
   useEffect(() => {
     const fetchSurveys = async () => {
       try {
-        const fetchedSurvey = await getSurveyByUser();
+        const fetchedSurvey = await getCurrentUserSurveys();
         setSurveys(fetchedSurvey);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Error desconocido';

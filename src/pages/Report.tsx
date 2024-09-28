@@ -6,7 +6,7 @@ import { Report as ReportType } from '../types/report';
 import SurveyModal from '../components/survey/SurveyModal';
 import { Survey } from '../types/survey';
 import { downloadReportWhitoutSurvey, downloadReportWithSurvey } from '../services/reportService';
-import { getSurveyByUser } from '../services/surveyService';
+import { getCurrentUserSurveys } from '../services/surveyService';
 import ErrorModal from '../components/error/ErrorModal';
 import { useNavigate } from 'react-router-dom';
 const Report = () => {
@@ -43,7 +43,7 @@ const Report = () => {
   const handleConfirmDownload = async () => {
     try {
       if (reportSelected?.requiresSurvey) {
-        const surveyResponse = await getSurveyByUser();
+        const surveyResponse = await getCurrentUserSurveys();
         setSurveys(surveyResponse);
         setIsConfirmed(true);
       } else{

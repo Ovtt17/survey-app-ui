@@ -122,7 +122,24 @@ export const getSurveyByIdForOwner = async (id: string): Promise<Survey> => {
   }
 }
 
-export const getSurveyByUser = async (): Promise<Survey[]> => {
+export const getSurveyByUsername = async (username: string): Promise<Survey[]> => {
+  try {
+    const response = await fetch(`${BASE_URL}/user/${username}`, {
+      method: 'GET',
+      headers: getHeaders()
+    });
+    if (!response.ok) {
+      await handleErrorResponse(response);
+    }
+    const surveys: Survey[] = await response.json();
+    return surveys;
+  } catch (error) {
+    console.error('Error al obtener las encuestas del usuario:', error);
+    throw error;
+  }
+}
+
+export const getCurrentUserSurveys = async (): Promise<Survey[]> => {
   try {
     const response = await fetch(`${BASE_URL}/user`, {
       method: 'GET',
