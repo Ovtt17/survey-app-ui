@@ -11,7 +11,7 @@ function App() {
   const hideNavigationAndFooter = ['/register', '/login'].includes(location.pathname);
   return (
     <AuthProvider>
-      <div className="min-h-screen flex flex-col">
+      <div className="h-screen min-h-screen flex flex-col">
         <ScrollToTop />
           {!hideNavigationAndFooter && (
             <header>
