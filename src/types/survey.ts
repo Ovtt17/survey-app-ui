@@ -18,6 +18,7 @@ export interface SurveyResponse {
   description: string;
   creatorFullName: string;
   creatorUsername: string;
+  creatorProfilePicture?: string;
   averageRating: number;
   ratingCount: number;
 }

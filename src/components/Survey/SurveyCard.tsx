@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {SurveyResponse} from "../../types/survey";
+import { SurveyResponse } from "../../types/survey";
 import RatingModal from '../rating/RatingModal';
 import Rating from '@mui/material/Rating';
 import IconButton from "@mui/material/IconButton";
@@ -17,6 +17,7 @@ import ErrorModal from "../error/ErrorModal";
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
+import NoProfilePictureBlackIcon from '../../assets/no-profile-picture-bg-black.svg';
 
 interface SurveyCardProps {
   survey: SurveyResponse;
@@ -110,7 +111,11 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
           </p>
         </div>
         <div className="flex items-center">
-          <img className="w-10 h-10 rounded-full mr-4" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt={`Avatar of ${survey.creatorFullName}`} />
+          <img
+            src={survey?.creatorProfilePicture || NoProfilePictureBlackIcon}
+            alt={`Avatar of ${survey.creatorFullName}`}
+            className="w-10 h-10 rounded-full mr-4"
+          />
           <div className="text-sm">
             <p className="text-gray-900">{survey.creatorFullName}</p>
             <div>
