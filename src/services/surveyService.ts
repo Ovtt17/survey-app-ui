@@ -64,7 +64,7 @@ export const getSurveys = async (): Promise<SurveyResponse[]> => {
 };
 
 export const getSurveyByIdForSubmission = async (id: string): Promise<SurveySubmission> => {
-  return await fetchWithHandling(`${BASE_URL}/${id}`, {
+  return await fetchWithHandling(`${BASE_URL}/${id}/submission`, {
     method: 'GET',
     headers: getHeaders()
   });
