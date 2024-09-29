@@ -2,7 +2,6 @@ import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { EditProvider } from '../context/EditSurveyContext';
 import LoadingComponent from '../components/loadings/LoadingComponent';
-import Profile from '../pages/Profile';
 
 const Home = lazy(() => import('../pages/Home'));
 const AnswerSurvey = lazy(() => import('../pages/AnswerSurvey'));
@@ -14,6 +13,7 @@ const Report = lazy(() => import('../pages/Report'));
 const ActivateAccount = lazy(() => import('../pages/ActivateAccount'));
 const UserSurveys = lazy(() => import('../pages/UserSurveys'));
 const LogIn = lazy(() => import('../pages/Login'));
+const Profile = lazy(() => import('../pages/Profile'));
 
 const ROUTES = {
   // General Routes
