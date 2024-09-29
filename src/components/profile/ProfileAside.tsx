@@ -6,21 +6,21 @@ interface ProfileAsideProps {
 }
 
 const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
-  const { profileUser, isOwner } = useProfileUser();
+  const { profileUser: user, isOwner } = useProfileUser();
 
   return (
     <aside className="w-full md:w-1/5 md:max-w-1/3 md:pb-6">
       <div className="flex flex-col gap-6 items-center md:items-start">
         <div className="flex justify-center w-full">
           <img
-            src={profileUser?.profilePictureUrl || NoProfilePictureWhiteIcon}
+            src={user?.profilePictureUrl || NoProfilePictureWhiteIcon}
             alt="profile-picture"
             className="min-w-24 min-h-24 max-w-64 max-h-64 w-full h-auto rounded-full object-cover"
           />
         </div>
         <div className="text-center md:text-left">
-          <p className="text-2xl font-bold mb-2">{profileUser?.fullName}</p>
-          <p className="text-base text-gray-500">@{profileUser?.username}</p>
+          <p className="text-2xl font-bold mb-2">{user?.fullName}</p>
+          <p className="text-base text-gray-500">@{user?.username}</p>
         </div>
         {
           isOwner && (
