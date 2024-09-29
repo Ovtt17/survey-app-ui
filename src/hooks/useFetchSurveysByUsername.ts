@@ -8,6 +8,7 @@ const useFetchSurveysByUsername = (username: string) => {
   const [openErrorTemplate, setOpenErrorTemplate] = useState(false);
 
   useEffect(() => {
+    if (!username) return;
     const fetchSurveys = async () => {
       try {
         const fetchedSurvey = await getSurveysByUsername(username);
