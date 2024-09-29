@@ -123,7 +123,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
                 Rating:
                 <Rating
                   name="read-only"
-                  className="mr-2"
+                  className="mr-1 sm:mr-2"
                   size="small"
                   value={survey.averageRating}
                   readOnly
