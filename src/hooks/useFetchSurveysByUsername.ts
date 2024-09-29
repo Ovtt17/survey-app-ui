@@ -22,7 +22,7 @@ const useFetchSurveysByUsername = (username: string) => {
     };
 
     fetchSurveys();
-  }, []);
+  }, [username]);
 
   return { surveys, errorMessage, openErrorTemplate, setSurveys, setOpenErrorTemplate };
 };
