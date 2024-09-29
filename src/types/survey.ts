@@ -16,6 +16,8 @@ export interface SurveyResponse {
   id: number;
   title: string;
   description: string;
-  creator: string;
+  creatorFullName: string;
+  creatorUsername: string;
   averageRating: number;
+  ratingCount: number;
 }

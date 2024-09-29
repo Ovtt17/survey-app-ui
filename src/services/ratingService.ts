@@ -22,7 +22,7 @@ export const createRating = async (rating: Rating): Promise<void> => {
   }
 };
 
-export const getRatingGroupBySurveyId = async (surveyId: number): Promise<RatingGroup[]> => {
+export const getRatingGroupBySurveyId = async (surveyId: string): Promise<RatingGroup[]> => {
   try {
     const response = await fetch(BASE_URL + `/grouped/${surveyId}`, {
       method: 'GET',

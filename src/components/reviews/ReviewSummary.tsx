@@ -2,7 +2,7 @@ import { FC, useEffect, useState } from 'react';
 import { getSurveyById } from '../../services/surveyService';
 import { RatingGroup } from '../../types/rating';
 import { getRatingGroupBySurveyId } from '../../services/ratingService';
-import {SurveySubmission} from '../../types/survey';
+import {SurveyResponse} from '../../types/survey';
 import { Rating } from '@mui/material';
 import RatingBar from '../rating/RatingBar';
 
@@ -12,11 +12,11 @@ interface ReviewSummaryProps {
 
 export const ReviewSummary: FC<ReviewSummaryProps> = ({ surveyId }) => {
   const [ratings, setRatings] = useState<RatingGroup[]>([]);
-  const [survey, setSurvey] = useState<SurveySubmission>();
+  const [survey, setSurvey] = useState<SurveyResponse>();
 
   useEffect(() => {
     const fetchRatings = async () => {
-      const fetchRatings = await getRatingGroupBySurveyId(surveyId);
+      const fetchRatings = await getRatingGroupBySurveyId(surveyId.toString());
       setRatings(fetchRatings);
     };
     fetchRatings();

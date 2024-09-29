@@ -4,16 +4,16 @@ import { useState } from 'react';
 import ReportModal from '../components/report/ReportModal';
 import { Report as ReportType } from '../types/report';
 import SurveyModal from '../components/survey/SurveyModal';
-import {SurveySubmission} from '../types/survey';
+import {SurveyResponse} from '../types/survey';
 import { downloadReportWhitoutSurvey, downloadReportWithSurvey } from '../services/reportService';
-import { getCurrentUserSurveys } from '../services/surveyService';
+import { getSurveysByCurrentUser } from '../services/surveyService';
 import ErrorModal from '../components/error/ErrorModal';
 import { useNavigate } from 'react-router-dom';
 const Report = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reportSelected, setReportSelected] = useState<ReportType | null>(null);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
-  const [surveys, setSurveys] = useState<SurveySubmission[]>([]);
+  const [surveys, setSurveys] = useState<SurveyResponse[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
 
@@ -43,7 +43,7 @@ const Report = () => {
   const handleConfirmDownload = async () => {
     try {
       if (reportSelected?.requiresSurvey) {
-        const surveyResponse = await getCurrentUserSurveys();
+        const surveyResponse = await getSurveysByCurrentUser();
         setSurveys(surveyResponse);
         setIsConfirmed(true);
       } else{
@@ -58,7 +58,7 @@ const Report = () => {
     }
   };
 
-  const handleSurveySelected = (survey: SurveySubmission) => {
+  const handleSurveySelected = (survey: SurveyResponse) => {
     if (reportSelected && survey.id) {
       downloadReportBySurvey(reportSelected.id, reportSelected.title, survey.id);
     }

@@ -5,8 +5,8 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import {SurveySubmission} from '../types/survey';
-import { getSurveyById } from '../services/surveyService';
+import { SurveySubmission } from '../types/survey';
+import { getSurveyByIdForSubmission } from '../services/surveyService';
 import { Answer } from '../types/answer';
 import { createAnswer } from '../services/answerService';
 import Rating from '@mui/material/Rating';
@@ -92,7 +92,7 @@ const AnswerSurvey = () => {
       }
 
       try {
-        const fetchedSurvey = await getSurveyById(id);
+        const fetchedSurvey = await getSurveyByIdForSubmission(id);
         setSurvey(fetchedSurvey);
       } catch (error) {
         setError('Error fetching survey');

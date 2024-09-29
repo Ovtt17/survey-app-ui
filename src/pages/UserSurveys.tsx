@@ -2,11 +2,11 @@ import { useAuthContext } from "../context/AuthContext";
 import SurveyCard from "../components/survey/SurveyCard";
 import ErrorTemplate from "../components/error/ErrorTemplate";
 import { useNavigate } from "react-router-dom";
-import useFetchSurveysForOwner from "../hooks/useFetchSurveysForOwner";
+import useFetchSurveysByCurrentUser from "../hooks/useFetchSurveysForOwner";
 
 const UserSurveys = () => {
   const { user } = useAuthContext();
-  const { surveys, errorMessage, openErrorTemplate, setSurveys, setOpenErrorTemplate } = useFetchSurveysForOwner();
+  const { surveys, errorMessage, openErrorTemplate, setSurveys, setOpenErrorTemplate } = useFetchSurveysByCurrentUser();
   const navigate = useNavigate();
 
   const handleSurveyDeleted = (id: number) => {
@@ -22,7 +22,7 @@ const UserSurveys = () => {
         <div>
             <div className="flex flex-wrap justify-start">
               {surveys?.map((survey, index) => {
-                const isOwner = survey.creator?.username === user?.username;
+                const isOwner = survey.creatorUsername === user?.username;
                 return (
                   <div key={index} className="w-full sm:w-1/2 p-2">
                     <SurveyCard

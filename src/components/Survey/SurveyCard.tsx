@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {SurveySubmission} from "../../types/survey";
+import {SurveyResponse} from "../../types/survey";
 import RatingModal from '../rating/RatingModal';
 import Rating from '@mui/material/Rating';
 import IconButton from "@mui/material/IconButton";
@@ -19,7 +19,7 @@ import StarRateIcon from '@mui/icons-material/StarRate';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 
 interface SurveyCardProps {
-  survey: SurveySubmission;
+  survey: SurveyResponse;
   isOwner?: boolean;
   onDelete?: (id: number) => void;
 }
@@ -78,12 +78,12 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
               title="Exportar a Excel"
             >
             </div>
-            <Link title="Ver Respuestas" to={`/${survey.creator?.username}/surveys/${survey.id}/participations`}>
+            <Link title="Ver Respuestas" to={`/${survey.creatorUsername}/surveys/${survey.id}/participations`}>
               <IconButton aria-label="view" size="small">
                 <VisibilityIcon fontSize="small" />
               </IconButton>
             </Link>
-            <Link title="Editar" to={`/${survey.creator?.username}/surveys/${survey.id}`}>
+            <Link title="Editar" to={`/${survey.creatorUsername}/surveys/${survey.id}`}>
               <IconButton aria-label="edit" size="small">
                 <EditIcon fontSize="small" />
               </IconButton>
@@ -110,9 +110,9 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
           </p>
         </div>
         <div className="flex items-center">
-          <img className="w-10 h-10 rounded-full mr-4" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt={`Avatar of ${survey.creator}`} />
+          <img className="w-10 h-10 rounded-full mr-4" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt={`Avatar of ${survey.creatorFullName}`} />
           <div className="text-sm">
-            <p className="text-gray-900">{survey.creator?.fullName}</p>
+            <p className="text-gray-900">{survey.creatorFullName}</p>
             <div>
               <span className="text-gray-600 flex items-center">
                 Rating:

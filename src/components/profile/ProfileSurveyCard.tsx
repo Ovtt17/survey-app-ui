@@ -1,10 +1,10 @@
 import { FC } from 'react';
-import {SurveySubmission} from '../../types/survey';
+import {SurveyResponse} from '../../types/survey';
 import { Link } from 'react-router-dom';
 import { Rating } from '@mui/material';
 
 interface ProfileSurveyCardProps {
-  survey: SurveySubmission;
+  survey: SurveyResponse;
 }
 
 const ProfileSurveyCard: FC<ProfileSurveyCardProps> = ({ survey }) => {

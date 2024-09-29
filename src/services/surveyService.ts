@@ -1,5 +1,5 @@
 import { Participation } from "../types/participation";
-import {SurveySubmission} from "../types/survey";
+import {SurveyResponse, SurveySubmission} from "../types/survey";
 import { getToken } from "../utils/auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys`;
@@ -30,7 +30,7 @@ const fetchWithHandling = async (url: string, options: RequestInit) => {
   }
 };
 
-export const createSurvey = async (survey: SurveySubmission): Promise<SurveySubmission> => {
+export const createSurvey = async (survey: SurveySubmission): Promise<Response> => {
   return await fetchWithHandling(BASE_URL, {
     method: 'POST',
     headers: getHeaders(),
@@ -38,7 +38,7 @@ export const createSurvey = async (survey: SurveySubmission): Promise<SurveySubm
   });
 };
 
-export const updateSurvey = async (survey: SurveySubmission): Promise<SurveySubmission> => {
+export const updateSurvey = async (survey: SurveySubmission): Promise<Response> => {
   return await fetchWithHandling(`${BASE_URL}/${survey.id}`, {
     method: 'PUT',
     headers: getHeaders(),
@@ -46,14 +46,14 @@ export const updateSurvey = async (survey: SurveySubmission): Promise<SurveySubm
   });
 };
 
-export const deleteSurvey = async (id: number): Promise<void> => {
-  await fetchWithHandling(`${BASE_URL}/${id}`, {
+export const deleteSurvey = async (id: number): Promise<Response> => {
+  return await fetchWithHandling(`${BASE_URL}/${id}`, {
     method: 'DELETE',
     headers: getHeaders()
   });
 };
 
-export const getSurveys = async (): Promise<SurveySubmission[]> => {
+export const getSurveys = async (): Promise<SurveyResponse[]> => {
   return await fetchWithHandling(BASE_URL, {
     method: 'GET',
     headers: {
@@ -63,7 +63,7 @@ export const getSurveys = async (): Promise<SurveySubmission[]> => {
   });
 };
 
-export const getSurveyById = async (id: string): Promise<SurveySubmission> => {
+export const getSurveyByIdForSubmission = async (id: string): Promise<SurveySubmission> => {
   return await fetchWithHandling(`${BASE_URL}/${id}`, {
     method: 'GET',
     headers: getHeaders()
@@ -77,14 +77,21 @@ export const getSurveyByIdForOwner = async (id: string): Promise<SurveySubmissio
   });
 };
 
-export const getSurveysByUsername = async (username: string): Promise<SurveySubmission[]> => {
+export const getSurveyById = async (id: string): Promise<SurveyResponse> => {
+  return await fetchWithHandling(`${BASE_URL}/${id}`, {
+    method: 'GET',
+    headers: getHeaders()
+  });
+};
+
+export const getSurveysByUsername = async (username: string): Promise<SurveyResponse[]> => {
   return await fetchWithHandling(`${BASE_URL}/user/${username}`, {
     method: 'GET',
     headers: getHeaders()
   });
 };
 
-export const getCurrentUserSurveys = async (): Promise<SurveySubmission[]> => {
+export const getSurveysByCurrentUser = async (): Promise<SurveyResponse[]> => {
   return await fetchWithHandling(`${BASE_URL}/user`, {
     method: 'GET',
     headers: getHeaders()

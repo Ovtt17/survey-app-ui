@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SurveyCard from "../components/survey/SurveyCard";
-import {SurveySubmission} from "../types/survey";
+import {SurveyResponse} from "../types/survey";
 import { getSurveys } from "../services/surveyService";
 import CreateSurveyButton from "../components/buttons/CreateSurveyButton";
 import ErrorModal from "../components/error/ErrorModal";
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const navigate = useNavigate();
-  const [surveys, setSurveys] = useState<SurveySubmission[]>([]);
+  const [surveys, setSurveys] = useState<SurveyResponse[]>([]);
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
 
   const handleOpenErrorModal = () => {

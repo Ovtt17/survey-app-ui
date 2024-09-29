@@ -1,5 +1,5 @@
 import { FC } from 'react';
-import useFetchSurveysForOwner from '../../hooks/useFetchSurveysForOwner';
+import useFetchSurveysByCurrentUser from '../../hooks/useFetchSurveysForOwner';
 import ProfileSurveyCard from './ProfileSurveyCard';
 import { useParams } from 'react-router-dom';
 import { useAuthContext } from '../../context/AuthContext';
@@ -14,9 +14,10 @@ const ProfileSurveys: FC<ProfileSurveysProps> = ({ }) => {
   const { isProfileOwner } = useAuthContext();
 
   const isOwner = isProfileOwner(username!);
-  const surveysHook = isOwner ? useFetchSurveysForOwner() : useFetchSurveysByUsername(username as string);
+  const surveysHook = isOwner ? useFetchSurveysByCurrentUser() : useFetchSurveysByUsername(username as string);
 
   const { surveys, openErrorTemplate } = surveysHook;
+
   return (
     <div className="w-full md:w-2/3 p-4">
       <h2 className="text-xl font-semibold mb-4 border-b-2">Encuestas</h2>
