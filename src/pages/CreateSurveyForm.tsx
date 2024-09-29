@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import AccordionList from '../components/survey/AccordionList';
 import { Question } from '../types/question';
 import { QuestionType } from '../types/questionType';
-import { Survey } from '../types/survey';
+import {SurveySubmission} from '../types/survey';
 import { createSurvey, getSurveyByIdForOwner, updateSurvey } from '../services/surveyService';
 import { QuestionOption } from '../types/questionOption';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -32,7 +32,7 @@ const CreateSurveyForm = () => {
     { id: 1, expanded: false, question: { text: '', type: QuestionType.SELECCION_UNICA as QuestionType, options: [] as QuestionOption[] } }
   ]);
 
-  const [formData, setFormData] = useState<Survey>(
+  const [formData, setFormData] = useState<SurveySubmission>(
     {
       title: '',
       description: '',
@@ -110,7 +110,7 @@ const CreateSurveyForm = () => {
 
   const createOrUpdateSurvey = async (event: React.FormEvent) => {
     event?.preventDefault();
-    const survey: Survey = {
+    const survey: SurveySubmission = {
       ...formData,
       questions: accordions.map((accordion) => accordion.question)
     };

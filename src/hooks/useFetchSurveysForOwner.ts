@@ -1,9 +1,9 @@
 import { useState, useEffect, startTransition } from 'react';
 import { getCurrentUserSurveys } from '../services/surveyService';
-import { Survey } from '../types/survey';
+import {SurveySubmission} from '../types/survey';
 
 const useFetchSurveysForOwner = () => {
-  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [surveys, setSurveys] = useState<SurveySubmission[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [openErrorTemplate, setOpenErrorTemplate] = useState(false);
 

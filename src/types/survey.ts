@@ -1,7 +1,7 @@
 import { Question } from "./question";
 import { User } from "./user";
 
-export interface Survey {
+export interface SurveySubmission {
   id?: number;
   title: string;
   description: string;
@@ -10,4 +10,11 @@ export interface Survey {
   ratingCount?: number;
   creationDate?: string;
   questions: Question[];
+}
+
+export interface SurveyResponse {
+  id: number;
+  title: string;
+  description: string;
+  
 }

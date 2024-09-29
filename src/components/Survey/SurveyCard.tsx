@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Survey } from "../../types/survey";
+import {SurveySubmission} from "../../types/survey";
 import RatingModal from '../rating/RatingModal';
 import Rating from '@mui/material/Rating';
 import IconButton from "@mui/material/IconButton";
@@ -19,7 +19,7 @@ import StarRateIcon from '@mui/icons-material/StarRate';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 
 interface SurveyCardProps {
-  survey: Survey;
+  survey: SurveySubmission;
   isOwner?: boolean;
   onDelete?: (id: number) => void;
 }

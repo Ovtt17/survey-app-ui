@@ -1,5 +1,5 @@
 import { Participation } from "../types/participation";
-import { Survey } from "../types/survey";
+import {SurveySubmission} from "../types/survey";
 import { getToken } from "../utils/auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys`;
@@ -30,7 +30,7 @@ const fetchWithHandling = async (url: string, options: RequestInit) => {
   }
 };
 
-export const createSurvey = async (survey: Survey): Promise<Survey> => {
+export const createSurvey = async (survey: SurveySubmission): Promise<SurveySubmission> => {
   return await fetchWithHandling(BASE_URL, {
     method: 'POST',
     headers: getHeaders(),
@@ -38,7 +38,7 @@ export const createSurvey = async (survey: Survey): Promise<Survey> => {
   });
 };
 
-export const updateSurvey = async (survey: Survey): Promise<Survey> => {
+export const updateSurvey = async (survey: SurveySubmission): Promise<SurveySubmission> => {
   return await fetchWithHandling(`${BASE_URL}/${survey.id}`, {
     method: 'PUT',
     headers: getHeaders(),
@@ -53,7 +53,7 @@ export const deleteSurvey = async (id: number): Promise<void> => {
   });
 };
 
-export const getSurveys = async (): Promise<Survey[]> => {
+export const getSurveys = async (): Promise<SurveySubmission[]> => {
   return await fetchWithHandling(BASE_URL, {
     method: 'GET',
     headers: {
@@ -63,28 +63,28 @@ export const getSurveys = async (): Promise<Survey[]> => {
   });
 };
 
-export const getSurveyById = async (id: string): Promise<Survey> => {
+export const getSurveyById = async (id: string): Promise<SurveySubmission> => {
   return await fetchWithHandling(`${BASE_URL}/${id}`, {
     method: 'GET',
     headers: getHeaders()
   });
 };
 
-export const getSurveyByIdForOwner = async (id: string): Promise<Survey> => {
+export const getSurveyByIdForOwner = async (id: string): Promise<SurveySubmission> => {
   return await fetchWithHandling(`${BASE_URL}/${id}/owner`, {
     method: 'GET',
     headers: getHeaders()
   });
 };
 
-export const getSurveysByUsername = async (username: string): Promise<Survey[]> => {
+export const getSurveysByUsername = async (username: string): Promise<SurveySubmission[]> => {
   return await fetchWithHandling(`${BASE_URL}/user/${username}`, {
     method: 'GET',
     headers: getHeaders()
   });
 };
 
-export const getCurrentUserSurveys = async (): Promise<Survey[]> => {
+export const getCurrentUserSurveys = async (): Promise<SurveySubmission[]> => {
   return await fetchWithHandling(`${BASE_URL}/user`, {
     method: 'GET',
     headers: getHeaders()

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import ReportModal from '../components/report/ReportModal';
 import { Report as ReportType } from '../types/report';
 import SurveyModal from '../components/survey/SurveyModal';
-import { Survey } from '../types/survey';
+import {SurveySubmission} from '../types/survey';
 import { downloadReportWhitoutSurvey, downloadReportWithSurvey } from '../services/reportService';
 import { getCurrentUserSurveys } from '../services/surveyService';
 import ErrorModal from '../components/error/ErrorModal';
@@ -13,7 +13,7 @@ const Report = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [reportSelected, setReportSelected] = useState<ReportType | null>(null);
   const [isConfirmed, setIsConfirmed] = useState<boolean>(false);
-  const [surveys, setSurveys] = useState<Survey[]>([]);
+  const [surveys, setSurveys] = useState<SurveySubmission[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
 
@@ -58,7 +58,7 @@ const Report = () => {
     }
   };
 
-  const handleSurveySelected = (survey: Survey) => {
+  const handleSurveySelected = (survey: SurveySubmission) => {
     if (reportSelected && survey.id) {
       downloadReportBySurvey(reportSelected.id, reportSelected.title, survey.id);
     }
