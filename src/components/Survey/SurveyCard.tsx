@@ -110,14 +110,18 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
             {survey.description}
           </p>
         </div>
-        <div className="flex items-center">
-          <img
-            src={survey?.creatorProfilePicture || NoProfilePictureBlackIcon}
-            alt={`Avatar of ${survey.creatorFullName}`}
-            className="w-10 h-10 rounded-full mr-4"
-          />
+        <div className="flex">
+          <Link to={`/${survey.creatorUsername}`} className="inline-block">
+            <img
+              src={survey?.creatorProfilePicture || NoProfilePictureBlackIcon}
+              alt={`${survey.creatorFullName}'s profile picture`}
+              className="w-10 h-10 rounded-full mr-4"
+            />
+          </Link>
           <div className="text-sm">
-            <p className="text-gray-900">{survey.creatorFullName}</p>
+            <Link to={`/${survey.creatorUsername}`} className="inline-block">
+              <p className="text-gray-900 hover:underline">{survey.creatorFullName}</p>
+            </Link>
             <div>
               <span className="text-gray-600 text-sm flex items-center">
                 Rating:
@@ -157,8 +161,6 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
             <span className="hidden md:inline md:text-base">Valorar</span>
           </button>
         </div>
-
-
       </div>
       <RatingModal
         open={openRatingModal}
