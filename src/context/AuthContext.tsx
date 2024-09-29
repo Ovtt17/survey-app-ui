@@ -23,12 +23,35 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const token = getToken();
-    if (storedUser && token) {
-      setUser(JSON.parse(storedUser));
-      setIsAuthenticated(true);
-    }
+    const checkAuth = () => {
+      try {
+        const storedUser = localStorage.getItem('user');
+        const token = getToken();
+        if (storedUser && token) {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Error al verificar la autenticación:', error);
+        removeToken();
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    };
+    checkAuth();
+
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'user' || event.key === 'token') {
+        checkAuth();
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
   const authenticateUser = async (authResponse: AuthenticationResponse) => {
