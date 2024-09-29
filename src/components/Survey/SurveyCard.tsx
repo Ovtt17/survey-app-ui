@@ -114,15 +114,17 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
           <div className="text-sm">
             <p className="text-gray-900">{survey.creatorFullName}</p>
             <div>
-              <span className="text-gray-600 flex items-center">
+              <span className="text-gray-600 text-sm flex items-center">
                 Rating:
                 <Rating
-                  name="read-only ml-1"
+                  name="read-only"
+                  className="mr-2"
                   size="small"
                   value={survey.averageRating}
                   readOnly
                   precision={0.5}
                 />
+                <span>({survey.ratingCount})</span>
               </span>
             </div>
           </div>
