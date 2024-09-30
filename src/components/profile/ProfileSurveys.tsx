@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import useFetchSurveysByCurrentUser from '../../hooks/useFetchSurveysForOwner';
 import ProfileSurveyCard from './ProfileSurveyCard';
 import { useParams } from 'react-router-dom';
@@ -13,12 +13,16 @@ interface ProfileSurveysProps {
 const ProfileSurveys: FC<ProfileSurveysProps> = ({ }) => {
   const { username } = useParams<{ username: string }>();
   const { isProfileOwner } = useAuthContext();
+  const [page, setPage] = useState(1);
+  const pageSize = 8;
+  const handleSurveyPageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
 
   const isOwner = isProfileOwner(username!);
-  const surveysHook = isOwner ? useFetchSurveysByCurrentUser() : useFetchSurveysByUsername(username as string);
+  const surveysHook = isOwner ? useFetchSurveysByCurrentUser(page, pageSize) : useFetchSurveysByUsername(username as string, page, pageSize);
 
-  const { surveys, openErrorTemplate } = surveysHook;
-
+  const { surveys, openErrorTemplate, totalPages } = surveysHook;
   const hasSurveys = surveys.length > 0;
 
   return (
@@ -35,15 +39,19 @@ const ProfileSurveys: FC<ProfileSurveysProps> = ({ }) => {
           </div>
           <div className="flex justify-center mt-5 mb-16 md:my-0">
             <Pagination
-              count={10}
+              count={totalPages}
+              page={page}
               shape="rounded"
               size='small'
               sx={{
-                '& .Mui-selected': {
-                  background: 'var(--tw-bg-midnight-black)',
-                  color: '#FFFFFF',
-                }
+                '& .MuiPaginationItem-root': {
+                  '&.Mui-selected': {
+                    backgroundColor: 'var(--tw-bg-midnight-black)',
+                    color: '#FFFFFF',
+                  },
+                },
               }}
+              onChange={handleSurveyPageChange}
             />
           </div>
         </>

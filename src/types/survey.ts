@@ -22,3 +22,9 @@ export interface SurveyResponse {
   averageRating: number;
   ratingCount: number;
 }
+
+export interface SurveyPagedResponse {
+  surveys: SurveyResponse[];
+  page: number;
+  totalPages: number;
+}

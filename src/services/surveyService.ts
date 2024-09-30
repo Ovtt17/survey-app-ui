@@ -1,5 +1,5 @@
 import { Participation } from "../types/participation";
-import {SurveyResponse, SurveySubmission} from "../types/survey";
+import {SurveyPagedResponse, SurveyResponse, SurveySubmission} from "../types/survey";
 import { getToken } from "../utils/auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys`;
@@ -84,15 +84,24 @@ export const getSurveyById = async (id: string): Promise<SurveyResponse> => {
   });
 };
 
-export const getSurveysByUsername = async (username: string): Promise<SurveyResponse[]> => {
-  return await fetchWithHandling(`${BASE_URL}/user/${username}`, {
+export const getSurveysByCurrentUser = async (): Promise<SurveyResponse[]> => {
+  return await fetchWithHandling(`${BASE_URL}/user`, {
     method: 'GET',
     headers: getHeaders()
   });
 };
 
-export const getSurveysByCurrentUser = async (): Promise<SurveyResponse[]> => {
-  return await fetchWithHandling(`${BASE_URL}/user`, {
+export const getSurveysByCurrentUserWithPaging = async (page: number, size: number): Promise<SurveyPagedResponse> => {
+  const adjustedPage = page - 1;
+  return await fetchWithHandling(`${BASE_URL}/user/paged?page=${adjustedPage}&size=${size}`, {
+    method: 'GET',
+    headers: getHeaders()
+  });
+};
+
+export const getSurveysByUsernameWithPaging = async (username: string, page: number, size: number): Promise<SurveyPagedResponse> => {
+  const adjustedPage = page - 1;
+  return await fetchWithHandling(`${BASE_URL}/user/${username}/paged?page=${adjustedPage}&size=${size}`, {
     method: 'GET',
     headers: getHeaders()
   });
