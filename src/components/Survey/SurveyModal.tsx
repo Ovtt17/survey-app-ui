@@ -1,13 +1,13 @@
 import { IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
 import { FC } from 'react';
-import { Survey } from '../../types/survey';
+import {SurveyResponse} from '../../types/survey';
 import PrintIcon from '@mui/icons-material/Print';
 
 
 interface SurveyModalProps {
-  surveys: Survey[];
+  surveys: SurveyResponse[];
   handleCloseModal: () => void;
-  handleSurveySelected: (survey: Survey) => void;
+  handleSurveySelected: (survey: SurveyResponse) => void;
   error: string | null;
 }
 
@@ -33,7 +33,7 @@ const SurveyModal: FC<SurveyModalProps> = ({ surveys, handleSurveySelected, hand
                 <TableRow key={survey.id}>
                   <TableCell align="center">{survey.id}</TableCell>
                   <TableCell align="center">{survey.title}</TableCell>
-                  <TableCell align="center">{survey.creator?.fullName}</TableCell>
+                  <TableCell align="center">{survey.creatorFullName}</TableCell>
                   <TableCell align="center">
                     <IconButton onClick={() => handleSurveySelected(survey)} aria-label="view" size="small">
                       <PrintIcon fontSize="medium" color="action" />

@@ -1,10 +1,10 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import AccountCircleRoundedIcon from '@mui/icons-material/AccountCircleRounded';
 import { useAuthContext } from '../../context/AuthContext';
 import { useEffect, useState } from 'react';
 import ErrorModal from '../error/ErrorModal';
+import NoProfilePictureWhiteIcon from '../../assets/no-profile-picture-bg-white.svg';
 
 
 const navigation = [
@@ -90,18 +90,15 @@ export default function Navigation() {
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
-                  {isAuthenticated ? (
-                    <img
-                      alt="Profile Picture"
-                      src={user?.profilePictureUrl}
-                      className="h-8 w-8 rounded-full"
-                    />
-                  ) : (
-                    <span className="h-8 w-8 rounded-full flex items-center justify-center text-white">
-                      <AccountCircleRoundedIcon />
-                    </span>
-
-                  )}
+                  <img
+                    alt="Profile Picture"
+                    src={
+                      isAuthenticated
+                        ? user?.profilePictureUrl || NoProfilePictureWhiteIcon
+                        : NoProfilePictureWhiteIcon
+                    }
+                    className="h-8 w-8 rounded-full"
+                  />
                 </MenuButton>
               </div>
               <MenuItems

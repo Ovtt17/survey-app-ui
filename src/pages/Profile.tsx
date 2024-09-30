@@ -1,25 +1,46 @@
+import { useState } from 'react';
+import CreateSurveyButton from '../components/buttons/CreateSurveyButton';
+import ProfileAside from '../components/profile/ProfileAside';
+import ProfileSurveys from '../components/profile/ProfileSurveys';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
-import { useParams } from 'react-router-dom';
+import ErrorTemplate from '../components/error/ErrorTemplate';
 
 const Profile = () => {
   const { username } = useParams<{ username: string }>();
-  const { isProfileOwner, user } = useAuthContext();
+  const { isAuthenticated, isProfileOwner } = useAuthContext();
 
   const isOwner = isProfileOwner(username!);
+  const navigate = useNavigate();
+  const [, setOpenErrorModal] = useState<boolean>(false);
+
+  const handleOpenErrorModal = () => {
+    setOpenErrorModal(true);
+  };
+
+  const handleConfirmLogin = () => {
+    setOpenErrorModal(false);
+    navigate("/login");
+  };
 
   return (
-    <div>
-      {isOwner ? (
-        <div>
-          <h1>Welcome, {user?.username}!</h1>
-          <p>Here is your profile information:</p>
-          <p>Username: {user?.username}</p>
-        </div>
-        
+    <section className="w-full h-full flex flex-col justify-center md:flex-row gap-4 md:gap-0 p-2 md:p-5">
+      {isAuthenticated ? (
+        <>
+          <ProfileAside />
+          <ProfileSurveys />
+          {isOwner && <CreateSurveyButton handleOpenErrorModal={handleOpenErrorModal} />}
+        </>
+
       ) : (
-        <h1>Welcome to {username}'s profile!</h1>
+        <ErrorTemplate
+          title='Error'
+          message='Para realizar esta acción es necesario iniciar sesión'
+          buttonText='Iniciar Sesión'
+          onButtonClick={handleConfirmLogin}
+        />
       )}
-    </div>
+    </section>
   );
 }
 

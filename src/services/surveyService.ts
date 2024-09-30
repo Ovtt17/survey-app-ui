@@ -1,5 +1,5 @@
 import { Participation } from "../types/participation";
-import { Survey } from "../types/survey";
+import {SurveyPagedResponse, SurveyResponse, SurveySubmission} from "../types/survey";
 import { getToken } from "../utils/auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys`;
@@ -17,141 +17,100 @@ const handleErrorResponse = async (response: Response) => {
   throw error;
 };
 
-export const createSurvey = async (survey: Survey): Promise<Survey> => {
+const fetchWithHandling = async (url: string, options: RequestInit) => {
   try {
-    const response = await fetch(BASE_URL, {
-      method: 'POST',
-      headers: getHeaders(),
-      body: JSON.stringify(survey)
-    });
+    const response = await fetch(url, options);
     if (!response.ok) {
       await handleErrorResponse(response);
     }
-    const surveyCreated: Survey = await response.json();
-    return surveyCreated;
+    return await response.json();
   } catch (error) {
-    console.error('Error al crear la encuesta:', error);
+    console.error('Error during fetch operation:', error);
     throw error;
   }
-}
+};
 
-export const updateSurvey = async (survey: Survey): Promise<Survey> => {
-  try {
-    const response = await fetch(`${BASE_URL}/${survey.id}`, {
-      method: 'PUT',
-      headers: getHeaders(),
-      body: JSON.stringify(survey)
-    });
-    if (!response.ok) {
-      await handleErrorResponse(response);
-    }
-    const updatedSurvey: Survey = await response.json();
-    return updatedSurvey;
-  } catch (error) {
-    console.error('Error al actualizar la encuesta:', error);
-    throw error;
-  }
-}
+export const createSurvey = async (survey: SurveySubmission): Promise<Response> => {
+  return await fetchWithHandling(BASE_URL, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify(survey)
+  });
+};
 
-export const deleteSurvey = async (id: number): Promise<void> => {
-  try {
-    const response = await fetch(`${BASE_URL}/${id}`, {
-      method: 'DELETE',
-      headers: getHeaders()
-    });
-    if (!response.ok) {
-      await handleErrorResponse(response);
-    }
-  } catch (error) {
-    console.error('Error al eliminar la encuesta:', error);
-    throw error;
-  }
-}
+export const updateSurvey = async (survey: SurveySubmission): Promise<Response> => {
+  return await fetchWithHandling(`${BASE_URL}/${survey.id}`, {
+    method: 'PUT',
+    headers: getHeaders(),
+    body: JSON.stringify(survey)
+  });
+};
 
-export const getSurveys = async (): Promise<Survey[]> => {
-  try {
-    const response = await fetch(BASE_URL, {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      }
-    });
-    if (!response.ok) {
-      await handleErrorResponse(response);
-    }
-    const surveys: Survey[] = await response.json();
-    return surveys;
-  } catch (error) {
-    console.error('Error al obtener las encuestas:', error);
-    throw error;
-  }
-}
+export const deleteSurvey = async (id: number): Promise<Response> => {
+  return await fetchWithHandling(`${BASE_URL}/${id}`, {
+    method: 'DELETE',
+    headers: getHeaders()
+  });
+};
 
-export const getSurveyById = async (id: string): Promise<Survey> => {
-  try {
-    const response = await fetch(`${BASE_URL}/${id}`, {
-      method: 'GET',
-      headers: getHeaders()
-    });
-    if (!response.ok) {
-      await handleErrorResponse(response);
+export const getSurveys = async (page: number, size: number): Promise<SurveyPagedResponse> => {
+  const adjustedPage = page - 1;
+  return await fetchWithHandling(`${BASE_URL}?page=${adjustedPage}&size=${size}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
     }
-    const survey: Survey = await response.json();
-    return survey;
-  } catch (error) {
-    console.error('Error al obtener la encuesta:', error);
-    throw error;
-  }
-}
+  });
+};
 
-export const getSurveyByIdForOwner = async (id: string): Promise<Survey> => {
-  try {
-    const response = await fetch(`${BASE_URL}/${id}/owner`, {
-      method: 'GET',
-      headers: getHeaders()
-    });
-    if (!response.ok) {
-      await handleErrorResponse(response);
-    }
-    const survey: Survey = await response.json();
-    return survey;
-  } catch (error) {
-    console.error('Error al obtener la encuesta:', error);
-    throw error;
-  }
-}
+export const getSurveyByIdForSubmission = async (id: string): Promise<SurveySubmission> => {
+  return await fetchWithHandling(`${BASE_URL}/${id}/submission`, {
+    method: 'GET',
+    headers: getHeaders()
+  });
+};
 
-export const getSurveyByUser = async (): Promise<Survey[]> => {
-  try {
-    const response = await fetch(`${BASE_URL}/user`, {
-      method: 'GET',
-      headers: getHeaders()
-    });
-    if (!response.ok) {
-      await handleErrorResponse(response);
-    }
-    const surveys: Survey[] = await response.json();
-    return surveys;
-  } catch (error) {
-    console.error('Error al obtener las encuestas del usuario:', error);
-    throw error;
-  }
-}
+export const getSurveyByIdForOwner = async (id: string): Promise<SurveySubmission> => {
+  return await fetchWithHandling(`${BASE_URL}/${id}/owner`, {
+    method: 'GET',
+    headers: getHeaders()
+  });
+};
+
+export const getSurveyById = async (id: string): Promise<SurveyResponse> => {
+  return await fetchWithHandling(`${BASE_URL}/${id}`, {
+    method: 'GET',
+    headers: getHeaders()
+  });
+};
+
+export const getSurveysByCurrentUser = async (): Promise<SurveyResponse[]> => {
+  return await fetchWithHandling(`${BASE_URL}/user`, {
+    method: 'GET',
+    headers: getHeaders()
+  });
+};
+
+export const getSurveysByCurrentUserWithPaging = async (page: number, size: number): Promise<SurveyPagedResponse> => {
+  const adjustedPage = page - 1;
+  return await fetchWithHandling(`${BASE_URL}/user/paged?page=${adjustedPage}&size=${size}`, {
+    method: 'GET',
+    headers: getHeaders()
+  });
+};
+
+export const getSurveysByUsernameWithPaging = async (username: string, page: number, size: number): Promise<SurveyPagedResponse> => {
+  const adjustedPage = page - 1;
+  return await fetchWithHandling(`${BASE_URL}/user/${username}/paged?page=${adjustedPage}&size=${size}`, {
+    method: 'GET',
+    headers: getHeaders()
+  });
+};
 
 export const getSurveyParticipants = async (id: string): Promise<Participation[]> => {
-  try {
-    const response = await fetch(`${BASE_URL}/${id}/participants`, {
-      method: 'GET',
-      headers: getHeaders()
-    });
-    if (!response.ok) {
-      await handleErrorResponse(response);
-    }
-    const participants: Participation[] = await response.json();
-    return participants;
-  } catch (error) {
-    console.error('Error al obtener los participantes de la encuesta:', error);
-    throw error;
-  }
+  return await fetchWithHandling(`${BASE_URL}/${id}/participants`, {
+    method: 'GET',
+    headers: getHeaders()
+  });
 };

@@ -5,8 +5,8 @@ import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import { Survey } from '../types/survey';
-import { getSurveyById } from '../services/surveyService';
+import { SurveySubmission } from '../types/survey';
+import { getSurveyByIdForSubmission } from '../services/surveyService';
 import { Answer } from '../types/answer';
 import { createAnswer } from '../services/answerService';
 import Rating from '@mui/material/Rating';
@@ -17,7 +17,7 @@ import AnswerCard from '../components/answer/AnswerCard';
 const AnswerSurvey = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const [survey, setSurvey] = useState<Survey | null>(null);
+  const [survey, setSurvey] = useState<SurveySubmission | null>(null);
   const [answers, setAnswers] = useState<Answer[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -92,7 +92,7 @@ const AnswerSurvey = () => {
       }
 
       try {
-        const fetchedSurvey = await getSurveyById(id);
+        const fetchedSurvey = await getSurveyByIdForSubmission(id);
         setSurvey(fetchedSurvey);
       } catch (error) {
         setError('Error fetching survey');

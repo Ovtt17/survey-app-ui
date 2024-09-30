@@ -1,12 +1,12 @@
 import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
 import { getToken, removeToken, setToken } from '../utils/auth';
-import { getUser } from '../services/userService';
 import { User } from '../types/user';
+import { AuthenticationResponse } from '../types/authenticationResponse';
 
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
-  login: (token: string) => void;
+  login: (authResponse: AuthenticationResponse) => Promise<void>;
   logout: () => void;
   verifySession: (
     e: React.MouseEvent<HTMLElement, MouseEvent>,
@@ -22,16 +22,44 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const [user, setUser] = useState<User | null>(null);
 
-  const authenticateUser = async (token?: string) => {
+  useEffect(() => {
+    const checkAuth = () => {
+      try {
+        const storedUser = localStorage.getItem('user');
+        const token = getToken();
+        if (storedUser && token) {
+          const parsedUser = JSON.parse(storedUser);
+          setUser(parsedUser);
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error('Error al verificar la autenticación:', error);
+        removeToken();
+        setIsAuthenticated(false);
+        setUser(null);
+      }
+    };
+    checkAuth();
+
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key === 'user' || event.key === 'token') {
+        checkAuth();
+      }
+    };
+    window.addEventListener('storage', handleStorageChange);
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
+
+  const authenticateUser = async (authResponse: AuthenticationResponse) => {
     try {
-      if (token) {
-        setToken(token);
-      }
-      const userData = await getUser();
-      if (userData) {
-        setIsAuthenticated(true);
-        setUser(userData);
-      }
+      setToken(authResponse.token);
+      setUser(authResponse.user);
+      localStorage.setItem('user', JSON.stringify(authResponse.user));
+      setIsAuthenticated(true);
     } catch (error) {
       console.error('Error during authentication:', error);
       removeToken();
@@ -44,23 +72,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return isAuthenticated && user?.username === username;
   };
 
-  useEffect(() => {
-    const initializeAuth = async () => {
-      const token = getToken();
-      if (token) {
-        await authenticateUser();
-      }
-    };
-
-    initializeAuth();
-  }, []);
-
-  const login = async (token: string) => {
-    await authenticateUser(token);
+  const login = async (authResponse: AuthenticationResponse) => {
+    await authenticateUser(authResponse);
   };
 
   const logout = () => {
     removeToken();
+    localStorage.removeItem('user');
     setIsAuthenticated(false);
     setUser(null);
   };

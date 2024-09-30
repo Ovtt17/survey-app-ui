@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Survey } from "../../types/survey";
+import { SurveyResponse } from "../../types/survey";
 import RatingModal from '../rating/RatingModal';
 import Rating from '@mui/material/Rating';
 import IconButton from "@mui/material/IconButton";
@@ -17,9 +17,10 @@ import ErrorModal from "../error/ErrorModal";
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
+import NoProfilePictureBlackIcon from '../../assets/no-profile-picture-bg-black.svg';
 
 interface SurveyCardProps {
-  survey: Survey;
+  survey: SurveyResponse;
   isOwner?: boolean;
   onDelete?: (id: number) => void;
 }
@@ -78,12 +79,12 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
               title="Exportar a Excel"
             >
             </div>
-            <Link title="Ver Respuestas" to={`/${survey.creator?.username}/surveys/${survey.id}/participations`}>
+            <Link title="Ver Respuestas" to={`/${survey.creatorUsername}/surveys/${survey.id}/participations`}>
               <IconButton aria-label="view" size="small">
                 <VisibilityIcon fontSize="small" />
               </IconButton>
             </Link>
-            <Link title="Editar" to={`/${survey.creator?.username}/surveys/${survey.id}`}>
+            <Link title="Editar" to={`/${survey.creatorUsername}/surveys/${survey.id}`}>
               <IconButton aria-label="edit" size="small">
                 <EditIcon fontSize="small" />
               </IconButton>
@@ -109,20 +110,30 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
             {survey.description}
           </p>
         </div>
-        <div className="flex items-center">
-          <img className="w-10 h-10 rounded-full mr-4" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt={`Avatar of ${survey.creator}`} />
+        <div className="flex">
+          <Link to={`/${survey.creatorUsername}`} className="inline-block">
+            <img
+              src={survey?.creatorProfilePicture || NoProfilePictureBlackIcon}
+              alt={`${survey.creatorFullName}'s profile picture`}
+              className="w-10 h-10 rounded-full mr-4"
+            />
+          </Link>
           <div className="text-sm">
-            <p className="text-gray-900">{survey.creator?.fullName}</p>
+            <Link to={`/${survey.creatorUsername}`} className="inline-block">
+              <p className="text-gray-900 hover:underline">{survey.creatorFullName}</p>
+            </Link>
             <div>
-              <span className="text-gray-600 flex items-center">
+              <span className="text-gray-600 text-sm flex items-center">
                 Rating:
                 <Rating
-                  name="read-only ml-1"
+                  name="read-only"
+                  className="mr-1 sm:mr-2"
                   size="small"
                   value={survey.averageRating}
                   readOnly
                   precision={0.5}
                 />
+                <span>({survey.ratingCount})</span>
               </span>
             </div>
           </div>
@@ -150,8 +161,6 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
             <span className="hidden md:inline md:text-base">Valorar</span>
           </button>
         </div>
-
-
       </div>
       <RatingModal
         open={openRatingModal}
