@@ -17,9 +17,9 @@ const UserSurveys = () => {
 
   const {
     surveys,
+    setSurveys,
     errorMessage,
     openErrorTemplate,
-    setSurveys,
     setOpenErrorTemplate,
     totalPages
   } = useFetchSurveysByCurrentUser(page, pageSize);
@@ -28,12 +28,14 @@ const UserSurveys = () => {
     setSurveys(prevSurveys => prevSurveys.filter(survey => survey.id !== id));
   }
 
+  const hasSurveys = surveys.length > 0;
+
   return (
     <div>
       <div className="flex flex-col items-center">
         <h2 className="text-2xl font-bold">Mis Encuestas</h2>
       </div>
-      {surveys.length !== 0 || !openErrorTemplate ? (
+      {hasSurveys || !openErrorTemplate ? (
         <div>
           <div className="flex flex-wrap justify-start">
             {surveys?.map((survey, index) => {

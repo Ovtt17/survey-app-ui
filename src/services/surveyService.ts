@@ -53,8 +53,9 @@ export const deleteSurvey = async (id: number): Promise<Response> => {
   });
 };
 
-export const getSurveys = async (): Promise<SurveyResponse[]> => {
-  return await fetchWithHandling(BASE_URL, {
+export const getSurveys = async (page: number, size: number): Promise<SurveyPagedResponse> => {
+  const adjustedPage = page - 1;
+  return await fetchWithHandling(`${BASE_URL}?page=${adjustedPage}&size=${size}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',

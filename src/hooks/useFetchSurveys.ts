@@ -1,16 +1,21 @@
 import { useState, useEffect, startTransition } from "react";
-import {SurveySubmission} from "../types/survey";
+import {SurveyResponse} from "../types/survey";
+import { getSurveys } from "../services/surveyService";
 
-const useFetchSurveys = (fetchFunction: () => Promise<SurveySubmission[]>) => {
-  const [surveys, setSurveys] = useState<SurveySubmission[]>([]);
+const useFetchSurveys = (page: number, size: number) => {
+  const [surveys, setSurveys] = useState<SurveyResponse[]>([]);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [openErrorTemplate, setOpenErrorTemplate] = useState(false);
+  const [currentPage, setCurrentPage] = useState(page);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchSurveys = async () => {
       try {
-        const fetchedSurveys = await fetchFunction();
-        setSurveys(fetchedSurveys);
+        const response = await getSurveys(page, size);
+        setSurveys(response.surveys);
+        setCurrentPage(response.page + 1);
+        setTotalPages(response.totalPages);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
         startTransition(() => {
@@ -21,9 +26,9 @@ const useFetchSurveys = (fetchFunction: () => Promise<SurveySubmission[]>) => {
     };
 
     fetchSurveys();
-  }, [fetchFunction]);
+  }, [page]);
 
-  return { surveys, errorMessage, openErrorTemplate, setSurveys, setOpenErrorTemplate };
+  return { surveys, errorMessage, openErrorTemplate, setOpenErrorTemplate, currentPage, totalPages };
 };
 
 export default useFetchSurveys;
