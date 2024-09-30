@@ -35,7 +35,7 @@ const UserSurveys = () => {
       <div className="flex flex-col items-center">
         <h2 className="text-2xl font-bold">Mis Encuestas</h2>
       </div>
-      {hasSurveys || !openErrorTemplate ? (
+      {hasSurveys && !openErrorTemplate ? (
         <div>
           <div className="flex flex-wrap justify-start">
             {surveys?.map((survey, index) => {
