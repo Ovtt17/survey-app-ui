@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import useProfileUser from '../../hooks/useProfileUser';
 import NoProfilePictureWhiteIcon from '../../assets/no-profile-picture-bg-white.svg';
-import EditIcon from '@mui/icons-material/Edit';
+import EditProfilePictureDropDown from './EditProfilePictureDropDown';
 
 interface ProfileAsideProps {
 }
@@ -18,17 +18,7 @@ const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
             alt="profile-picture"
             className="w-full aspect-square rounded-full object-cover"
           />
-          {isOwner && (
-            <button
-              className="absolute border bottom-0 left-0 mb-5 ml-8 md:mb-3 md:ml-4 px-2 py-0.5 bg-midnight-black text-white rounded-md hover:bg-gray-700"
-              aria-label="Edit profile picture"
-            >
-              <EditIcon
-                fontSize="small"
-              />
-              <span className="hidden lg:inline">Edit</span>
-            </button>
-          )}
+          {isOwner && <EditProfilePictureDropDown /> }
         </div>
         <div className="text-center md:text-left">
           <p className="text-2xl font-bold mb-2">{user?.fullName}</p>
