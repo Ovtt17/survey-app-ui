@@ -1,28 +1,47 @@
-import { FC } from 'react';
+import { FC, useEffect, useState } from 'react';
 import useProfileUser from '../../hooks/useProfileUser';
 import NoProfilePictureWhiteIcon from '../../assets/no-profile-picture-bg-white.svg';
 import EditProfilePictureDropDown from './EditProfilePictureDropDown';
+import { useAuthContext } from '../../context/AuthContext';
 
 interface ProfileAsideProps {
 }
 
 const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
-  const { profileUser: user, isOwner } = useProfileUser();
+  const { profileUser, isOwner } = useProfileUser();
+  const { setUser } = useAuthContext();
+  const [profilePictureUrl, setProfilePictureUrl] = useState<string | undefined>(profileUser?.profilePictureUrl);
+
+  useEffect(() => {
+    setProfilePictureUrl(profileUser?.profilePictureUrl);
+  }, [profileUser?.profilePictureUrl]);
+
+  const handleProfilePictureChange = (newProfilePicture: string) => {
+    setProfilePictureUrl(newProfilePicture);
+    if (profileUser) {
+      const updatedUser = { ...profileUser, profilePictureUrl: newProfilePicture };
+      setUser(updatedUser);
+    }
+  };
 
   return (
     <aside className="w-full md:w-1/5 md:max-w-1/3 md:pb-6">
       <div className="flex flex-col gap-6 items-center md:items-start">
         <div className="relative flex justify-center w-full max-w-xs md:max-w-sm">
           <img
-            src={user?.profilePictureUrl || NoProfilePictureWhiteIcon}
+            src={profilePictureUrl || NoProfilePictureWhiteIcon}
             alt="profile-picture"
             className="w-full aspect-square rounded-full object-cover"
           />
-          {isOwner && <EditProfilePictureDropDown profilePicture={user?.profilePictureUrl} /> }
+          {isOwner && <EditProfilePictureDropDown
+            profilePicture={profilePictureUrl}
+            handleProfilePictureChange={handleProfilePictureChange}
+          />
+          }
         </div>
         <div className="text-center md:text-left">
-          <p className="text-2xl font-bold mb-2">{user?.fullName}</p>
-          <p className="text-base text-gray-500">@{user?.username}</p>
+          <p className="text-2xl font-bold mb-2">{profileUser?.fullName}</p>
+          <p className="text-base text-gray-500">@{profileUser?.username}</p>
         </div>
         {
           isOwner && (

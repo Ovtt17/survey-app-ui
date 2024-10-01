@@ -1,11 +1,13 @@
 import { FC, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import { Menu, MenuItem } from '@mui/material';
+import { uploadProfilePicture } from '../../services/ImageService';
 interface EditProfilePictureDropDownProps {
   profilePicture?: string;
+  handleProfilePictureChange: (newProfilePicture: string) => void;
 }
 
-const EditProfilePictureDropDown: FC<EditProfilePictureDropDownProps> = ({ profilePicture }) => {
+const EditProfilePictureDropDown: FC<EditProfilePictureDropDownProps> = ({ profilePicture, handleProfilePictureChange }) => {
   const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(menuAnchorElement);
 
@@ -17,16 +19,29 @@ const EditProfilePictureDropDown: FC<EditProfilePictureDropDownProps> = ({ profi
     setMenuAnchorElement(null);
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const isValidImageFormat = (file: File) => {
+    const validExtensions = ['jpg', 'jpeg', 'png'];
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    return fileExtension && validExtensions.includes(fileExtension);
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const validExtensions = ['jpg', 'jpeg', 'png'];
-      const fileExtension = file.name.split('.').pop()?.toLowerCase();
-      if (fileExtension && validExtensions.includes(fileExtension)) {
-        console.log(file);
-      } else {
-        alert('Por favor, selecciona un archivo de imagen válido (jpg, jpeg, png).');
-      }
+    if (!file) return;
+
+    if (!isValidImageFormat(file)) {
+      alert('Por favor, selecciona un archivo de imagen válido (jpg, jpeg, png).');
+      handleMenuClose();
+      return;
+    }
+
+    try {
+      const newProfilePicture = await uploadProfilePicture(file);
+      handleProfilePictureChange(newProfilePicture);
+    } catch (error) {
+      console.error('Error uploading profile picture:', error);
+      alert('Hubo un error al subir la imagen. Por favor, inténtalo de nuevo.');
+    } finally {
       handleMenuClose();
     }
   };

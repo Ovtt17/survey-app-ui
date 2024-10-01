@@ -6,6 +6,7 @@ import { AuthenticationResponse } from '../types/authenticationResponse';
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
+  setUser: (user: User) => void;
   login: (authResponse: AuthenticationResponse) => Promise<void>;
   logout: () => void;
   verifySession: (
@@ -97,7 +98,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, login, logout, verifySession, isProfileOwner }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, setUser, login, logout, verifySession, isProfileOwner }}>
       {children}
     </AuthContext.Provider>
   );
