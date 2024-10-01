@@ -2,7 +2,7 @@ import { useAuthContext } from "../context/AuthContext";
 import SurveyCard from "../components/survey/SurveyCard";
 import ErrorTemplate from "../components/error/ErrorTemplate";
 import { useNavigate } from "react-router-dom";
-import useFetchSurveysByCurrentUser from "../hooks/useFetchSurveysForOwner";
+import useFetchSurveysByCurrentUser from "../hooks/useFetchSurveysByCurrentUser";
 import { useState } from "react";
 import { Pagination } from "@mui/material";
 
