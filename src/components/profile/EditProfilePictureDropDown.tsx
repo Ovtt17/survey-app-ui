@@ -1,9 +1,11 @@
 import { FC, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import { Menu, MenuItem } from '@mui/material';
-interface EditProfilePictureDropDownProps {}
+interface EditProfilePictureDropDownProps {
+  profilePicture?: string;
+}
 
-const EditProfilePictureDropDown: FC<EditProfilePictureDropDownProps> = ({ }) => {
+const EditProfilePictureDropDown: FC<EditProfilePictureDropDownProps> = ({ profilePicture }) => {
   const [menuAnchorElement, setMenuAnchorElement] = useState<null | HTMLElement>(null);
   const isMenuOpen = Boolean(menuAnchorElement);
 
@@ -40,7 +42,7 @@ const EditProfilePictureDropDown: FC<EditProfilePictureDropDownProps> = ({ }) =>
         }}
       >
         <MenuItem onClick={handleMenuClose} sx={{ fontSize: '14px' }}>Subir nueva foto</MenuItem>
-        <MenuItem onClick={handleMenuClose} sx={{ fontSize: '14px' }}>Eliminar foto</MenuItem>
+        {profilePicture && <MenuItem onClick={handleMenuClose} sx={{ fontSize: '14px' }}>Eliminar foto</MenuItem> }
       </Menu>
     </div>
   );

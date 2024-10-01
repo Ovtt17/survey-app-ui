@@ -18,7 +18,7 @@ const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
             alt="profile-picture"
             className="w-full aspect-square rounded-full object-cover"
           />
-          {isOwner && <EditProfilePictureDropDown /> }
+          {isOwner && <EditProfilePictureDropDown profilePicture={user?.profilePictureUrl} /> }
         </div>
         <div className="text-center md:text-left">
           <p className="text-2xl font-bold mb-2">{user?.fullName}</p>
