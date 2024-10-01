@@ -5,6 +5,7 @@ import { useAuthContext } from '../../context/AuthContext';
 import { useEffect, useState } from 'react';
 import ErrorModal from '../error/ErrorModal';
 import NoProfilePictureWhiteIcon from '../../assets/no-profile-picture-bg-white.svg';
+import AppIcon from '../../assets/app_icon.svg';
 
 
 const navigation = [
@@ -51,7 +52,7 @@ export default function Navigation() {
               <div className="flex flex-shrink-0 items-center">
                 <img
                   alt="Your Company"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                  src={AppIcon}
                   className="h-8 w-auto"
                 />
               </div>
