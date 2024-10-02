@@ -37,3 +37,21 @@ export const uploadProfilePicture = async (image: File): Promise<string> => {
 export const uploadSurveyPicture = async (image: File, surveyId: number): Promise<string> => {
   return uploadImage(`${BASE_URL}/survey/${surveyId}`, image);
 }
+
+export const deleteProfilePicture = async (): Promise<string> => {
+  try {
+    const response = await fetch(BASE_URL + '/profile', {
+      method: 'DELETE',
+      headers: getHeaders()
+    });
+
+    if (!response.ok) {
+      throw new Error(`Error ${response.status}: ${response.statusText}`);
+    }
+
+    const messageResponse = response.text();
+    return messageResponse;
+  } catch (error) {
+    throw error;
+  }
+}

@@ -9,7 +9,7 @@ interface ProfileAsideProps {
 
 const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
   const { profileUser, isOwner } = useProfileUser();
-  const { setUser } = useAuthContext();
+  const { changeUser } = useAuthContext();
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | undefined>(profileUser?.profilePictureUrl);
 
   useEffect(() => {
@@ -20,7 +20,7 @@ const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
     setProfilePictureUrl(newProfilePicture);
     if (profileUser) {
       const updatedUser = { ...profileUser, profilePictureUrl: newProfilePicture };
-      setUser(updatedUser);
+      changeUser(updatedUser);
     }
   };
 

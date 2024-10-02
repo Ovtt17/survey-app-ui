@@ -6,7 +6,7 @@ import { AuthenticationResponse } from '../types/authenticationResponse';
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
-  setUser: (user: User) => void;
+  changeUser: (user: User) => void;
   login: (authResponse: AuthenticationResponse) => Promise<void>;
   logout: () => void;
   verifySession: (
@@ -97,8 +97,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  const changeUser = (newUser: User) => {
+    setUser(newUser);
+    localStorage.setItem('user', JSON.stringify(newUser));
+  }
+
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, setUser, login, logout, verifySession, isProfileOwner }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, changeUser, login, logout, verifySession, isProfileOwner }}>
       {children}
     </AuthContext.Provider>
   );

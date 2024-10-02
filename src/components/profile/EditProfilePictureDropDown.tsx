@@ -1,7 +1,7 @@
 import { FC, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import { Menu, MenuItem } from '@mui/material';
-import { uploadProfilePicture } from '../../services/ImageService';
+import { deleteProfilePicture, uploadProfilePicture } from '../../services/ImageService';
 interface EditProfilePictureDropDownProps {
   profilePicture?: string;
   handleProfilePictureChange: (newProfilePicture: string) => void;
@@ -25,7 +25,7 @@ const EditProfilePictureDropDown: FC<EditProfilePictureDropDownProps> = ({ profi
     return fileExtension && validExtensions.includes(fileExtension);
   };
 
-  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -45,6 +45,16 @@ const EditProfilePictureDropDown: FC<EditProfilePictureDropDownProps> = ({ profi
       handleMenuClose();
     }
   };
+
+  const handleImageDelete = async () => {
+    try {
+      await deleteProfilePicture();
+      handleProfilePictureChange('');
+    } catch (error) {
+      console.error('Error deleting profile picture:', error);
+      alert('Hubo un error al eliminar la imagen. Por favor, inténtalo de nuevo.');
+    }
+  }
 
   return (
     <div className='absolute border bottom-0 left-0 mb-5 ml-8 md:mb-3 md:ml-4 px-2 py-0.5 bg-midnight-black text-white rounded-md hover:bg-gray-700'>
@@ -72,17 +82,25 @@ const EditProfilePictureDropDown: FC<EditProfilePictureDropDownProps> = ({ profi
       >
         <MenuItem sx={{ fontSize: '14px' }}>
           <label htmlFor="upload-photo" style={{ cursor: 'pointer' }}>
-            Subir nueva foto
+            Cambiar foto
           </label>
           <input
             type="file"
             id="upload-photo"
             accept="image/*"
             style={{ display: 'none' }}
-            onChange={handleFileChange}
+            onChange={handleImageChange}
           />
         </MenuItem>
-        {profilePicture && <MenuItem onClick={handleMenuClose} sx={{ fontSize: '14px' }}>Eliminar foto</MenuItem>}
+        {profilePicture &&
+          <MenuItem
+            onClick={handleImageDelete}
+            sx={{ fontSize: '14px' }}
+          >
+            <label htmlFor="delete-photo" style={{ cursor: 'pointer' }}>
+              Eliminar
+            </label>
+          </MenuItem>}
       </Menu>
     </div>
   );
