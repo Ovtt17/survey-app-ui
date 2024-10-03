@@ -2,7 +2,7 @@ import { useAuthContext } from "../context/AuthContext";
 import SurveyCard from "../components/survey/SurveyCard";
 import ErrorTemplate from "../components/error/ErrorTemplate";
 import { useNavigate } from "react-router-dom";
-import useFetchSurveysByCurrentUser from "../hooks/useFetchSurveysForOwner";
+import useFetchSurveysByCurrentUser from "../hooks/useFetchSurveysByCurrentUser";
 import { useState } from "react";
 import { Pagination } from "@mui/material";
 
@@ -35,7 +35,7 @@ const UserSurveys = () => {
       <div className="flex flex-col items-center">
         <h2 className="text-2xl font-bold">Mis Encuestas</h2>
       </div>
-      {hasSurveys || !openErrorTemplate ? (
+      {hasSurveys && !openErrorTemplate ? (
         <div>
           <div className="flex flex-wrap justify-start">
             {surveys?.map((survey, index) => {

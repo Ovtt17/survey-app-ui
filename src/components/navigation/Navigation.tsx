@@ -1,10 +1,12 @@
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
+import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItems } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../../context/AuthContext';
 import { useEffect, useState } from 'react';
 import ErrorModal from '../error/ErrorModal';
 import NoProfilePictureWhiteIcon from '../../assets/no-profile-picture-bg-white.svg';
+import AppIcon from '../../assets/app_icon.svg';
+import UserMenuDropDown from './UserMenuDropDown';
 
 
 const navigation = [
@@ -17,7 +19,7 @@ function classNames(...classes: string[]) {
 }
 
 export default function Navigation() {
-  const { isAuthenticated, logout, user } = useAuthContext();
+  const { isAuthenticated, user } = useAuthContext();
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
 
   const navigate = useNavigate();
@@ -51,7 +53,7 @@ export default function Navigation() {
               <div className="flex flex-shrink-0 items-center">
                 <img
                   alt="Your Company"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
+                  src={AppIcon}
                   className="h-8 w-auto"
                 />
               </div>
@@ -105,46 +107,7 @@ export default function Navigation() {
                 transition
                 className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-100 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
               >
-                {isAuthenticated ? (
-                  <>
-                    <MenuItem>
-                      <Link to={`/${user?.username}`} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                        Perfil
-                      </Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link to={`/${user?.username}/surveys`} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                        Mis Encuestas
-                      </Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link to={`/${user?.username}/reports`} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                        Generar Reportes
-                      </Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link to="/settings" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                        Configuración
-                      </Link>
-                    </MenuItem>
-                    <MenuItem>
-                      <Link to="/" onClick={logout} className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                        Cerrar Sesión
-                      </Link>
-                    </MenuItem>
-                  </>
-                ) : (
-                  <>
-                    <MenuItem>
-                      <Link to="/login" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                        Sign In
-                      </Link>
-                    </MenuItem>
-                    <Link to="/register" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                      Register
-                    </Link>
-                  </>
-                )}
+                <UserMenuDropDown />
               </MenuItems>
             </Menu>
           </div>

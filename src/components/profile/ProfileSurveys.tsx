@@ -1,5 +1,5 @@
 import { FC, useState } from 'react';
-import useFetchSurveysByCurrentUser from '../../hooks/useFetchSurveysForOwner';
+import useFetchSurveysByCurrentUser from '../../hooks/useFetchSurveysByCurrentUser';
 import ProfileSurveyCard from './ProfileSurveyCard';
 import { useParams } from 'react-router-dom';
 import { useAuthContext } from '../../context/AuthContext';

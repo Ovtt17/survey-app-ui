@@ -31,7 +31,7 @@ const Home = () => {
 
   return (
     <>
-      {thereAreSurveys || !openErrorTemplate ? (
+      {thereAreSurveys && !openErrorTemplate ? (
         <>
           <div className="App flex flex-col items-center">
             <div className="flex flex-wrap justify-start">
