@@ -5,7 +5,7 @@ import LoadingComponent from '../components/loadings/LoadingComponent';
 
 const Home = lazy(() => import('../pages/Home'));
 const AnswerSurvey = lazy(() => import('../pages/AnswerSurvey'));
-const CreateSurveyForm = lazy(() => import('../pages/CreateSurveyForm'));
+const SurveyCreate = lazy(() => import('../pages/SurveyCreate'));
 const Reviews = lazy(() => import('../pages/Reviews'));
 const Register = lazy(() => import('../pages/Register'));
 const SurveyParticipations = lazy(() => import('../components/survey/SurveyParticipations'));

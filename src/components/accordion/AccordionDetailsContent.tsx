@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import Typography from '@mui/material/Typography';
-import Select from '@mui/material/Select';
+import Select, {SelectChangeEvent} from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { SelectChangeEvent } from '@mui/material/Select';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import { Question } from '../../types/question';
-import OptionList from './OptionList';
-import { QuestionType } from '../../types/questionType';
-import { QuestionOption } from '../../types/questionOption';
+import {Question} from '../../types/question.ts';
+import OptionList from '../survey/OptionList.tsx';
+import {QuestionType} from '../../types/questionType.ts';
+import {QuestionOption} from '../../types/questionOption.ts';
 
 interface AccordionDetailsContentProps {
   question: Question;
