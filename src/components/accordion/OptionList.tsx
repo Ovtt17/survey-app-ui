@@ -5,8 +5,8 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Add from '@mui/icons-material/Add';
 import Remove from '@mui/icons-material/Remove';
-import { QuestionType } from '../../types/questionType';
-import { QuestionOption } from '../../types/questionOption';
+import {QuestionType} from '../../types/questionType.ts';
+import {QuestionOption} from '../../types/questionOption.ts';
 
 interface OptionListProps {
   options: QuestionOption[];

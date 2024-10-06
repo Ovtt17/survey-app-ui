@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import {Question} from '../../types/question.ts';
-import OptionList from '../survey/OptionList.tsx';
+import OptionList from './OptionList.tsx';
 import {QuestionType} from '../../types/questionType.ts';
 import {QuestionOption} from '../../types/questionOption.ts';
 
