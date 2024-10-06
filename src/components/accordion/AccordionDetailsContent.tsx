@@ -33,7 +33,7 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
   }, [question]);
 
   return (
-    <div>
+    <div className='flex flex-col gap-6'>
       <Typography>
         <label className="block text-gray-600 mb-1">Pregunta</label>
         <input
@@ -44,7 +44,7 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
           onChange={(e) => onTextChange(e.target.value)}
         />
       </Typography>
-      <div className='my-6'>
+      <div>
         <label className="block text-gray-600 mb-2">Tipo de Pregunta</label>
         <Select
           value={question.type}
@@ -57,7 +57,7 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
           <MenuItem value={QuestionType.SELECCION_UNICA}>{QuestionType.SELECCION_UNICA}</MenuItem>
         </Select>
       </div>
-      <div className='my-6'>
+      <div>
         <FormControlLabel
           control={
             <Checkbox
