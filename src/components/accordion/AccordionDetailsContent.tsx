@@ -51,6 +51,7 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
           onChange={onTypeChange}
           displayEmpty
           fullWidth
+          variant='outlined'
         >
           <MenuItem value={QuestionType.TEXTO}>{QuestionType.TEXTO}</MenuItem>
           <MenuItem value={QuestionType.SELECCION_UNICA}>{QuestionType.SELECCION_UNICA}</MenuItem>
