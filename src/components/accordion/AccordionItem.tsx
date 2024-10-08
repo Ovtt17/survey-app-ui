@@ -5,8 +5,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import DeleteIcon from '@mui/icons-material/Delete';
-import AccordionDetailsContent from './AccordionDetailsContent';
+import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined'; import AccordionDetailsContent from './AccordionDetailsContent';
 import { Question } from '../../types/question';
 
 interface AccordionItemProps {
@@ -25,10 +24,10 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ index, removeQuestion }) 
     return (
         <Accordion expanded={expanded} onChange={handleExpansion}>
             <AccordionSummary
-                expandIcon={<ExpandMoreIcon />}
+                expandIcon={<ExpandMoreIcon sx={{ color: 'white'}}/>}
                 aria-controls={`panel${index}-content`}
                 id={`panel${index}-header`}
-                sx={{ backgroundColor: 'lightblue' }}
+                sx={{ backgroundColor: 'black', color: 'white' }}
             >
                 <div className='flex items-center justify-between w-full'>
                     <Typography>Pregunta {index + 1}</Typography>
@@ -39,7 +38,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({ index, removeQuestion }) 
                             removeQuestion();
                         }}
                     >
-                        <DeleteIcon />
+                        <DeleteOutlineOutlinedIcon sx={{color: 'white'}}  />
                     </IconButton>
                 </div>
             </AccordionSummary>
