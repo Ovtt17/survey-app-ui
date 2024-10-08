@@ -6,6 +6,11 @@ export const accordionTemplate: Omit<Accordion, 'id'> = {
     question: {
         text: '',
         type: QuestionType.SELECCION_UNICA,
-        options: []
+        options: [
+            {
+                text: '',
+                isCorrect: false
+            }
+        ]
     }
 };
