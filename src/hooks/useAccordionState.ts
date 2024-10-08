@@ -57,7 +57,15 @@ const useAccordionState = () => {
             ...prevAccordions,
             {
                 ...accordionTemplate,
-                id: prevAccordions.length + 1
+                id: prevAccordions.length + 1,
+                question: {
+                    ...accordionTemplate.question,
+                    id: prevAccordions.length + 1,
+                    options: accordionTemplate.question.options.map((option, index) => ({
+                        ...option,
+                        id: index + 1
+                    }))
+                }
             }
         ]);
     };
