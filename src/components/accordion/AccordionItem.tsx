@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
@@ -7,43 +7,27 @@ import Typography from '@mui/material/Typography';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AccordionDetailsContent from './AccordionDetailsContent';
-import {Question} from '../../types/question';
-import {SelectChangeEvent} from '@mui/material/Select';
+import { Question } from '../../types/question';
 
 interface AccordionItemProps {
-    accordion: {
-        id: number;
-        expanded: boolean;
-        question: Question;
-    };
+    question: Question;
     index: number;
-    onExpansionChange: (id: number, isExpanded: boolean) => void;
-    onTextChange: (id: number, value: string) => void;
-    onTypeChange: (id: number, event: SelectChangeEvent<Question['type']>) => void;
-    onRemove: (id: number) => void;
+    removeQuestion: () => void;
 }
 
-const AccordionItem: React.FC<AccordionItemProps> = ({
-    accordion,
-    index,
-    onExpansionChange,
-    onTextChange,
-    onTypeChange,
-    onRemove
-}) => {
+const AccordionItem: React.FC<AccordionItemProps> = ({ question, index, removeQuestion }) => {
+    const [expanded, setExpanded] = useState(false);
+
+    const handleExpansion = (_event: React.SyntheticEvent, isExpanded: boolean) => {
+        setExpanded(isExpanded);
+    };
+
     return (
-        <Accordion
-            expanded={accordion.expanded}
-            onChange={(_event, isExpanded) => onExpansionChange(accordion.id, isExpanded)}
-            sx={{
-                '& .MuiAccordion-region': { height: accordion.expanded ? 'auto' : 0 },
-                '& .MuiAccordionDetails-root': { display: accordion.expanded ? 'block' : 'none' },
-            }}
-        >
+        <Accordion expanded={expanded} onChange={handleExpansion}>
             <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
-                aria-controls={`panel${accordion.id}-content`}
-                id={`panel${accordion.id}-header`}
+                aria-controls={`panel${index}-content`}
+                id={`panel${index}-header`}
                 sx={{ backgroundColor: 'lightblue' }}
             >
                 <div className='flex items-center justify-between w-full'>
@@ -52,7 +36,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
                         aria-label="delete"
                         onClick={(e) => {
                             e.stopPropagation();
-                            onRemove(accordion.id);
+                            removeQuestion();
                         }}
                     >
                         <DeleteIcon />
@@ -60,11 +44,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
                 </div>
             </AccordionSummary>
             <AccordionDetails>
-                <AccordionDetailsContent
-                    question={accordion.question}
-                    onTextChange={(value) => onTextChange(accordion.id, value)}
-                    onTypeChange={(event) => onTypeChange(accordion.id, event)}
-                />
+                <AccordionDetailsContent questionIndex={index} />
             </AccordionDetails>
         </Accordion>
     );

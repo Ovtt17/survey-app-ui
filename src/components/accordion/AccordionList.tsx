@@ -1,35 +1,30 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import AccordionItem from './AccordionItem';
-import useAccordionState from "../../hooks/useAccordionState.ts";
+import { SurveySubmission } from '../../types/survey';
 
-const AccordionList: React.FC = () => {
-    const {
-        accordions,
-        handleExpansion,
-        handleInputChange,
-        handleTypeChange,
-        addAccordion,
-        removeAccordion
-    } = useAccordionState();
+interface AccordionListProps {
+    questions: SurveySubmission['questions'];
+    addQuestion: () => void;
+    removeQuestion: (index: number) => void;
+}
+
+const AccordionList: React.FC<AccordionListProps> = ({ questions, addQuestion, removeQuestion }) => {
 
     return (
         <div>
-            {accordions.map((accordion, index) => (
+            {questions.map((question, index) => (
                 <AccordionItem
-                    key={accordion.id}
-                    accordion={accordion}
+                    key={question.id}
+                    question={question}
                     index={index}
-                    onExpansionChange={handleExpansion}
-                    onTextChange={handleInputChange}
-                    onTypeChange={handleTypeChange}
-                    onRemove={removeAccordion}
+                    removeQuestion={() => removeQuestion(index)}
                 />
             ))}
             <Button
                 variant="contained"
                 sx={{ marginTop: 2 }}
-                onClick={addAccordion}
+                onClick={addQuestion}
             >
                 Agregar Pregunta
             </Button>
