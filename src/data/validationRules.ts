@@ -1,9 +1,9 @@
 export const validationRules = {
   questionText: {
-    required: 'La pregunta es obligatoria',
+    required: 'El encabezado de la pregunta es obligatoria',
     minLength: {
       value: 5,
-      message: 'La pregunta debe tener al menos 5 caracteres'
+      message: 'El encabezado de la pregunta debe tener al menos 5 caracteres'
     }
   },
   optionText: {
