@@ -15,7 +15,7 @@ interface AccordionItemProps {
     removeQuestion: () => void;
 }
 
-const AccordionItem: React.FC<AccordionItemProps> = ({ question, index, removeQuestion }) => {
+const AccordionItem: React.FC<AccordionItemProps> = ({ index, removeQuestion }) => {
     const [expanded, setExpanded] = useState(false);
 
     const handleExpansion = (_event: React.SyntheticEvent, isExpanded: boolean) => {
