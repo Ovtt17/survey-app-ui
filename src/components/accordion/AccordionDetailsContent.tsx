@@ -1,21 +1,24 @@
-import React from 'react';
-import Typography from '@mui/material/Typography';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
+import { useFormContext, Controller, useFieldArray } from 'react-hook-form';
 import OptionList from './OptionList';
+import { Typography, Select, MenuItem, FormControlLabel, Checkbox } from '@mui/material';
+import { validationRules } from '../../data/validationRules';
 import { QuestionType } from '../../types/questionType';
-import { useFormContext, Controller } from 'react-hook-form';
+import { Question } from '../../types/question';
 
 interface AccordionDetailsContentProps {
   questionIndex: number;
 }
 
 const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ questionIndex }) => {
-  const { control, register, watch } = useFormContext();
+  const { control, register, watch, formState: { errors } } = useFormContext<{
+    questions: Question[];
+  }>();
+  const { fields: options, append, remove } = useFieldArray({
+    control,
+    name: `questions.${questionIndex}.options`
+  });
 
-  const requestCorrectAnswer = watch(`questions.${questionIndex}.isCorrect`, false);
+  const requestCorrectAnswer = watch(`questions.${questionIndex}.isCorrect`, false) as boolean;
 
   return (
     <div className='flex flex-col gap-6'>
@@ -25,8 +28,11 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
           type="text"
           placeholder="Texto de la Pregunta"
           className="w-full border border-gray-300 rounded-lg p-3"
-          {...register(`questions.${questionIndex}.text`)}
+          {...register(`questions.${questionIndex}.text`, validationRules.questionText)}
         />
+        {errors.questions?.[questionIndex]?.text && (
+          <span className="text-red-500">{errors.questions[questionIndex].text.message}</span>
+        )}
       </Typography>
       <div>
         <label className="block text-gray-600 mb-2">Tipo de Pregunta</label>
@@ -52,7 +58,6 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
           control={
             <Checkbox
               {...register(`questions.${questionIndex}.isCorrect`)}
-              color="primary"
             />
           }
           label="¿Las respuestas deben ser correctas?"
@@ -60,7 +65,11 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
       </div>
       <OptionList
         questionIndex={questionIndex}
-        requestCorrectAnswer={requestCorrectAnswer}
+        requestCorrectAnswer={requestCorrectAnswer }
+        options={options}
+        append={append}
+        remove={remove}
+        errors={errors}
       />
     </div>
   );

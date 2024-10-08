@@ -2,20 +2,18 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
 import OptionItem from './OptionItem';
-import { useFieldArray, useFormContext } from 'react-hook-form';
-
+import { useFormContext } from 'react-hook-form';
 interface OptionListProps {
   questionIndex: number;
   requestCorrectAnswer: boolean;
+  options: any[];
+  append: (value: any) => void;
+  remove: (index: number) => void;
+  errors: any;
 }
 
-const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAnswer }) => {
-  const { control } = useFormContext();
-
-  const { fields: options, append, remove } = useFieldArray({
-    control,
-    name: `questions.${questionIndex}.options`
-  });
+const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAnswer, options, append, remove, errors }) => {
+  const { register } = useFormContext();
 
   const addOption = () => {
     append({ text: '', isCorrect: false });
@@ -34,16 +32,23 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
           questionIndex={questionIndex}
           requestCorrectAnswer={requestCorrectAnswer}
           removeOption={() => removeOption(index)}
+          register={register}
+          errors={errors}
         />
       ))}
-      <Button
-        variant="contained"
-        color="secondary"
-        startIcon={<Add />}
-        onClick={addOption}
-      >
-        Añadir Opción
-      </Button>
+      <div className="mt-4">
+        {options.length === 0 && (
+          <span className="text-red-500 block mb-2">Debe haber al menos una opción</span>
+        )}
+        <Button
+          variant="contained"
+          color="secondary"
+          startIcon={<Add />}
+          onClick={addOption}
+        >
+          Añadir Opción
+        </Button>
+      </div>
     </div>
   );
 };
