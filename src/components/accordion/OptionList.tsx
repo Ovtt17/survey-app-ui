@@ -2,19 +2,15 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
 import OptionItem from './OptionItem';
-import { useFormContext } from 'react-hook-form';
 interface OptionListProps {
   questionIndex: number;
   requestCorrectAnswer: boolean;
   options: any[];
   append: (value: any) => void;
   remove: (index: number) => void;
-  errors: any;
 }
 
-const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAnswer, options, append, remove, errors }) => {
-  const { register } = useFormContext();
-
+const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAnswer, options, append, remove }) => {
   const addOption = () => {
     append({ text: '', isCorrect: false });
   };
@@ -32,8 +28,6 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
           questionIndex={questionIndex}
           requestCorrectAnswer={requestCorrectAnswer}
           removeOption={() => removeOption(index)}
-          register={register}
-          errors={errors}
         />
       ))}
       <div className="mt-4">

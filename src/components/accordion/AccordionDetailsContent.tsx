@@ -4,13 +4,14 @@ import { Typography, Select, MenuItem, FormControlLabel, Checkbox } from '@mui/m
 import { validationRules } from '../../data/validationRules';
 import { QuestionType } from '../../types/questionType';
 import { Question } from '../../types/question';
+import { useEffect } from 'react';
 
 interface AccordionDetailsContentProps {
   questionIndex: number;
 }
 
 const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ questionIndex }) => {
-  const { control, register, watch, formState: { errors } } = useFormContext<{
+  const { control, register, watch, setError, clearErrors, formState: { errors } } = useFormContext<{
     questions: Question[];
   }>();
   const { fields: options, append, remove } = useFieldArray({
@@ -19,6 +20,22 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
   });
 
   const requestCorrectAnswer = watch(`questions.${questionIndex}.isCorrect`, false) as boolean;
+
+  useEffect(() => {
+    if (requestCorrectAnswer) {
+      const hasCorrectOption = options.some(option => option.isCorrect);
+      if (!hasCorrectOption) {
+        setError(`questions.${questionIndex}.options`, {
+          type: 'manual',
+          message: 'Debe haber al menos una opción correcta'
+        });
+      } else {
+        clearErrors(`questions.${questionIndex}.options`);
+      }
+    } else {
+      clearErrors(`questions.${questionIndex}.options`);
+    }
+  }, [requestCorrectAnswer, options, setError, clearErrors, questionIndex]);
 
   return (
     <div className='flex flex-col gap-6'>
@@ -62,14 +79,18 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
           }
           label="¿Las respuestas deben ser correctas?"
         />
+        <div>
+          {errors.questions?.[questionIndex]?.options && (
+            <span className="text-red-500">{errors.questions[questionIndex].options.message}</span>
+          )}
+        </div>
       </div>
       <OptionList
         questionIndex={questionIndex}
-        requestCorrectAnswer={requestCorrectAnswer }
+        requestCorrectAnswer={requestCorrectAnswer}
         options={options}
         append={append}
         remove={remove}
-        errors={errors}
       />
     </div>
   );

@@ -4,17 +4,26 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Remove from '@mui/icons-material/Remove';
 import { validationRules } from '../../data/validationRules';
+import { useFormContext } from 'react-hook-form';
+import { Question } from '../../types/question';
 
 interface OptionItemProps {
   optionIndex: number;
   questionIndex: number;
   requestCorrectAnswer: boolean;
   removeOption: () => void;
-  register: any;
-  errors: any;
 }
 
-const OptionItem: React.FC<OptionItemProps> = ({ optionIndex, questionIndex, requestCorrectAnswer, removeOption, register, errors }) => {
+const OptionItem: React.FC<OptionItemProps> = ({
+  optionIndex,
+  questionIndex,
+  requestCorrectAnswer,
+  removeOption
+}) => {
+  const { register, formState: { errors } } = useFormContext<{
+    questions: Question[];
+  }>();
+
   return (
     <div className="my-2">
       <div className="flex items-center">
