@@ -2,11 +2,12 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
 import OptionItem from './OptionItem';
+import { QuestionOption } from '../../types/questionOption';
 interface OptionListProps {
   questionIndex: number;
   requestCorrectAnswer: boolean;
-  options: any[];
-  append: (value: any) => void;
+  options: QuestionOption[];
+  append: (value: QuestionOption) => void;
   remove: (index: number) => void;
 }
 
