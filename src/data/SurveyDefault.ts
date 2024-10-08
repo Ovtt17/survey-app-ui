@@ -8,7 +8,10 @@ export const surveyDefault: SurveySubmission = {
         {
             text: '',
             type: QuestionType.SELECCION_UNICA,
-            options: []
+            options: [
+                { text: '', isCorrect: false },
+                { text: '', isCorrect: false }
+            ]
         }
     ],
 };
