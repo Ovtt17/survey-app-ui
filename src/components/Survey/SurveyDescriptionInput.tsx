@@ -1,7 +1,8 @@
 import { useFormContext } from 'react-hook-form';
+import { validationRules } from '../../data/validationRules';
 
 const SurveyDescriptionInput = () => {
-    const { register } = useFormContext();
+    const { register, formState: { errors } } = useFormContext();
 
     return (
         <div>
@@ -9,8 +10,9 @@ const SurveyDescriptionInput = () => {
             <textarea
                 placeholder="Descripción de la Encuesta"
                 className="w-full border border-gray-300 rounded-lg p-3"
-                {...register('description')}
+                {...register('description', validationRules.description)}
             />
+            {errors.description?.message && <span className="text-red-500">{String(errors.description.message)}</span>}
         </div>
     );
 }
