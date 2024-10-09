@@ -7,8 +7,15 @@ import SubmitSurveyButton from './SubmitSurveyButton';
 import { SurveySubmission } from '../../types/survey.ts';
 import { surveyDefault } from '../../data/SurveyDefault.ts';
 import { QuestionType } from '../../types/questionType.ts';
+import { createSurvey } from '../../services/surveyService.ts';
+import SuccessModal from '../modals/SuccessModal.tsx';
+import { useState } from 'react';
+import { useAuthContext } from '../../context/AuthContext.tsx';
 
 const SurveyFormContainer = () => {
+    const { user } = useAuthContext();
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+    const [modalMessage, setModalMessage] = useState<string>('');
     const { isSurveyEditable } = useSurveyContext();
 
     const methods = useForm<SurveySubmission>({
@@ -22,8 +29,14 @@ const SurveyFormContainer = () => {
         name: 'questions'
     });
 
-    const onSubmit = (data: SurveySubmission) => {
-        console.log(data);
+    const onSubmit = async (survey: SurveySubmission) => {
+        try {
+            let response = await createSurvey(survey);
+            setIsModalOpen(true);
+            setModalMessage(response);
+        } catch (error) {
+            console.error('Error submitting survey:', error);
+        }
     };
 
     const addQuestion = () => {
@@ -49,6 +62,13 @@ const SurveyFormContainer = () => {
                     <SubmitSurveyButton isEditable={isSurveyEditable} />
                 </form>
             </FormProvider>
+            <SuccessModal
+                open={isModalOpen}
+                title="¡Registro Exitoso!"
+                message={modalMessage}
+                buttonText="Ver tus Encuestas"
+                buttonLink={`/${user?.username}/surveys`}
+            />
         </div>
     );
 }
