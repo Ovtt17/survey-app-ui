@@ -12,8 +12,8 @@ export const convertSurveyToFormData = (data: SurveySubmission): FormData => {
   return formData;
 };
 
-const getHeaders = () => ({
-  'Content-Type': 'application/json',
+const getHeaders = (contentType: string = 'application/json') => ({
+  'Content-Type': contentType,
   'Accept': 'application/json',
   'Authorization': `Bearer ${getToken()}`
 });
@@ -38,21 +38,21 @@ const fetchWithHandling = async (url: string, options: RequestInit) => {
   }
 };
 
-export const createSurvey = async (survey: SurveySubmission): Promise<Response> => {
+export const createSurvey = async (survey: SurveySubmission): Promise<string> => {
   const formData = convertSurveyToFormData(survey);
   return await fetchWithHandling(BASE_URL, {
     method: 'POST',
-    headers: getHeaders(),
-    body: JSON.stringify(formData)
+    headers: getHeaders('multipart/form-data'),
+    body: formData
   });
 };
 
-export const updateSurvey = async (survey: SurveySubmission): Promise<Response> => {
+export const updateSurvey = async (survey: SurveySubmission): Promise<string> => {
   const formData = convertSurveyToFormData(survey);
   return await fetchWithHandling(`${BASE_URL}/${survey.id}`, {
     method: 'PUT',
-    headers: getHeaders(),
-    body: JSON.stringify(formData)
+    headers: getHeaders('multipart/form-data'),
+    body: formData
   });
 };
 
