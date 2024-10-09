@@ -4,6 +4,14 @@ import { getToken } from "../utils/auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys`;
 
+export const convertSurveyToFormData = (data: SurveySubmission): FormData => {
+  const formData = new FormData();
+  formData.append('title', data.title);
+  formData.append('description', data.description);
+  formData.append('questions', JSON.stringify(data.questions));
+  return formData;
+};
+
 const getHeaders = () => ({
   'Content-Type': 'application/json',
   'Accept': 'application/json',
@@ -31,18 +39,20 @@ const fetchWithHandling = async (url: string, options: RequestInit) => {
 };
 
 export const createSurvey = async (survey: SurveySubmission): Promise<Response> => {
+  const formData = convertSurveyToFormData(survey);
   return await fetchWithHandling(BASE_URL, {
     method: 'POST',
     headers: getHeaders(),
-    body: JSON.stringify(survey)
+    body: JSON.stringify(formData)
   });
 };
 
 export const updateSurvey = async (survey: SurveySubmission): Promise<Response> => {
+  const formData = convertSurveyToFormData(survey);
   return await fetchWithHandling(`${BASE_URL}/${survey.id}`, {
     method: 'PUT',
     headers: getHeaders(),
-    body: JSON.stringify(survey)
+    body: JSON.stringify(formData)
   });
 };
 
