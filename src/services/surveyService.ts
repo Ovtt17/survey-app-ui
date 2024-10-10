@@ -1,19 +1,21 @@
 import { Participation } from "../types/participation";
-import {SurveyPagedResponse, SurveyResponse, SurveySubmission} from "../types/survey";
+import { SurveyPagedResponse, SurveyResponse, SurveySubmission } from "../types/survey";
 import { getToken } from "../utils/auth";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys`;
 
-export const convertSurveyToFormData = (data: SurveySubmission): FormData => {
+export const convertSurveyToFormData = (survey: SurveySubmission): FormData => {
   const formData = new FormData();
-  formData.append('title', data.title);
-  formData.append('description', data.description);
-  formData.append('questions', JSON.stringify(data.questions));
+  formData.append('surveyRequest', new Blob([JSON.stringify(survey)], { type: 'application/json' }));
+
+  if (survey.picture) {
+    formData.append('picture', survey.picture);
+  }
   return formData;
 };
 
-const getHeaders = (contentType: string = 'application/json') => ({
-  'Content-Type': contentType,
+const getHeaders = () => ({
+  'Content-Type': 'application/json',
   'Accept': 'application/json',
   'Authorization': `Bearer ${getToken()}`
 });
@@ -40,27 +42,72 @@ const fetchWithHandling = async (url: string, options: RequestInit) => {
 
 export const createSurvey = async (survey: SurveySubmission): Promise<string> => {
   const formData = convertSurveyToFormData(survey);
-  return await fetchWithHandling(BASE_URL, {
-    method: 'POST',
-    headers: getHeaders('multipart/form-data'),
-    body: formData
-  });
+  try {
+    const response = await fetch(BASE_URL, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${getToken()}`
+      },
+      body: formData
+    });
+
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || 'Hubo un error al guardar la encuesta.');
+    }
+
+    const message = await response.text();
+    return message;
+  } catch (error) {
+    console.error('Error during fetch operation:', error);
+    throw error;
+  }
 };
 
 export const updateSurvey = async (survey: SurveySubmission): Promise<string> => {
   const formData = convertSurveyToFormData(survey);
-  return await fetchWithHandling(`${BASE_URL}/${survey.id}`, {
-    method: 'PUT',
-    headers: getHeaders('multipart/form-data'),
-    body: formData
-  });
+  try {
+    const response = await fetch(`${BASE_URL}/${survey.id}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${getToken()}`
+      },
+      body: formData
+    });
+
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || 'Hubo un error al modificar la encuesta.');
+    }
+
+    const message = await response.text();
+    return message;
+  } catch (error) {
+    console.error('Error during fetch operation:', error);
+    throw error;
+  }
 };
 
-export const deleteSurvey = async (id: number): Promise<Response> => {
-  return await fetchWithHandling(`${BASE_URL}/${id}`, {
-    method: 'DELETE',
-    headers: getHeaders()
-  });
+export const deleteSurvey = async (id: number): Promise<string> => {
+  try {
+    const response = await fetch(`${BASE_URL}/${id}`, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${getToken()}`
+      }
+    });
+
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      throw new Error(errorResponse.message || 'Hubo un error al eliminar la encuesta.');
+    }
+
+    const message = await response.text();
+    return message;
+  } catch (error) {
+    console.error('Error during fetch operation:', error);
+    throw error;
+  }
 };
 
 export const getSurveys = async (page: number, size: number): Promise<SurveyPagedResponse> => {

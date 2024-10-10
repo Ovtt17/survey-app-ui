@@ -31,10 +31,11 @@ const SurveyFormContainer = () => {
 
     const onSubmit = async (survey: SurveySubmission) => {
         try {
-            let response = await createSurvey(survey);
+            const responseMessage = await createSurvey(survey);
+            setModalMessage(responseMessage);
             setIsModalOpen(true);
-            setModalMessage(response);
         } catch (error) {
+            setIsModalOpen(false);
             console.error('Error submitting survey:', error);
         }
     };
