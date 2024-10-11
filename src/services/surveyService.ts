@@ -68,7 +68,7 @@ export const updateSurvey = async (survey: SurveySubmission): Promise<string> =>
   const formData = convertSurveyToFormData(survey);
   try {
     const response = await fetch(`${BASE_URL}/${survey.id}`, {
-      method: 'POST',
+      method: 'PUT',
       headers: {
         'Authorization': `Bearer ${getToken()}`
       },
