@@ -1,16 +1,13 @@
 import { useForm, FormProvider, useFieldArray } from 'react-hook-form';
 import { useSurveyContext } from '../../context/SurveyContext.tsx';
-import SurveyTitleInput from './SurveyTitleInput';
-import SurveyDescriptionInput from './SurveyDescriptionInput';
-import AccordionList from '../accordion/AccordionList';
-import SubmitSurveyButton from './SubmitSurveyButton';
 import { SurveySubmission } from '../../types/survey.ts';
 import { surveyDefault } from '../../data/SurveyDefault.ts';
 import { QuestionType } from '../../types/questionType.ts';
-import { createSurvey } from '../../services/surveyService.ts';
+import { createSurvey, updateSurvey } from '../../services/surveyService.ts';
 import SuccessModal from '../modals/SuccessModal.tsx';
 import { useState } from 'react';
 import { useAuthContext } from '../../context/AuthContext.tsx';
+import SurveyFormContent from './SurveyFormContent.tsx';
 
 const SurveyFormContainer = () => {
     const { user } = useAuthContext();
@@ -31,7 +28,12 @@ const SurveyFormContainer = () => {
 
     const onSubmit = async (survey: SurveySubmission) => {
         try {
-            const responseMessage = await createSurvey(survey);
+            let responseMessage: string = '';
+            if (survey.id && isSurveyEditable) {
+                responseMessage = await updateSurvey(survey);
+            } else {
+                responseMessage = await createSurvey(survey);
+            }
             setModalMessage(responseMessage);
             setIsModalOpen(true);
         } catch (error) {
@@ -56,12 +58,13 @@ const SurveyFormContainer = () => {
     return (
         <div className='w-11/12 bg-white p-8 rounded-lg shadow-xl'>
             <FormProvider {...methods}>
-                <form onSubmit={methods.handleSubmit(onSubmit)} className='flex flex-col gap-5'>
-                    <SurveyTitleInput />
-                    <SurveyDescriptionInput />
-                    <AccordionList questions={questions} addQuestion={addQuestion} removeQuestion={removeQuestion} />
-                    <SubmitSurveyButton isEditable={isSurveyEditable} />
-                </form>
+                <SurveyFormContent
+                    onSubmit={methods.handleSubmit(onSubmit)}
+                    questions={questions}
+                    addQuestion={addQuestion}
+                    removeQuestion={removeQuestion}
+                    isSurveyEditable={isSurveyEditable}
+                />
             </FormProvider>
             <SuccessModal
                 open={isModalOpen}
