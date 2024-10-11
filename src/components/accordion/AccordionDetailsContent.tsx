@@ -18,7 +18,9 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
     name: `questions.${questionIndex}.options`
   });
 
-  const requestCorrectAnswer = watch(`questions.${questionIndex}.isCorrect`, false) as boolean;
+  const questionType = watch(`questions.${questionIndex}.type`) as QuestionType;
+
+  const isCorrect = watch(`questions.${questionIndex}.isCorrect`) as boolean;
 
   return (
     <div className='flex flex-col gap-6'>
@@ -39,7 +41,7 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
         <Controller
           control={control}
           name={`questions.${questionIndex}.type`}
-          defaultValue={QuestionType.SELECCION_UNICA}
+          defaultValue={questionType}
           render={({ field }) => (
             <Select
               {...field}
@@ -57,6 +59,7 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
         <FormControlLabel
           control={
             <Checkbox
+              checked={isCorrect}
               {...register(`questions.${questionIndex}.isCorrect`)}
             />
           }
@@ -70,7 +73,7 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
       </div>
       <OptionList
         questionIndex={questionIndex}
-        requestCorrectAnswer={requestCorrectAnswer}
+        requestCorrectAnswer={isCorrect}
         options={options}
         append={append}
         remove={remove}
