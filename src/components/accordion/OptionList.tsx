@@ -16,7 +16,7 @@ interface OptionListProps {
 }
 
 const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAnswer, options, append, remove }) => {
-  const { setValue } = useFormContext<{
+  const { setValue,watch } = useFormContext<{
     questions: Question[];
   }>();
   const [selectedCorrectOption, setSelectedCorrectOption] = useState<number | null>(null);
@@ -50,7 +50,7 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
             questionIndex={questionIndex}
             requestCorrectAnswer={requestCorrectAnswer}
             removeOption={() => removeOption(index)}
-            isChecked={selectedCorrectOption === index}
+            isChecked={watch(`questions.${questionIndex}.options.${index}.isCorrect`) as boolean}
             onChange={() => handleCorrectAnswerChange(index)}
           />
         ))}
