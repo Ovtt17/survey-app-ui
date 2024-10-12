@@ -6,6 +6,8 @@ import { QuestionOption } from '../../types/questionOption';
 import { RadioGroup } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { Question } from '../../types/question';
+import { QuestionType } from '../../types/questionType';
+import { validationRules } from '../../data/validationRules';
 
 interface OptionListProps {
   questionIndex: number;
@@ -16,10 +18,20 @@ interface OptionListProps {
 }
 
 const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAnswer, options, append, remove }) => {
-  const { setValue,watch } = useFormContext<{
+  const { setValue, watch } = useFormContext<{
     questions: Question[];
   }>();
   const [selectedCorrectOption, setSelectedCorrectOption] = useState<number | null>(null);
+  const questionType = watch(`questions.${questionIndex}.type`) as QuestionType;
+  const errors = [];
+
+  if (validationRules.options.minOptions.condition(options, questionType)) {
+    errors.push(validationRules.options.minOptions.message);
+  }
+
+  if (validationRules.options.textOptions.condition(options, questionType, requestCorrectAnswer)) {
+    errors.push(validationRules.options.textOptions.message);
+  }
 
   const addOption = () => {
     append({ text: '', isCorrect: false });
@@ -56,9 +68,9 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
         ))}
       </RadioGroup>
       <div className="mt-4">
-        {options.length === 0 && (
-          <span className="text-red-500 block mb-2">Debe haber al menos una opción</span>
-        )}
+        {errors.map((error, index) => (
+          <span key={index} className="text-red-500 block mb-2">{error}</span>
+        ))}
         <Button
           variant="contained"
           color="secondary"
