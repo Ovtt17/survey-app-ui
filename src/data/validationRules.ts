@@ -19,19 +19,20 @@ export const validationRules = {
     required: 'La descripción es obligatoria.'
   },
   options: {
-    minOptions: {
-      message: 'Debe haber al menos dos opciones.',
-      condition: (options: QuestionOption[], questionType: string) => {
-        return options.length < 2 && questionType === QuestionType.SELECCION_UNICA;
+    validate: (options: QuestionOption[], questionType: string, isCorrect: boolean) => {
+      if (isCorrect && options.length < 2) {
+        return 'Debe haber al menos dos opciones cuando la respuesta debe ser correcta.';
       }
-    },
-    textOptions: {
-      message: 'Las preguntas de texto solo pueden tener opciones si es una respuesta correcta.',
-      condition: (options: QuestionOption[], questionType: string, isCorrect: boolean) => {
-        return options.length > 0
-          && questionType === QuestionType.TEXTO
-          && !isCorrect;
+      if (questionType === QuestionType.SELECCION_UNICA && options.length < 2) {
+        return 'Debe haber al menos dos opciones para seleccionar.';
       }
+      if (questionType === QuestionType.TEXTO && options.length > 0 && !isCorrect) {
+        return 'Las preguntas de texto solo pueden tener opciones si es una respuesta correcta.';
+      }
+      if (isCorrect && !options.some(option => option.isCorrect)) {
+        return 'Debe seleccionar al menos una opción como correcta.';
+      }
+      return true;
     }
-  }
+  },
 };
