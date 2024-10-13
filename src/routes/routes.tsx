@@ -1,11 +1,11 @@
-import { Suspense, lazy } from 'react';
-import { Route, Routes } from 'react-router-dom';
-import { EditProvider } from '../context/EditSurveyContext';
+import {lazy, Suspense} from 'react';
+import {Route, Routes} from 'react-router-dom';
+import {SurveyProvider} from '../context/SurveyContext.tsx';
 import LoadingComponent from '../components/loadings/LoadingComponent';
 
 const Home = lazy(() => import('../pages/Home'));
 const AnswerSurvey = lazy(() => import('../pages/AnswerSurvey'));
-const CreateSurveyForm = lazy(() => import('../pages/CreateSurveyForm'));
+const SurveyCreate = lazy(() => import('../pages/SurveyCreate'));
 const Reviews = lazy(() => import('../pages/Reviews'));
 const Register = lazy(() => import('../pages/Register'));
 const SurveyParticipations = lazy(() => import('../components/survey/SurveyParticipations'));
@@ -57,15 +57,15 @@ const AppRoutes = () => {
         {/* Survey Routes */}
         <Route path={ROUTES.SURVEYS} element={<Home />} />
         <Route path={ROUTES.CREATE_SURVEY} element={
-          <EditProvider>
-            <CreateSurveyForm />
-          </EditProvider>
+          <SurveyProvider>
+            <SurveyCreate />
+          </SurveyProvider>
         } />
         <Route path={ROUTES.ANSWER_SURVEY} element={<AnswerSurvey />} />
         <Route path={ROUTES.EDIT_SURVEY} element={
-          <EditProvider>
-            <CreateSurveyForm />
-          </EditProvider>
+          <SurveyProvider>
+            <SurveyCreate />
+          </SurveyProvider>
         } />
         <Route path={ROUTES.SURVEY_REVIEWS} element={<Reviews />} />
         <Route path={ROUTES.SURVEY_PARTICIPATIONS} element={<SurveyParticipations />} />

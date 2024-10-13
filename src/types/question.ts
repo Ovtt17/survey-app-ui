@@ -7,4 +7,5 @@ export interface Question {
   text: string;
   type: QuestionType;
   options: QuestionOption[];
+  isCorrect?: boolean;
 }

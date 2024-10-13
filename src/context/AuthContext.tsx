@@ -1,7 +1,7 @@
-import { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { getToken, removeToken, setToken } from '../utils/auth';
-import { User } from '../types/user';
-import { AuthenticationResponse } from '../types/authenticationResponse';
+import React, {createContext, ReactNode, useContext, useEffect, useState} from 'react';
+import {getToken, removeToken, setToken} from '../utils/auth';
+import {User} from '../types/user';
+import {AuthenticationResponse} from '../types/authenticationResponse';
 
 interface AuthContextType {
   isAuthenticated: boolean;

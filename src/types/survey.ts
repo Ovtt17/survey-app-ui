@@ -1,5 +1,5 @@
-import { Question } from "./question";
-import { User } from "./user";
+import {Question} from "./question";
+import {User} from "./user";
 
 export interface SurveySubmission {
   id?: number;
@@ -10,6 +10,7 @@ export interface SurveySubmission {
   ratingCount?: number;
   creationDate?: string;
   questions: Question[];
+  picture?: File;
 }
 
 export interface SurveyResponse {
@@ -21,6 +22,7 @@ export interface SurveyResponse {
   creatorProfilePicture?: string;
   averageRating: number;
   ratingCount: number;
+  pictureUrl?: string;
 }
 
 export interface SurveyPagedResponse {
