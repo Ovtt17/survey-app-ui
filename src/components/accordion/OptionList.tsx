@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Add from '@mui/icons-material/Add';
 import OptionItem from './OptionItem';
@@ -24,6 +24,14 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
   const [selectedCorrectOption, setSelectedCorrectOption] = useState<number | null>(null);
   const questionType = watch(`questions.${questionIndex}.type`) as QuestionType;
   const errors = [];
+
+  useEffect(() => {
+    if (!requestCorrectAnswer) {
+      options.forEach((_, i) => {
+        setValue(`questions.${questionIndex}.options.${i}.isCorrect`, false);
+      });
+    }
+  }, [requestCorrectAnswer]);
 
   if (validationRules.options.minOptions.condition(options, questionType)) {
     errors.push(validationRules.options.minOptions.message);
