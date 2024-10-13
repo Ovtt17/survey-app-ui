@@ -18,12 +18,11 @@ interface OptionListProps {
 }
 
 const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAnswer, options, append, remove }) => {
-  const { setValue, watch } = useFormContext<{
+  const { setValue, watch, setError, clearErrors, formState: { errors } } = useFormContext<{
     questions: Question[];
   }>();
   const [selectedCorrectOption, setSelectedCorrectOption] = useState<number | null>(null);
   const questionType = watch(`questions.${questionIndex}.type`) as QuestionType;
-  const errors = [];
 
   useEffect(() => {
     if (!requestCorrectAnswer) {
@@ -33,13 +32,14 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
     }
   }, [requestCorrectAnswer]);
 
-  if (validationRules.options.minOptions.condition(options, questionType)) {
-    errors.push(validationRules.options.minOptions.message);
-  }
-
-  if (validationRules.options.textOptions.condition(options, questionType, requestCorrectAnswer)) {
-    errors.push(validationRules.options.textOptions.message);
-  }
+  useEffect(() => {
+    const validationResult = validationRules.options.validate(options, questionType, requestCorrectAnswer);
+    if (validationResult !== true) {
+      setError(`questions.${questionIndex}.options`, { type: 'manual', message: validationResult });
+    } else {
+      clearErrors(`questions.${questionIndex}.options`);
+    }
+  }, [options, questionType, requestCorrectAnswer, setError, clearErrors, questionIndex]);
 
   const addOption = () => {
     append({ text: '', isCorrect: false });
@@ -49,8 +49,9 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
     remove(index);
     if (selectedCorrectOption === index) {
       setSelectedCorrectOption(null);
-      setValue(`questions.${questionIndex}.isCorrect`, false);
     }
+    const hasMultipleOptions = options.length > 1;
+    setValue(`questions.${questionIndex}.isCorrect`, hasMultipleOptions);
   };
 
   const handleCorrectAnswerChange = (index: number) => {
@@ -58,6 +59,7 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
     options.forEach((_, i) => {
       setValue(`questions.${questionIndex}.options.${i}.isCorrect`, i === index);
     });
+    clearErrors(`questions.${questionIndex}.options`);
   };
 
   return (
@@ -76,9 +78,11 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
         ))}
       </RadioGroup>
       <div className="mt-4">
-        {errors.map((error, index) => (
-          <span key={index} className="text-red-500 block mb-2">{error}</span>
-        ))}
+        {errors.questions?.[questionIndex]?.options && (
+          <span className="text-red-500 block mb-2">
+            {errors.questions[questionIndex].options.message}
+          </span>
+        )}
         <Button
           variant="contained"
           color="secondary"
