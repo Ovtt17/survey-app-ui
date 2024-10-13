@@ -65,11 +65,6 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
           }
           label="¿Las respuestas deben ser correctas?"
         />
-        <div>
-          {errors.questions?.[questionIndex]?.options && (
-            <span className="text-red-500">{errors.questions[questionIndex].options.message}</span>
-          )}
-        </div>
       </div>
       <OptionList
         questionIndex={questionIndex}
