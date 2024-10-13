@@ -16,8 +16,8 @@ const useFetchSurveyById = () => {
       const loadSurvey = async () => {
         try {
           const survey = await getSurveyByIdForOwner(surveyId);
-          Object.keys(survey).forEach(key => {
-            setValue(key, (survey as Record<string, any>)[key]);
+          Object.entries(survey).forEach(([key, value]) => {
+            setValue(key, value);
           });
         } catch (error) {
           console.error('Error loading survey:', error);
