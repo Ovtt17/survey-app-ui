@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { getSurveyByIdForOwner } from '../services/surveyService';
@@ -10,22 +10,44 @@ const useFetchSurveyById = () => {
   const { user } = useAuthContext();
   const { setValue } = useFormContext();
   const { isSurveyEditable } = useSurveyContext();
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  const isNewSurvey = !surveyId;
 
   useEffect(() => {
-    if (surveyId && isSurveyEditable) {
-      const loadSurvey = async () => {
-        try {
-          const survey = await getSurveyByIdForOwner(surveyId);
-          Object.entries(survey).forEach(([key, value]) => {
-            setValue(key, value);
-          });
-        } catch (error) {
-          console.error('Error loading survey:', error);
+    const loadSurvey = async () => {
+      try {
+        if (isNewSurvey) {
+          return;
         }
-      };
-      loadSurvey();
-    }
-  }, [surveyId, isSurveyEditable, username, user]);
+
+        if (!isSurveyEditable) {
+          setError('No tienes permisos para editar encuestas de otros usuarios.');
+          return;
+        }
+
+        if (surveyId && isSurveyEditable) {
+          const survey = await getSurveyByIdForOwner(surveyId);
+          Object.keys(survey).forEach(key => {
+            setValue(key, (survey as Record<string, any>)[key]);
+          });
+        }
+      } catch (error: any) {
+        if (error.message) {
+          setError(error.message);
+        } else {
+          setError('Error de conexión al cargar la encuesta.');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadSurvey();
+  }, [surveyId, isSurveyEditable, username, user, setValue]);
+
+  return { error, loading };
 };
 
 export default useFetchSurveyById;
