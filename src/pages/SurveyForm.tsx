@@ -1,7 +1,6 @@
 import {useSurveyContext} from '../context/SurveyContext.tsx';
 import { useAuthContext } from '../context/AuthContext.tsx';
 import { useState } from 'react';
-import { QuestionType } from '../types/questionType.ts';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { SurveySubmission } from '../types/survey.ts';
 import { surveyDefault } from '../data/SurveyDefault.ts';
@@ -43,12 +42,7 @@ const SurveyCreate = () => {
   };
 
   const addQuestion = () => {
-    append({
-      text: '',
-      type: QuestionType.SELECCION_UNICA,
-      isCorrect: false,
-      options: [{ text: '', isCorrect: false }]
-    });
+    append(surveyDefault.questions[0]);
   };
 
   const removeQuestion = (index: number) => {
