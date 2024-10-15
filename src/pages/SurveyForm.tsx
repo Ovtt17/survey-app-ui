@@ -8,7 +8,7 @@ import { createSurvey, updateSurvey } from '../services/surveyService.ts';
 import SurveyFormContent from '../components/survey/SurveyFormContent.tsx';
 import SuccessModal from '../components/modals/SuccessModal.tsx';
 
-const SurveyCreate = () => {
+const SurveyForm = () => {
   const { isSurveyEditable } = useSurveyContext();
   const { user } = useAuthContext();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -76,4 +76,4 @@ const SurveyCreate = () => {
   );
 }
 
-export default SurveyCreate;
+export default SurveyForm;
