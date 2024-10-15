@@ -11,6 +11,9 @@ export interface SurveySubmission extends BaseSurvey {
   id?: number;
   creator?: User;
   questions: Question[];
+  averageRating?: number;
+  ratingCount?: number;
+  creationDate?: string;
 }
 
 export interface SurveyResponse extends BaseSurvey {
