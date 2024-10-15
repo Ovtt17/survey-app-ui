@@ -10,6 +10,7 @@ import ErrorTemplate from '../error/ErrorTemplate.tsx';
 import { useNavigate } from 'react-router-dom';
 import LoadingComponent from '../loadings/LoadingComponent.tsx';
 import { useAuthContext } from '../../context/AuthContext.tsx';
+import ImageUpload from '../image/ImageUpload';
 
 interface SurveyFormContentProps {
   onSubmit: (event: React.FormEvent) => void;
@@ -44,6 +45,7 @@ const SurveyFormContent: FC<SurveyFormContentProps> = ({ onSubmit, questions, ad
     <form onSubmit={onSubmit} className='flex flex-col gap-5'>
       <SurveyTitleInput />
       <SurveyDescriptionInput />
+      <ImageUpload />
       <AccordionList questions={questions} addQuestion={addQuestion} removeQuestion={removeQuestion} />
       <SubmitSurveyButton isEditable={isSurveyEditable} />
     </form>
