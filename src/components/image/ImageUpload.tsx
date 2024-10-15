@@ -23,6 +23,7 @@ const ImageUpload: React.FC = () => {
 
   const handleRemoveImage = () => {
     setPreview(null);
+    setValue('picture', null);
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
     }
