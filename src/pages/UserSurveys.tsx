@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import useFetchSurveysByCurrentUser from "../hooks/useFetchSurveysByCurrentUser";
 import { useState } from "react";
 import { Pagination } from "@mui/material";
+import LoadingComponent from "../components/loadings/LoadingComponent";
 
 const UserSurveys = () => {
   const navigate = useNavigate();
@@ -21,7 +22,8 @@ const UserSurveys = () => {
     errorMessage,
     openErrorTemplate,
     setOpenErrorTemplate,
-    totalPages
+    totalPages,
+    loading
   } = useFetchSurveysByCurrentUser(page, pageSize);
 
   const handleSurveyDeleted = (id: number) => {
@@ -35,7 +37,10 @@ const UserSurveys = () => {
       <div className="flex flex-col items-center">
         <h2 className="text-2xl font-bold">Mis Encuestas</h2>
       </div>
-      {hasSurveys && !openErrorTemplate ? (
+
+      {loading ? (
+        <LoadingComponent />
+      ) : hasSurveys && !openErrorTemplate ? (
         <div>
           <div className="flex flex-wrap justify-start">
             {surveys?.map((survey, index) => {
@@ -69,7 +74,6 @@ const UserSurveys = () => {
             />
           </div>
         </div>
-
       ) : (
         <ErrorTemplate
           title="Encuestas no encontradas."
