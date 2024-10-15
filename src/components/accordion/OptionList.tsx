@@ -24,22 +24,29 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
   const [selectedCorrectOption, setSelectedCorrectOption] = useState<number | null>(null);
   const questionType = watch(`questions.${questionIndex}.type`) as QuestionType;
 
+  const watchedOptions = watch(`questions.${questionIndex}.options`);
+
   useEffect(() => {
     if (!requestCorrectAnswer) {
       options.forEach((_, i) => {
         setValue(`questions.${questionIndex}.options.${i}.isCorrect`, false);
       });
+      setSelectedCorrectOption(null);
+    } else if (selectedCorrectOption === null && options.length > 0) {
+      setSelectedCorrectOption(0);
+      setValue(`questions.${questionIndex}.options.0.isCorrect`, true);
     }
   }, [requestCorrectAnswer]);
 
   useEffect(() => {
-    const validationResult = validationRules.options.validate(options, questionType, requestCorrectAnswer);
+    const validationResult = validationRules.options.validate(watchedOptions, questionType, requestCorrectAnswer);
     if (validationResult !== true) {
       setError(`questions.${questionIndex}.options`, { type: 'manual', message: validationResult });
     } else {
       clearErrors(`questions.${questionIndex}.options`);
     }
-  }, [options, questionType, requestCorrectAnswer, setError, clearErrors, questionIndex]);
+  }, [watchedOptions, questionType, requestCorrectAnswer, setError, clearErrors, questionIndex]);
+
 
   const addOption = () => {
     append({ text: '', isCorrect: false });
