@@ -35,7 +35,7 @@ const ImageUpload: React.FC = () => {
         type='file'
         accept='image/*'
         onChange={handleImageChange}
-        className='p-2 border border-gray-300 rounded-md hover:border-blue-500 transition duration-150'
+        className='cursor-pointer p-2 border border-gray-300 rounded-md hover:border-blue-500 transition duration-150'
         ref={fileInputRef}
       />
       {preview && (
