@@ -27,12 +27,7 @@ const SurveyForm = () => {
 
   const onSubmit = async (survey: SurveySubmission) => {
     try {
-      let responseMessage: string = '';
-      if (survey.id && isSurveyEditable) {
-        responseMessage = await updateSurvey(survey);
-      } else {
-        responseMessage = await createSurvey(survey);
-      }
+      const responseMessage = survey.id && isSurveyEditable ? await updateSurvey(survey) : await createSurvey(survey);
       setModalMessage(responseMessage);
       setIsModalOpen(true);
     } catch (error) {
