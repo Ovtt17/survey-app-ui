@@ -1,10 +1,10 @@
 import React, { useRef, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { useFormContext } from 'react-hook-form';
 
 const ImageUpload: React.FC = () => {
   const { setValue } = useFormContext();
-
   const [preview, setPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -31,13 +31,24 @@ const ImageUpload: React.FC = () => {
 
   return (
     <div className='flex flex-col items-center gap-4 p-4 border border-gray-300 rounded-lg shadow-md'>
+      {!preview && (
+        <div
+          className="w-full h-48 flex flex-col justify-center items-center border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition duration-150"
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <AddPhotoAlternateIcon style={{ fontSize: '48px', color: 'gray' }} />
+          <p className="text-gray-500">Haz clic o arrastra una imagen</p>
+        </div>
+      )}
+
       <input
         type='file'
         accept='image/*'
         onChange={handleImageChange}
-        className='cursor-pointer p-2 border border-gray-300 rounded-md hover:border-blue-500 transition duration-150'
+        className='hidden'
         ref={fileInputRef}
       />
+
       {preview && (
         <>
           <img
