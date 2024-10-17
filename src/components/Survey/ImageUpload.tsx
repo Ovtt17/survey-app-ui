@@ -66,7 +66,7 @@ const ImageUpload: React.FC = () => {
           <img
             src={preview}
             alt='Selected'
-            className='w-full max-w-4xl h-auto border border-gray-300 rounded-lg shadow-lg transition-transform duration-200 hover:scale-105'
+            className='w-full max-w-4xl max-h-[520px] border border-gray-300 rounded-lg shadow-lg transition-transform duration-200 hover:scale-105'
           />
           <button
             onClick={handleRemoveImage}
