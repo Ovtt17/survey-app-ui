@@ -9,6 +9,7 @@ export const convertSurveyToFormData = (survey: SurveySubmission): FormData => {
     id: survey.id,
     title: survey.title,
     description: survey.description,
+    pictureUrl: survey.pictureUrl,
     questions: survey.questions
   })], { type: 'application/json' }));
   if (survey.picture) {
