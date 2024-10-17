@@ -7,12 +7,14 @@ import { surveyDefault } from '../data/SurveyDefault.ts';
 import { createSurvey, updateSurvey } from '../services/surveyService.ts';
 import SurveyFormContent from '../components/survey/SurveyFormContent.tsx';
 import SuccessModal from '../components/modals/SuccessModal.tsx';
+import ProccessingModal from '../components/modals/ProccessingModal.tsx';
 
 const SurveyForm = () => {
   const { isSurveyEditable } = useSurveyContext();
   const { user } = useAuthContext();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const methods = useForm<SurveySubmission>({
     defaultValues: surveyDefault
@@ -27,12 +29,15 @@ const SurveyForm = () => {
 
   const onSubmit = async (survey: SurveySubmission) => {
     try {
+      setIsLoading(true);
       const responseMessage = survey.id && isSurveyEditable ? await updateSurvey(survey) : await createSurvey(survey);
       setModalMessage(responseMessage);
       setIsModalOpen(true);
     } catch (error) {
       setIsModalOpen(false);
       console.error('Error submitting survey:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,6 +63,7 @@ const SurveyForm = () => {
               isSurveyEditable={isSurveyEditable}
             />
           </FormProvider>
+          <ProccessingModal isLoading={isLoading} />
           <SuccessModal
             open={isModalOpen}
             title="¡Registro Exitoso!"
