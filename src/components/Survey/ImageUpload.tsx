@@ -1,13 +1,20 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { useFormContext } from 'react-hook-form';
 import { isValidImageFormat } from '../../utils/imageUtils';
 
 const ImageUpload: React.FC = () => {
-  const { register, setValue } = useFormContext();
+  const { register, setValue, getValues } = useFormContext();
   const [preview, setPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const savedImageUrl = getValues('pictureUrl');
+    if (savedImageUrl) {
+      setPreview(savedImageUrl);
+    }
+  }, [getValues]);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
