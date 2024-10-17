@@ -2,23 +2,28 @@ import React, { useRef, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { useFormContext } from 'react-hook-form';
+import { isValidImageFormat } from '../../utils/imageUtils';
 
 const ImageUpload: React.FC = () => {
-  const { setValue } = useFormContext();
+  const { register, setValue } = useFormContext();
   const [preview, setPreview] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        const result = reader.result as string;
-        setPreview(result);
-        setValue('picture', result);
-      };
-      reader.readAsDataURL(file);
+    if (!file) return;
+
+    if (!isValidImageFormat(file)) {
+      alert('Por favor, selecciona un archivo de imagen válido (jpg, jpeg, png).');
+      return;
     }
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      const result = reader.result as string;
+      setPreview(result);
+      setValue('picture', file);
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleRemoveImage = () => {
@@ -44,7 +49,7 @@ const ImageUpload: React.FC = () => {
       <input
         type='file'
         accept='image/*'
-        onChange={handleImageChange}
+        {...register('picture', { onChange: handleImageChange })}
         className='hidden'
         ref={fileInputRef}
       />

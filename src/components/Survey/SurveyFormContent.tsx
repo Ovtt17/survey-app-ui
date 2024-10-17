@@ -10,7 +10,7 @@ import ErrorTemplate from '../error/ErrorTemplate.tsx';
 import { useNavigate } from 'react-router-dom';
 import LoadingComponent from '../loadings/LoadingComponent.tsx';
 import { useAuthContext } from '../../context/AuthContext.tsx';
-import ImageUpload from '../image/ImageUpload';
+import ImageUpload from './ImageUpload.tsx';
 
 interface SurveyFormContentProps {
   onSubmit: (event: React.FormEvent) => void;

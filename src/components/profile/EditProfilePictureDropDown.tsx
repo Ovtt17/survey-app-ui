@@ -2,6 +2,7 @@ import { FC, useState } from 'react';
 import EditIcon from '@mui/icons-material/Edit';
 import { Menu, MenuItem } from '@mui/material';
 import { deleteProfilePicture, uploadProfilePicture } from '../../services/ImageService';
+import { isValidImageFormat } from '../../utils/imageUtils';
 interface EditProfilePictureDropDownProps {
   profilePicture?: string;
   handleProfilePictureChange: (newProfilePicture: string) => void;
@@ -17,12 +18,6 @@ const EditProfilePictureDropDown: FC<EditProfilePictureDropDownProps> = ({ profi
 
   const handleMenuClose = () => {
     setMenuAnchorElement(null);
-  };
-
-  const isValidImageFormat = (file: File) => {
-    const validExtensions = ['jpg', 'jpeg', 'png'];
-    const fileExtension = file.name.split('.').pop()?.toLowerCase();
-    return fileExtension && validExtensions.includes(fileExtension);
   };
 
   const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
