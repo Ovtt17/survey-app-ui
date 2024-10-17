@@ -4,7 +4,7 @@ import {User} from "./user";
 export interface BaseSurvey {
   title: string;
   description: string;
-  picture?: File | string;
+  pictureUrl?: string;
 }
 
 export interface SurveySubmission extends BaseSurvey {
@@ -14,6 +14,7 @@ export interface SurveySubmission extends BaseSurvey {
   averageRating?: number;
   ratingCount?: number;
   creationDate?: string;
+  picture?: File;
 }
 
 export interface SurveyResponse extends BaseSurvey {
@@ -23,7 +24,6 @@ export interface SurveyResponse extends BaseSurvey {
   creatorProfilePicture?: string;
   averageRating: number;
   ratingCount: number;
-  pictureUrl?: string;
 }
 
 export interface SurveyPagedResponse {
