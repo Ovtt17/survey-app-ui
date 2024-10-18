@@ -30,7 +30,7 @@ const useFetchSurveyToAnswer = () => {
     fetchSurvey();
   }, [id]);
 
-  return { survey, loading, error };
+  return { survey, loading, error, setError };
 };
 
 export default useFetchSurveyToAnswer;
