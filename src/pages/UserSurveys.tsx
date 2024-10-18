@@ -1,4 +1,3 @@
-import { useAuthContext } from "../context/AuthContext";
 import SurveyCard from "../components/survey/SurveyCard";
 import ErrorTemplate from "../components/error/ErrorTemplate";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +10,6 @@ import ErrorModal from "../components/error/ErrorModal";
 
 const UserSurveys = () => {
   const navigate = useNavigate();
-  const { user } = useAuthContext();
   const [page, setPage] = useState(1);
   const pageSize = 6;
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
@@ -56,12 +54,10 @@ const UserSurveys = () => {
         <div>
           <div className="flex flex-wrap justify-start">
             {surveys?.map((survey, index) => {
-              const isOwner = survey.creatorUsername === user?.username;
               return (
                 <div key={index} className="w-full sm:w-1/2 p-2">
                   <SurveyCard
                     survey={survey}
-                    isOwner={isOwner}
                     onDelete={handleSurveyDeleted}
                   />
                 </div>

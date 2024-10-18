@@ -3,14 +3,9 @@ import { Link, useNavigate } from "react-router-dom";
 import { SurveyResponse } from "../../types/survey";
 import RatingModal from '../rating/RatingModal';
 import Rating from '@mui/material/Rating';
-import IconButton from "@mui/material/IconButton";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteSurvey } from "../../services/surveyService";
 import { createRating } from "../../services/ratingService";
-import ExcelIcon from '../../assets/icon-excel.svg';
 import { downloadReportWithSurvey } from "../../services/reportService";
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { reports } from "../../data/Reports";
 import { useAuthContext } from "../../context/AuthContext";
 import ErrorModal from "../error/ErrorModal";
@@ -19,14 +14,14 @@ import StarRateIcon from '@mui/icons-material/StarRate';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import NoProfilePictureBlackIcon from '../../assets/no-profile-picture-bg-black.svg';
 import imageNotAvailable from '../../assets/Image_not_available.png';
+import SurveyOwnerOptions from "./SurveyOwnerOptions";
 
 interface SurveyCardProps {
   survey: SurveyResponse;
-  isOwner?: boolean;
   onDelete?: (id: number) => void;
 }
 
-const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) => {
+const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onDelete }) => {
   const [openRatingModal, setOpenRatingModal] = useState(false);
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
   const { verifySession, isAuthenticated } = useAuthContext();
@@ -77,28 +72,12 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
         </figure>
       </div>
       <div className="relative min-h-72 shadow-xl bg-white rounded-b p-4 flex flex-col justify-between leading-normal">
-        {isOwner && (
-          <div className="absolute top-2 right-1 flex space-x-2">
-            <div onClick={downloadAnswersReport} className="cursor-pointer h-8 w-8 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
-              style={{ backgroundImage: `url(${ExcelIcon})` }}
-              title="Exportar a Excel"
-            >
-            </div>
-            <Link title="Ver Respuestas" to={`/${survey.creatorUsername}/surveys/${survey.id}/participations`}>
-              <IconButton aria-label="view" size="small">
-                <VisibilityIcon fontSize="small" />
-              </IconButton>
-            </Link>
-            <Link title="Editar" to={`/${survey.creatorUsername}/surveys/${survey.id}`}>
-              <IconButton aria-label="edit" size="small">
-                <EditIcon fontSize="small" />
-              </IconButton>
-            </Link>
-            <IconButton onClick={() => handleDelete(survey.id)} aria-label="delete" title="Eliminar" size="small">
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </div>
-        )}
+        <SurveyOwnerOptions
+          key={survey.id}
+          survey={survey}
+          onDownloadAnswersReport={downloadAnswersReport}
+          onDelete={handleDelete}
+        />
         <div className="mb-6 mt-2">
           {!isAuthenticated && (
             <p className="text-sm text-gray-600 flex items-center">
