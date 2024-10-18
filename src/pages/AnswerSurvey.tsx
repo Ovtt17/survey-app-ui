@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
@@ -11,12 +10,8 @@ import { Answer } from '../types/answer';
 import { createAnswer } from '../services/answerService';
 import RatingModal from '../components/rating/RatingModal';
 import { createRating } from '../services/ratingService';
-import AnswerCard from '../components/answer/AnswerCard';
-import SurveyCreatorInfo from '../components/survey/SurveyCreatorInfo';
-import dayjs from 'dayjs';
-import 'dayjs/locale/es';
-
-dayjs.locale('es');
+import SurveyDetails from '../components/answer/SurveyDetails';
+import QuestionsToAnswerList from '../components/answer/QuestionsToAnswerList';
 
 const AnswerSurvey = () => {
   const navigate = useNavigate();
@@ -127,37 +122,13 @@ const AnswerSurvey = () => {
         <Alert severity="warning">No se encontró ninguna encuesta</Alert>
       ) : (
         <>
-          <SurveyCreatorInfo survey={{
-            creatorFullName: survey.creator?.fullName || '',
-            creatorUsername: survey.creator?.username || '',
-            creatorProfilePicture: survey.creator?.profilePictureUrl || '',
-            averageRating: survey.averageRating || 0,
-            ratingCount: survey.ratingCount || 0,
-          }} />
-          <Typography variant="h4" gutterBottom>
-            {survey.title}
-          </Typography>
-          <Typography variant="h6" gutterBottom>
-            {survey.description}
-          </Typography>
-          {survey.creationDate && (
-            <Typography variant="subtitle1" gutterBottom>
-              <b>Fecha de creación:</b> {dayjs(survey.creationDate).format('MMMM D, YYYY h:mm A')}
-            </Typography>
-          )}
-          <div>
-            {
-              survey && survey.questions && survey.questions.map((question) => (
-                <AnswerCard
-                  key={question.id}
-                  surveyId={survey.id || 0}
-                  question={question}
-                  answers={answers}
-                  unansweredQuestions={unansweredQuestions}
-                  handleAnswerChange={handleAnswerChange}
-                />
-              ))}
-          </div>
+          <SurveyDetails survey={survey} />
+          <QuestionsToAnswerList
+            survey={survey}
+            answers={answers}
+            unansweredQuestions={unansweredQuestions}
+            handleAnswerChange={handleAnswerChange}
+          />
           <div className='flex justify-end items-end'>
             <Button variant='contained' color='success' onClick={handleSubmit}>
               ENVIAR
