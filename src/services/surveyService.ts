@@ -5,9 +5,13 @@ import { getToken } from "../utils/auth";
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys`;
 
 export const convertSurveyToFormData = (survey: SurveySubmission): FormData => {
-  const formData = new FormData();
-  formData.append('surveyRequest', new Blob([JSON.stringify(survey)], { type: 'application/json' }));
-
+  const formData = new FormData();  formData.append('surveyRequest', new Blob([JSON.stringify({
+    id: survey.id,
+    title: survey.title,
+    description: survey.description,
+    pictureUrl: survey.pictureUrl,
+    questions: survey.questions
+  })], { type: 'application/json' }));
   if (survey.picture) {
     formData.append('picture', survey.picture);
   }

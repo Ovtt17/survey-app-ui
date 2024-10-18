@@ -17,10 +17,7 @@ export const SurveyProvider: React.FC<{ children: ReactNode }> = ({ children }) 
   const { isProfileOwner } = useAuthContext();
   const { username } = useParams<{ id: string, username: string }>();
 
-  const isSurveyOwner = (username: string) => {
-    return isProfileOwner(username);
-  }
-  const isSurveyEditable = username ? isSurveyOwner(username) : false;
+  const isSurveyEditable = username ? isProfileOwner(username) : false;
 
 
   return (

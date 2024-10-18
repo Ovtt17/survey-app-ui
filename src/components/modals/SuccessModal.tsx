@@ -10,7 +10,6 @@ interface SuccessModalProps {
   message: string;
   buttonText: string;
   buttonLink: string;
-  onClose?: () => void;
 }
 
 const SuccessModal: React.FC<SuccessModalProps> = ({
@@ -19,12 +18,10 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
   message,
   buttonText,
   buttonLink,
-  onClose
 }) => {
   return (
     <Dialog
       open={open}
-      onClose={onClose}
       maxWidth="sm"
       fullWidth
       sx={{
@@ -33,7 +30,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
         },
       }}
     >
-      <h2 className="text-center text-xl lg:text-3xl font-bold tracking-tight text-gray-900 mt-4">
+      <h2 className="text-center text-2xl lg:text-3xl font-bold tracking-tight text-gray-900 mt-4">
         {title}
       </h2>
       <DialogContent>
@@ -46,7 +43,7 @@ const SuccessModal: React.FC<SuccessModalProps> = ({
               style={{ width: '150px', height: '150px' }}
             />
           </div>
-          <p className="mt-2 text-md text-gray-600">
+          <p className="mt-2 text-lg text-gray-600">
             {message}
           </p>
           <div className='pt-10'>

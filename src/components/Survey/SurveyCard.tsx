@@ -2,33 +2,27 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SurveyResponse } from "../../types/survey";
 import RatingModal from '../rating/RatingModal';
-import Rating from '@mui/material/Rating';
-import IconButton from "@mui/material/IconButton";
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
 import { deleteSurvey } from "../../services/surveyService";
 import { createRating } from "../../services/ratingService";
-import ExcelIcon from '../../assets/icon-excel.svg';
 import { downloadReportWithSurvey } from "../../services/reportService";
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import { reports } from "../../data/Reports";
 import { useAuthContext } from "../../context/AuthContext";
 import ErrorModal from "../error/ErrorModal";
-import ReviewsIcon from '@mui/icons-material/Reviews';
-import StarRateIcon from '@mui/icons-material/StarRate';
-import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
-import NoProfilePictureBlackIcon from '../../assets/no-profile-picture-bg-black.svg';
+import imageNotAvailable from '../../assets/Image_not_available.png';
+import SurveyOwnerOptions from "./SurveyOwnerOptions";
+import SurveyCreatorInfo from "./SurveyCreatorInfo";
+import SurveyActions from "./SurveyActions";
 
 interface SurveyCardProps {
   survey: SurveyResponse;
-  isOwner?: boolean;
+  allowOwnerOptions?: boolean;
   onDelete?: (id: number) => void;
 }
 
-const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) => {
+const SurveyCard: React.FC<SurveyCardProps> = ({ survey, allowOwnerOptions, onDelete }) => {
   const [openRatingModal, setOpenRatingModal] = useState(false);
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
-  const { verifySession, isAuthenticated } = useAuthContext();
+  const { isAuthenticated, verifySession } = useAuthContext();
   const navigate = useNavigate();
 
   const handleOpenRatingModal = () => setOpenRatingModal(true);
@@ -66,33 +60,28 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
 
   return (
     <div className="w-full pb-5 min-h-[520px]">
-      <div className=" max-md:h-48 h-52 flex-none bg-cover rounded-t text-center overflow-hidden"
-        style={{ backgroundImage: "url('https://plus.unsplash.com/premium_photo-1673306778968-5aab577a7365?fm=jpg&q=60&w=3000&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8YmFja2dyb3VuZCUyMGltYWdlfDB8fDB8fHww')" }}
-        title="Portada de la encuesta"
+      <Link
+        to={`/surveys/${survey.id}`}
+        onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}
       >
-      </div>
+        <div className="max-sm:h-64 h-72 w-full bg-gray-300 flex-none bg-cover rounded-t text-center overflow-hidden">
+          <figure className="w-full h-full flex justify-center items-center">
+            <img
+              src={survey.pictureUrl || imageNotAvailable}
+              alt="Portada de la encuesta"
+              className="w-full h-full object-fill"
+            />
+          </figure>
+        </div>
+      </Link>
       <div className="relative min-h-72 shadow-xl bg-white rounded-b p-4 flex flex-col justify-between leading-normal">
-        {isOwner && (
-          <div className="absolute top-2 right-1 flex space-x-2">
-            <div onClick={downloadAnswersReport} className="cursor-pointer h-8 w-8 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden"
-              style={{ backgroundImage: `url(${ExcelIcon})` }}
-              title="Exportar a Excel"
-            >
-            </div>
-            <Link title="Ver Respuestas" to={`/${survey.creatorUsername}/surveys/${survey.id}/participations`}>
-              <IconButton aria-label="view" size="small">
-                <VisibilityIcon fontSize="small" />
-              </IconButton>
-            </Link>
-            <Link title="Editar" to={`/${survey.creatorUsername}/surveys/${survey.id}`}>
-              <IconButton aria-label="edit" size="small">
-                <EditIcon fontSize="small" />
-              </IconButton>
-            </Link>
-            <IconButton onClick={() => handleDelete(survey.id)} aria-label="delete" title="Eliminar" size="small">
-              <DeleteIcon fontSize="small" />
-            </IconButton>
-          </div>
+        {allowOwnerOptions && (
+          <SurveyOwnerOptions
+            key={survey.id}
+            survey={survey}
+            onDownloadAnswersReport={downloadAnswersReport}
+            onDelete={handleDelete}
+          />
         )}
         <div className="mb-6 mt-2">
           {!isAuthenticated && (
@@ -103,64 +92,25 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, isOwner, onDelete }) =>
               Members only
             </p>
           )}
-          <div className="text-gray-900 font-bold text-xl mb-2 mt-4 md:line-clamp-1">
-            <p>{survey.title}</p>
-          </div>
+          <Link
+            to={`/surveys/${survey.id}`}
+            onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}
+            className="hover:underline inline-block"
+          >
+            <div className="text-gray-900 font-bold text-xl mb-2 mt-4 md:line-clamp-1">
+              <p>{survey.title}</p>
+            </div>
+          </Link>
           <p className="text-gray-700 text-base line-clamp-2">
             {survey.description}
           </p>
         </div>
-        <div className="flex">
-          <Link to={`/${survey.creatorUsername}`} className="inline-block">
-            <img
-              src={survey?.creatorProfilePicture || NoProfilePictureBlackIcon}
-              alt={`${survey.creatorFullName}'s profile picture`}
-              className="w-10 h-10 rounded-full mr-4"
-            />
-          </Link>
-          <div className="text-sm">
-            <Link to={`/${survey.creatorUsername}`} className="inline-block">
-              <p className="text-gray-900 hover:underline">{survey.creatorFullName}</p>
-            </Link>
-            <div>
-              <span className="text-gray-600 text-sm flex items-center">
-                Rating:
-                <Rating
-                  name="read-only"
-                  className="mr-1 sm:mr-2"
-                  size="small"
-                  value={survey.averageRating}
-                  readOnly
-                  precision={0.5}
-                />
-                <span>({survey.ratingCount})</span>
-              </span>
-            </div>
-          </div>
-        </div>
-        <div className="pt-4 flex justify-around">
-          <Link to={`/surveys/${survey.id}`} onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}>
-            <button className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300">
-              <ChecklistRtlIcon className="mr-1" />
-              <span className="hidden md:inline md:text-base">Responder</span>
-            </button>
-          </Link>
-
-          <Link to={`/surveys/${survey.id}/reviews`} onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}>
-            <button className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300">
-              <ReviewsIcon className="mr-1" />
-              <span className="hidden md:inline md:text-base">Reseñas</span>
-            </button>
-          </Link>
-
-          <button
-            className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300"
-            onClick={(e) => verifySession(e, handleOpenErrorModal, handleOpenRatingModal)}
-          >
-            <StarRateIcon className="mr-1" />
-            <span className="hidden md:inline md:text-base">Valorar</span>
-          </button>
-        </div>
+        <SurveyCreatorInfo survey={survey} />
+        <SurveyActions
+          survey={survey}
+          handleOpenErrorModal={handleOpenErrorModal}
+          handleOpenRatingModal={handleOpenRatingModal}
+        />
       </div>
       <RatingModal
         open={openRatingModal}

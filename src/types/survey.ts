@@ -1,28 +1,29 @@
 import {Question} from "./question";
 import {User} from "./user";
 
-export interface SurveySubmission {
-  id?: number;
+export interface BaseSurvey {
   title: string;
   description: string;
+  pictureUrl?: string;
+}
+
+export interface SurveySubmission extends BaseSurvey {
+  id?: number;
   creator?: User;
+  questions: Question[];
   averageRating?: number;
   ratingCount?: number;
   creationDate?: string;
-  questions: Question[];
   picture?: File;
 }
 
-export interface SurveyResponse {
+export interface SurveyResponse extends BaseSurvey {
   id: number;
-  title: string;
-  description: string;
   creatorFullName: string;
   creatorUsername: string;
   creatorProfilePicture?: string;
   averageRating: number;
   ratingCount: number;
-  pictureUrl?: string;
 }
 
 export interface SurveyPagedResponse {

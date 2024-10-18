@@ -8,9 +8,11 @@ const useFetchSurveysByCurrentUser = (page: number, size: number) => {
   const [openErrorTemplate, setOpenErrorTemplate] = useState(false);
   const [currentPage, setCurrentPage] = useState(page);
   const [totalPages, setTotalPages] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchSurveys = async () => {
+      setLoading(true);
       try {
         const response = await getSurveysByCurrentUserWithPaging(page, size);
         setSurveys(response.surveys);
@@ -22,13 +24,15 @@ const useFetchSurveysByCurrentUser = (page: number, size: number) => {
           setErrorMessage(errorMessage);
           setOpenErrorTemplate(true);
         });
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchSurveys();
   }, [page]);
 
-  return { surveys, errorMessage, openErrorTemplate, setSurveys, setOpenErrorTemplate, currentPage, totalPages };
+  return { surveys, errorMessage, openErrorTemplate, setSurveys, setOpenErrorTemplate, currentPage, totalPages, loading };
 };
 
 export default useFetchSurveysByCurrentUser;
