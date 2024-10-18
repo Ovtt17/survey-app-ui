@@ -58,6 +58,7 @@ const UserSurveys = () => {
                 <div key={index} className="w-full sm:w-1/2 p-2">
                   <SurveyCard
                     survey={survey}
+                    allowOwnerOptions
                     onDelete={handleSurveyDeleted}
                   />
                 </div>

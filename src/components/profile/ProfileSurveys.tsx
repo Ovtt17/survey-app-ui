@@ -40,6 +40,7 @@ const ProfileSurveys: FC<ProfileSurveysProps> = ({ }) => {
                 <SurveyCard
                   key={survey.id}
                   survey={survey}
+                  allowOwnerOptions
                   onDelete={handleSurveyDeleted}
                 />
               ))}
