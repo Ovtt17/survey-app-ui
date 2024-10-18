@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { SurveyResponse } from "../../types/survey";
 import RatingModal from '../rating/RatingModal';
-import Rating from '@mui/material/Rating';
 import { deleteSurvey } from "../../services/surveyService";
 import { createRating } from "../../services/ratingService";
 import { downloadReportWithSurvey } from "../../services/reportService";
@@ -12,9 +11,9 @@ import ErrorModal from "../error/ErrorModal";
 import ReviewsIcon from '@mui/icons-material/Reviews';
 import StarRateIcon from '@mui/icons-material/StarRate';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
-import NoProfilePictureBlackIcon from '../../assets/no-profile-picture-bg-black.svg';
 import imageNotAvailable from '../../assets/Image_not_available.png';
 import SurveyOwnerOptions from "./SurveyOwnerOptions";
+import SurveyCreatorInfo from "./SurveyCreatorInfo";
 
 interface SurveyCardProps {
   survey: SurveyResponse;
@@ -94,34 +93,7 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onDelete }) => {
             {survey.description}
           </p>
         </div>
-        <div className="flex">
-          <Link to={`/${survey.creatorUsername}`} className="inline-block">
-            <img
-              src={survey?.creatorProfilePicture || NoProfilePictureBlackIcon}
-              alt={`${survey.creatorFullName}'s profile picture`}
-              className="w-10 h-10 rounded-full mr-4"
-            />
-          </Link>
-          <div className="text-sm">
-            <Link to={`/${survey.creatorUsername}`} className="inline-block">
-              <p className="text-gray-900 hover:underline">{survey.creatorFullName}</p>
-            </Link>
-            <div>
-              <span className="text-gray-600 text-sm flex items-center">
-                Rating:
-                <Rating
-                  name="read-only"
-                  className="mr-1 sm:mr-2"
-                  size="small"
-                  value={survey.averageRating}
-                  readOnly
-                  precision={0.5}
-                />
-                <span>({survey.ratingCount})</span>
-              </span>
-            </div>
-          </div>
-        </div>
+        <SurveyCreatorInfo survey={survey} />
         <div className="pt-4 flex justify-around">
           <Link to={`/surveys/${survey.id}`} onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}>
             <button className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300">
