@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SurveyResponse } from "../../types/survey";
 import RatingModal from '../rating/RatingModal';
 import { deleteSurvey } from "../../services/surveyService";
@@ -22,7 +22,7 @@ interface SurveyCardProps {
 const SurveyCard: React.FC<SurveyCardProps> = ({ survey, allowOwnerOptions, onDelete }) => {
   const [openRatingModal, setOpenRatingModal] = useState(false);
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
-  const { isAuthenticated } = useAuthContext();
+  const { isAuthenticated, verifySession } = useAuthContext();
   const navigate = useNavigate();
 
   const handleOpenRatingModal = () => setOpenRatingModal(true);
@@ -60,15 +60,20 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, allowOwnerOptions, onDe
 
   return (
     <div className="w-full pb-5 min-h-[520px]">
-      <div className="max-sm:h-64 h-72 w-full bg-gray-300 flex-none bg-cover rounded-t text-center overflow-hidden">
-        <figure className="w-full h-full flex justify-center items-center">
-          <img
-            src={survey.pictureUrl || imageNotAvailable}
-            alt="Portada de la encuesta"
-            className="w-full h-full object-fill"
-          />
-        </figure>
-      </div>
+      <Link
+        to={`/surveys/${survey.id}`}
+        onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}
+      >
+        <div className="max-sm:h-64 h-72 w-full bg-gray-300 flex-none bg-cover rounded-t text-center overflow-hidden">
+          <figure className="w-full h-full flex justify-center items-center">
+            <img
+              src={survey.pictureUrl || imageNotAvailable}
+              alt="Portada de la encuesta"
+              className="w-full h-full object-fill"
+            />
+          </figure>
+        </div>
+      </Link>
       <div className="relative min-h-72 shadow-xl bg-white rounded-b p-4 flex flex-col justify-between leading-normal">
         {allowOwnerOptions && (
           <SurveyOwnerOptions
@@ -87,9 +92,15 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, allowOwnerOptions, onDe
               Members only
             </p>
           )}
-          <div className="text-gray-900 font-bold text-xl mb-2 mt-4 md:line-clamp-1">
-            <p>{survey.title}</p>
-          </div>
+          <Link
+            to={`/surveys/${survey.id}`}
+            onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}
+            className="hover:underline inline-block"
+          >
+            <div className="text-gray-900 font-bold text-xl mb-2 mt-4 md:line-clamp-1">
+              <p>{survey.title}</p>
+            </div>
+          </Link>
           <p className="text-gray-700 text-base line-clamp-2">
             {survey.description}
           </p>
