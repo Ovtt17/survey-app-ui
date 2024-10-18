@@ -10,9 +10,9 @@ const UserMenuDropDown = ({ }) => {
       {isAuthenticated ? (
         <>
           <MenuItem>
-            <Link to={`/${user?.username}`} className="block w-full h-full px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+            <a href={`/${user?.username}`} className="block w-full h-full px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
               Perfil
-            </Link>
+            </a>
           </MenuItem>
           <MenuItem>
             <Link to={`/${user?.username}/surveys`} className="block w-full h-full px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
