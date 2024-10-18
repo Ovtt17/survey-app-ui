@@ -37,7 +37,8 @@ const AnswerSurvey = () => {
     });
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
     if (survey) {
       const unanswered = survey.questions
         .filter((question) => !answers.some((a) => a.questionId === question.id))
@@ -49,6 +50,8 @@ const AnswerSurvey = () => {
         window.scrollTo(0, 0);
         return;
       }
+      setError('');
+      setUnansweredQuestions([]);
     }
 
     try {
@@ -100,17 +103,19 @@ const AnswerSurvey = () => {
       ) : (
         <>
           <SurveyDetails survey={survey} />
-          <QuestionsToAnswerList
-            survey={survey}
-            answers={answers}
-            unansweredQuestions={unansweredQuestions}
-            handleAnswerChange={handleAnswerChange}
-          />
-          <div className='flex justify-end items-end'>
-            <Button variant='contained' color='success' onClick={handleSubmit}>
-              ENVIAR
-            </Button>
-          </div>
+          <form onSubmit={handleSubmit}>
+            <QuestionsToAnswerList
+              survey={survey}
+              answers={answers}
+              unansweredQuestions={unansweredQuestions}
+              handleAnswerChange={handleAnswerChange}
+            />
+            <div className='flex justify-end items-end'>
+              <Button variant='contained' color='success' type='submit'>
+                ENVIAR
+              </Button>
+            </div>
+          </form>
           <RatingModal
             open={ratingModalOpen}
             onClose={() => setRatingModalOpen(false)}
