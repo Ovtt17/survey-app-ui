@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
 import useFetchSurveysByCurrentUser from '../../hooks/useFetchSurveysByCurrentUser';
-import ProfileSurveyCard from './ProfileSurveyCard';
 import { useParams } from 'react-router-dom';
 import { useAuthContext } from '../../context/AuthContext';
 import useFetchSurveysByUsername from '../../hooks/useFetchSurveysByUsername';
 import { Pagination } from '@mui/material';
+import SurveyCard from '../survey/SurveyCard';
 
 interface ProfileSurveysProps {
 
@@ -22,8 +22,12 @@ const ProfileSurveys: FC<ProfileSurveysProps> = ({ }) => {
   const isOwner = isProfileOwner(username!);
   const surveysHook = isOwner ? useFetchSurveysByCurrentUser(page, pageSize) : useFetchSurveysByUsername(username as string, page, pageSize);
 
-  const { surveys, openErrorTemplate, totalPages } = surveysHook;
+  const { surveys, setSurveys, openErrorTemplate, totalPages } = surveysHook;
   const hasSurveys = surveys.length > 0;
+
+  const handleSurveyDeleted = (id: number) => {
+    setSurveys(prevSurveys => prevSurveys.filter(survey => survey.id !== id));
+  }
 
   return (
     <div className="w-full h-full md:w-2/3 p-4 flex flex-col">
@@ -33,7 +37,12 @@ const ProfileSurveys: FC<ProfileSurveysProps> = ({ }) => {
           <div className="flex-grow">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {surveys.map((survey) => (
-                <ProfileSurveyCard key={survey.id} survey={survey} />
+                <SurveyCard
+                  key={survey.id}
+                  survey={survey}
+                  isOwner={isOwner}
+                  onDelete={handleSurveyDeleted}
+                />
               ))}
             </div>
           </div>
