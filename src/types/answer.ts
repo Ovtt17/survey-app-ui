@@ -1,9 +1,11 @@
-export interface Answer {
-  id?: number;
+interface BaseAnswer {
   surveyId: number;
-  surveyTitle?: string;
   questionId: number;
-  questionText?: string;
   answerText: string;
-  participationId?: number;
+}
+export interface Answer extends BaseAnswer {
+  id?: number;
+}
+
+export interface NewAnswer extends BaseAnswer {
 }
