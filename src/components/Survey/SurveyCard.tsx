@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { SurveyResponse } from "../../types/survey";
 import RatingModal from '../rating/RatingModal';
 import { deleteSurvey } from "../../services/surveyService";
@@ -8,12 +8,10 @@ import { downloadReportWithSurvey } from "../../services/reportService";
 import { reports } from "../../data/Reports";
 import { useAuthContext } from "../../context/AuthContext";
 import ErrorModal from "../error/ErrorModal";
-import ReviewsIcon from '@mui/icons-material/Reviews';
-import StarRateIcon from '@mui/icons-material/StarRate';
-import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
 import imageNotAvailable from '../../assets/Image_not_available.png';
 import SurveyOwnerOptions from "./SurveyOwnerOptions";
 import SurveyCreatorInfo from "./SurveyCreatorInfo";
+import SurveyActions from "./SurveyActions";
 
 interface SurveyCardProps {
   survey: SurveyResponse;
@@ -23,7 +21,7 @@ interface SurveyCardProps {
 const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onDelete }) => {
   const [openRatingModal, setOpenRatingModal] = useState(false);
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
-  const { verifySession, isAuthenticated } = useAuthContext();
+  const { isAuthenticated } = useAuthContext();
   const navigate = useNavigate();
 
   const handleOpenRatingModal = () => setOpenRatingModal(true);
@@ -94,29 +92,11 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onDelete }) => {
           </p>
         </div>
         <SurveyCreatorInfo survey={survey} />
-        <div className="pt-4 flex justify-around">
-          <Link to={`/surveys/${survey.id}`} onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}>
-            <button className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300">
-              <ChecklistRtlIcon className="mr-1" />
-              <span className="hidden md:inline md:text-base">Responder</span>
-            </button>
-          </Link>
-
-          <Link to={`/surveys/${survey.id}/reviews`} onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}>
-            <button className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300">
-              <ReviewsIcon className="mr-1" />
-              <span className="hidden md:inline md:text-base">Reseñas</span>
-            </button>
-          </Link>
-
-          <button
-            className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300"
-            onClick={(e) => verifySession(e, handleOpenErrorModal, handleOpenRatingModal)}
-          >
-            <StarRateIcon className="mr-1" />
-            <span className="hidden md:inline md:text-base">Valorar</span>
-          </button>
-        </div>
+        <SurveyActions
+          survey={survey}
+          handleOpenErrorModal={handleOpenErrorModal}
+          handleOpenRatingModal={handleOpenRatingModal}
+        />
       </div>
       <RatingModal
         open={openRatingModal}
