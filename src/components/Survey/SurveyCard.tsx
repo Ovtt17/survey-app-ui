@@ -15,10 +15,11 @@ import SurveyActions from "./SurveyActions";
 
 interface SurveyCardProps {
   survey: SurveyResponse;
+  allowOwnerOptions?: boolean;
   onDelete?: (id: number) => void;
 }
 
-const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onDelete }) => {
+const SurveyCard: React.FC<SurveyCardProps> = ({ survey, allowOwnerOptions, onDelete }) => {
   const [openRatingModal, setOpenRatingModal] = useState(false);
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
   const { isAuthenticated } = useAuthContext();
@@ -69,12 +70,14 @@ const SurveyCard: React.FC<SurveyCardProps> = ({ survey, onDelete }) => {
         </figure>
       </div>
       <div className="relative min-h-72 shadow-xl bg-white rounded-b p-4 flex flex-col justify-between leading-normal">
-        <SurveyOwnerOptions
-          key={survey.id}
-          survey={survey}
-          onDownloadAnswersReport={downloadAnswersReport}
-          onDelete={handleDelete}
-        />
+        {allowOwnerOptions && (
+          <SurveyOwnerOptions
+            key={survey.id}
+            survey={survey}
+            onDownloadAnswersReport={downloadAnswersReport}
+            onDelete={handleDelete}
+          />
+        )}
         <div className="mb-6 mt-2">
           {!isAuthenticated && (
             <p className="text-sm text-gray-600 flex items-center">
