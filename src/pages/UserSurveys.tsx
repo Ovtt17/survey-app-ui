@@ -6,12 +6,24 @@ import useFetchSurveysByCurrentUser from "../hooks/useFetchSurveysByCurrentUser"
 import { useState } from "react";
 import { Pagination } from "@mui/material";
 import LoadingComponent from "../components/loadings/LoadingComponent";
+import CreateSurveyButton from "../components/buttons/CreateSurveyButton";
+import ErrorModal from "../components/error/ErrorModal";
 
 const UserSurveys = () => {
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [page, setPage] = useState(1);
   const pageSize = 6;
+  const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
+
+  const handleOpenErrorModal = () => {
+    setOpenErrorModal(true);
+  };
+  const handleConfirmLogin = () => {
+    setOpenErrorModal(false);
+    navigate("/login");
+  };
+
   const handleSurveyPageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
@@ -73,6 +85,15 @@ const UserSurveys = () => {
               onChange={handleSurveyPageChange}
             />
           </div>
+            <CreateSurveyButton handleOpenErrorModal={() => handleOpenErrorModal} />
+            <ErrorModal
+              open={openErrorModal}
+              setOpen={setOpenErrorModal}
+              title="Error"
+              message="Para realizar esta acción es necesario iniciar sesión"
+              confirmText="Iniciar Sesión"
+              onConfirm={handleConfirmLogin}
+            />
         </div>
       ) : (
         <ErrorTemplate
