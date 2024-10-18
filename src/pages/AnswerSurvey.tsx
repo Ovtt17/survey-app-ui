@@ -1,30 +1,28 @@
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Container from '@mui/material/Container';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
-import { SurveySubmission } from '../types/survey';
-import { getSurveyByIdForSubmission } from '../services/surveyService';
-import { Answer } from '../types/answer';
+import { NewAnswer } from '../types/answer';
 import { createAnswer } from '../services/answerService';
 import RatingModal from '../components/rating/RatingModal';
 import { createRating } from '../services/ratingService';
 import SurveyDetails from '../components/answer/SurveyDetails';
 import QuestionsToAnswerList from '../components/answer/QuestionsToAnswerList';
+import useFetchSurveyToAnswer from '../hooks/useFetchSurveyToAnswer';
 
 const AnswerSurvey = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
-  const [survey, setSurvey] = useState<SurveySubmission | null>(null);
-  const [answers, setAnswers] = useState<Answer[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [answers, setAnswers] = useState<NewAnswer[]>([]);
   const [success, setSuccess] = useState<boolean>(false);
   const [unansweredQuestions, setUnansweredQuestions] = useState<number[]>([]);
   const [ratingModalOpen, setRatingModalOpen] = useState<boolean>(false);
   const [shouldScroll, setShouldScroll] = useState<boolean>(false);
-  const handleAnswerChange = (questionId: number, answer: Answer) => {
+
+  const { survey, loading, error, setError } = useFetchSurveyToAnswer();
+
+  const handleAnswerChange = (questionId: number, answer: NewAnswer) => {
     setAnswers((prevAnswers) => {
       const existingAnswerIndex = prevAnswers.findIndex(
         (a) => a.questionId === questionId
@@ -80,27 +78,6 @@ const AnswerSurvey = () => {
       setShouldScroll(false);
     }
   }, [ratingModalOpen, shouldScroll]);
-
-  useEffect(() => {
-    const fetchSurvey = async () => {
-      if (!id) {
-        setError('No surveyId provided');
-        setLoading(false);
-        return;
-      }
-
-      try {
-        const fetchedSurvey = await getSurveyByIdForSubmission(id);
-        setSurvey(fetchedSurvey);
-      } catch (error) {
-        setError('Error fetching survey');
-        console.error('Error fetching survey:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSurvey();
-  }, [id]);
 
   if (loading) {
     return (
