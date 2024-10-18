@@ -9,10 +9,14 @@ import { SurveySubmission } from '../types/survey';
 import { getSurveyByIdForSubmission } from '../services/surveyService';
 import { Answer } from '../types/answer';
 import { createAnswer } from '../services/answerService';
-import Rating from '@mui/material/Rating';
 import RatingModal from '../components/rating/RatingModal';
 import { createRating } from '../services/ratingService';
 import AnswerCard from '../components/answer/AnswerCard';
+import SurveyCreatorInfo from '../components/survey/SurveyCreatorInfo';
+import dayjs from 'dayjs';
+import 'dayjs/locale/es';
+
+dayjs.locale('es');
 
 const AnswerSurvey = () => {
   const navigate = useNavigate();
@@ -25,7 +29,6 @@ const AnswerSurvey = () => {
   const [unansweredQuestions, setUnansweredQuestions] = useState<number[]>([]);
   const [ratingModalOpen, setRatingModalOpen] = useState<boolean>(false);
   const [shouldScroll, setShouldScroll] = useState<boolean>(false);
-
   const handleAnswerChange = (questionId: number, answer: Answer) => {
     setAnswers((prevAnswers) => {
       const existingAnswerIndex = prevAnswers.findIndex(
@@ -124,24 +127,13 @@ const AnswerSurvey = () => {
         <Alert severity="warning">No se encontró ninguna encuesta</Alert>
       ) : (
         <>
-          <div className="flex items-center pb-5">
-            <img className="w-10 h-10 rounded-full mr-4" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt={`Avatar of ${survey.creator}`} />
-            <div className="text-sm">
-              <p className="text-gray-900">{survey.creator?.firstName} {survey.creator?.lastName}</p>
-              <div>
-                <span className=" text-gray-600 flex items-center">
-                  Rating:
-                  <Rating
-                    name="read-only ml-1"
-                    size="small"
-                    value={survey.averageRating}
-                    readOnly
-                    precision={0.5}
-                  />
-                </span>
-              </div>
-            </div>
-          </div>
+          <SurveyCreatorInfo survey={{
+            creatorFullName: survey.creator?.fullName || '',
+            creatorUsername: survey.creator?.username || '',
+            creatorProfilePicture: survey.creator?.profilePictureUrl || '',
+            averageRating: survey.averageRating || 0,
+            ratingCount: survey.ratingCount || 0,
+          }} />
           <Typography variant="h4" gutterBottom>
             {survey.title}
           </Typography>
@@ -150,7 +142,7 @@ const AnswerSurvey = () => {
           </Typography>
           {survey.creationDate && (
             <Typography variant="subtitle1" gutterBottom>
-              <b>Creation Date:</b> {survey.creationDate}
+              <b>Fecha de creación:</b> {dayjs(survey.creationDate).format('MMMM D, YYYY h:mm A')}
             </Typography>
           )}
           <div>
