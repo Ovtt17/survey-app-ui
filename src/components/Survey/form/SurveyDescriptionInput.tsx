@@ -1,5 +1,5 @@
 import { useFormContext } from 'react-hook-form';
-import { validationRules } from '../../data/validationRules';
+import { validationRules } from '../../../data/validationRules';
 
 const SurveyDescriptionInput = () => {
     const { register, formState: { errors } } = useFormContext();

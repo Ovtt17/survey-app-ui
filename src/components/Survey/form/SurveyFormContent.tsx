@@ -1,15 +1,15 @@
 import React, { FC } from 'react';
 import SurveyTitleInput from './SurveyTitleInput';
 import SurveyDescriptionInput from './SurveyDescriptionInput';
-import AccordionList from '../accordion/AccordionList';
+import AccordionList from '../../accordion/AccordionList';
 import SubmitSurveyButton from './SubmitSurveyButton';
 import { FieldArrayWithId } from 'react-hook-form';
-import useFetchSurveyById from '../../hooks/useFetchSurveyById.ts';
-import { SurveySubmission } from '../../types/survey.ts';
-import ErrorTemplate from '../error/ErrorTemplate.tsx';
+import useFetchSurveyById from '../../../hooks/useFetchSurveyById.ts';
+import { SurveySubmission } from '../../../types/survey.ts';
+import ErrorTemplate from '../../error/ErrorTemplate.tsx';
 import { useNavigate } from 'react-router-dom';
-import LoadingComponent from '../loadings/LoadingComponent.tsx';
-import { useAuthContext } from '../../context/AuthContext.tsx';
+import LoadingComponent from '../../loadings/LoadingComponent.tsx';
+import { useAuthContext } from '../../../context/AuthContext.tsx';
 import ImageUpload from './ImageUpload.tsx';
 
 interface SurveyFormContentProps {
