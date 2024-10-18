@@ -53,8 +53,8 @@ const AnswerSurvey = () => {
 
     try {
       await createAnswer(answers);
-      setSuccess(true);
       setRatingModalOpen(true);
+      setSuccess(true);
       setShouldScroll(true);
     } catch {
       setError('Error al responder la encuesta.');
