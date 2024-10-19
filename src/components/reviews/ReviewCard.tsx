@@ -3,6 +3,7 @@ import { Review } from "../../types/review";
 import { Rating } from "@mui/material";
 import '../../styles/reviews.css'
 import NoProfilePictureBlackIcon from '../../assets/no-profile-picture-bg-black.svg';
+import { Link } from "react-router-dom";
 
 interface ReviewCardProps {
   review: Review;
@@ -28,11 +29,13 @@ const ReviewCard: FC<ReviewCardProps> = ({ review }) => {
             <h3 className="font-manrope font-semibold text-2xl sm:text-3xl leading-tight text-gray-800 mb-4">{review.title}</h3>
             <div className="flex sm:items-center flex-col sm:flex-row justify-between gap-4 mb-6">
               <div className="flex items-center gap-4">
-                <img
-                  src={review.authorPicture || NoProfilePictureBlackIcon}
-                  alt="user image"
-                  className="w-10 h-10 rounded-full shadow-md"
-                />
+                <Link to={`/${review.author}`}>
+                  <img
+                    src={review.authorPicture || NoProfilePictureBlackIcon}
+                    alt="user image"
+                    className="w-10 h-10 rounded-full shadow-md"
+                  />
+                </Link>
                 <h6 className="font-semibold text-lg leading-6 text-indigo-600">@{review.author}</h6>
               </div>
               <p className="font-normal text-md leading-6 text-gray-500">{formattedDate}</p>
