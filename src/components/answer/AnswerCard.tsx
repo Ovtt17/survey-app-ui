@@ -7,7 +7,6 @@ import {
   Radio,
   Typography,
   TextField,
-  Paper,
 } from '@mui/material';
 import { Question } from '../../types/question';
 import { Answer } from '../../types/answer';
@@ -37,8 +36,7 @@ const AnswerCard: FC<AnswerCardProps> = ({
   };
 
   return (
-    <Paper
-      elevation={3}
+    <div
       className={`my-5 p-5 ${unansweredQuestions.includes(question.id || 0) ? 'bg-red-100 border-red-500' : 'bg-slate-200'}`}
     >
       <FormControl component="fieldset" fullWidth>
@@ -80,7 +78,7 @@ const AnswerCard: FC<AnswerCardProps> = ({
           )}
         </RadioGroup>
       </FormControl>
-    </Paper>
+    </div>
   );
 };
 

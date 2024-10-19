@@ -7,7 +7,7 @@ import { RadioGroup } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { Question } from '../../types/question';
 import { QuestionType } from '../../types/questionType';
-import { validationRules } from '../../data/validationRules';
+import { surveyValidationRules } from '../../data/validationRules';
 
 interface OptionListProps {
   questionIndex: number;
@@ -43,7 +43,7 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
   }, [requestCorrectAnswer, options, setValue, questionIndex]);
 
   useEffect(() => {
-    const validationResult = validationRules.options.validate(watchedOptions, questionType, requestCorrectAnswer);
+    const validationResult = surveyValidationRules.options.validate(watchedOptions, questionType, requestCorrectAnswer);
     if (validationResult !== true) {
       setError(`questions.${questionIndex}.options`, { type: 'manual', message: validationResult });
     } else {

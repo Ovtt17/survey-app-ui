@@ -1,7 +1,7 @@
 import React from 'react';
 import IconButton from '@mui/material/IconButton';
 import Remove from '@mui/icons-material/Remove';
-import { validationRules } from '../../data/validationRules';
+import { surveyValidationRules } from '../../data/validationRules';
 import { useFormContext } from 'react-hook-form';
 import { Question } from '../../types/question';
 import { FormControl, FormControlLabel, Radio } from '@mui/material';
@@ -34,7 +34,7 @@ const OptionItem: React.FC<OptionItemProps> = ({
           type="text"
           placeholder={`Opción ${optionIndex + 1}`}
           className="border p-2 rounded w-full"
-          {...register(`questions.${questionIndex}.options.${optionIndex}.text`, validationRules.optionText)}
+          {...register(`questions.${questionIndex}.options.${optionIndex}.text`, surveyValidationRules.optionText)}
         />
         <IconButton color="secondary" onClick={removeOption}>
           <Remove />
