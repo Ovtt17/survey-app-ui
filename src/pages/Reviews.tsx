@@ -38,7 +38,7 @@ const Reviews = () => {
 
   return (
     <div className="border-2 p-10 rounded-md">
-      <h2 className="font-manrope font-bold text-4xl text-black mb-8 text-center">
+      <h2 className="font-bold text-4xl text-black mb-8 text-center">
         Reseñas de la encuesta
       </h2>
       <div className="pt-8">
