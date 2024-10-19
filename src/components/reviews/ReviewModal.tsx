@@ -1,31 +1,54 @@
 import { Rating } from '@mui/material';
-import React from 'react';
+import React, { useState } from 'react';
+import { NewReview, Review } from '../../types/review';
+import { saveReview } from '../../services/reviewService';
+import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface ReviewModalProps {
-  newReview: {
-    title: string;
-    content: string;
-    rating: {
-      rating: number;
-    };
-  };
-  handleInputChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  surveyId: number;
+  reviews: Review[];
+  setReviews: React.Dispatch<React.SetStateAction<Review[]>>;
   handleCloseModal: () => void;
-  handleSubmitReview: () => void;
-  setNewReview: (review: any) => void;
-  isLoading: boolean;
-  error: string | null;
 }
 
 const ReviewModal: React.FC<ReviewModalProps> = ({
-  newReview,
-  handleInputChange,
+  surveyId,
+  reviews,
+  setReviews,
   handleCloseModal,
-  handleSubmitReview,
-  setNewReview,
-  isLoading,
-  error
 }) => {
+  const defaultReview: NewReview = {
+    title: "",
+    content: "",
+    surveyId: surveyId,
+    rating: {
+      rating: 0,
+      surveyId: surveyId,
+    }
+  }
+
+  const { register, handleSubmit, setValue, watch, formState: { errors } } = useForm<NewReview>({
+    defaultValues: defaultReview,
+  });
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const onSubmit: SubmitHandler<NewReview> = async (review) => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const savedReview = await saveReview(review);
+      setReviews([...reviews, savedReview]);
+      handleCloseModal();
+    } catch (error) {
+      setError("Hubo un error al guardar la reseña");
+      console.error("Failed to save review", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <div id="subscribe-form-modal" className="fixed inset-0 bg-gray-600 bg-opacity-50 z-50 flex justify-center items-center">
       <div className="bg-white rounded-2xl py-4 px-5 w-3/4">
@@ -37,56 +60,48 @@ const ReviewModal: React.FC<ReviewModalProps> = ({
             </svg>
           </button>
         </div>
-        <div className="py-4">
+        <form onSubmit={handleSubmit(onSubmit)} className="py-4">
           <div className="mb-4">
             <label className="block text-gray-600 text-sm font-medium">Title</label>
             <input
               type="text"
-              name="title"
-              value={newReview.title}
-              onChange={handleInputChange}
+              {...register("title", { required: "El título es obligatorio." })}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md"
               placeholder="Enter title"
             />
+            {errors.title && <span className="text-red-500 text-sm">{errors.title.message}</span>}
           </div>
           <div className="mb-4">
             <label className="block text-gray-600 text-sm font-medium">Content</label>
             <textarea
-              name="content"
-              value={newReview.content}
-              onChange={handleInputChange}
+              {...register("content", { required: "El contenido de la reseña es obligatorio" })}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md"
               placeholder="Enter content"
             />
+            {errors.content && <span className="text-red-500 text-sm">{errors.content.message}</span>}
           </div>
           <div className="mb-4">
             <span className="text-gray-600 flex items-center">
               Rating:
               <Rating
                 onChange={(_, newValue) => {
-                  setNewReview({
-                    ...newReview,
-                    rating: {
-                      ...newReview.rating,
-                      rating: newValue || 0,
-                    }
-                  });
+                  setValue("rating.rating", newValue || 0);
                 }}
                 name="read-only ml-1"
                 size="small"
-                value={newReview.rating.rating}
+                value={watch("rating.rating")}
                 precision={0.5}
               />
             </span>
           </div>
-        </div>
-        <div className="flex items-center justify-end pt-4 border-t border-gray-200 space-x-4">
-          <button type="button" className="py-2.5 px-5 text-xs bg-indigo-50 text-indigo-500 rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-indigo-100" onClick={handleCloseModal}>Cancel</button>
-          <button type="button" className="py-2.5 px-5 text-xs bg-indigo-500 text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-indigo-700" onClick={handleSubmitReview} disabled={isLoading}>
-            {isLoading ? "Submitting..." : "Submit"}
-          </button>
-        </div>
-        {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+          <div className="flex items-center justify-end pt-4 border-t border-gray-200 space-x-4">
+            <button type="button" className="py-2.5 px-5 text-xs bg-indigo-50 text-indigo-500 rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-indigo-100" onClick={handleCloseModal}>Cancel</button>
+            <button type="submit" className="py-2.5 px-5 text-xs bg-indigo-500 text-white rounded-full cursor-pointer font-semibold text-center shadow-xs transition-all duration-500 hover:bg-indigo-700" disabled={isLoading}>
+              {isLoading ? "Submitting..." : "Submit"}
+            </button>
+          </div>
+          {error && <div className="text-red-500 text-sm mt-2">{error}</div>}
+        </form>
       </div>
     </div>
   );

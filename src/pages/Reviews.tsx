@@ -1,8 +1,8 @@
 import ReviewCard from "../components/reviews/ReviewCard";
 import { ReviewSummary } from "../components/reviews/ReviewSummary";
 import { useEffect, useState } from "react";
-import { NewReview, Review } from "../types/review";
-import { getReviews, saveReview } from "../services/reviewService";
+import { Review } from "../types/review";
+import { getReviews } from "../services/reviewService";
 import { useParams } from "react-router-dom";
 import ReviewModal from "../components/reviews/ReviewModal";
 import CreateButton from "../components/buttons/CreateButton";
@@ -11,19 +11,6 @@ const Reviews = () => {
   const { id: surveyId } = useParams<{ id: string }>();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const defaultReview: NewReview = {
-    title: "",
-    content: "",
-    surveyId: Number(surveyId),
-    rating: {
-      rating: 0,
-      surveyId: Number(surveyId),
-    }
-  }
-  const [newReview, setNewReview] = useState<NewReview>(defaultReview);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -43,26 +30,6 @@ const Reviews = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setNewReview(defaultReview);
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setNewReview({ ...newReview, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmitReview = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      const savedReview = await saveReview(newReview);
-      setReviews([...reviews, savedReview]);
-      handleCloseModal();
-    } catch (error) {
-      setError("Failed to save review");
-      console.error("Failed to save review", error);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
@@ -75,7 +42,7 @@ const Reviews = () => {
       </div>
       <div>
         {reviews.map((review) => (
-          <ReviewCard key={review.id} review={review} />
+          <ReviewCard review={review} />
         ))}
       </div>
       <div className="fixed bottom-10 right-10">
@@ -83,13 +50,10 @@ const Reviews = () => {
       </div>
       {isModalOpen && (
         <ReviewModal
-          newReview={newReview}
-          handleInputChange={handleInputChange}
+          surveyId={Number(surveyId)}
+          reviews={reviews}
+          setReviews={setReviews}
           handleCloseModal={handleCloseModal}
-          handleSubmitReview={handleSubmitReview}
-          setNewReview={setNewReview}
-          isLoading={isLoading}
-          error={error}
         />
       )}
     </div>
