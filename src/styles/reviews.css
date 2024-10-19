@@ -1,0 +1,15 @@
+@keyframes scaleUp {
+  0% {
+    transform: scale(0.9);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(0.9);
+  }
+}
+
+.animate-rating {
+  animation: scaleUp 1.5s ease-in-out infinite;
+}

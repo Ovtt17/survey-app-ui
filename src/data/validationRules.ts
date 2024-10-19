@@ -1,7 +1,7 @@
 import { QuestionOption } from "../types/questionOption";
 import { QuestionType } from "../types/questionType";
 
-export const validationRules = {
+export const surveyValidationRules = {
   questionText: {
     required: 'El encabezado de la pregunta es obligatoria.',
     minLength: {

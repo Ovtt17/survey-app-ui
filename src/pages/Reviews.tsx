@@ -1,7 +1,7 @@
 import ReviewCard from "../components/reviews/ReviewCard";
 import { ReviewSummary } from "../components/reviews/ReviewSummary";
 import { useEffect, useState } from "react";
-import { Review } from "../types/review";
+import { NewReview, Review } from "../types/review";
 import { getReviews, saveReview } from "../services/reviewService";
 import { useParams } from "react-router-dom";
 import ReviewModal from "../components/reviews/ReviewModal";
@@ -12,7 +12,7 @@ const Reviews = () => {
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const defaultReview: Review = {
+  const defaultReview: NewReview = {
     title: "",
     content: "",
     surveyId: Number(surveyId),
@@ -21,7 +21,7 @@ const Reviews = () => {
       surveyId: Number(surveyId),
     }
   }
-  const [newReview, setNewReview] = useState<Review>(defaultReview);
+  const [newReview, setNewReview] = useState<NewReview>(defaultReview);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -54,8 +54,8 @@ const Reviews = () => {
     setIsLoading(true);
     setError(null);
     try {
-      await saveReview(newReview);
-      setReviews([...reviews, newReview]);
+      const savedReview = await saveReview(newReview);
+      setReviews([...reviews, savedReview]);
       handleCloseModal();
     } catch (error) {
       setError("Failed to save review");

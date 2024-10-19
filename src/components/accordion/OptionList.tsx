@@ -7,7 +7,7 @@ import { RadioGroup } from '@mui/material';
 import { useFormContext } from 'react-hook-form';
 import { Question } from '../../types/question';
 import { QuestionType } from '../../types/questionType';
-import { validationRules } from '../../data/validationRules';
+import { surveyValidationRules } from '../../data/validationRules';
 
 interface OptionListProps {
   questionIndex: number;
@@ -23,23 +23,27 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
   }>();
   const [selectedCorrectOption, setSelectedCorrectOption] = useState<number | null>(null);
   const questionType = watch(`questions.${questionIndex}.type`) as QuestionType;
-
   const watchedOptions = watch(`questions.${questionIndex}.options`);
 
   useEffect(() => {
-    if (!requestCorrectAnswer) {
+    if (requestCorrectAnswer) {
+      const currentCorrectOption = options.findIndex(option => option.isCorrect);
+      if (currentCorrectOption !== -1) {
+        setSelectedCorrectOption(currentCorrectOption);
+      } else if (options.length > 0) {
+        setSelectedCorrectOption(0);
+        setValue(`questions.${questionIndex}.options.0.isCorrect`, true);
+      }
+    } else {
       options.forEach((_, i) => {
         setValue(`questions.${questionIndex}.options.${i}.isCorrect`, false);
       });
       setSelectedCorrectOption(null);
-    } else if (selectedCorrectOption === null && options.length > 0) {
-      setSelectedCorrectOption(0);
-      setValue(`questions.${questionIndex}.options.0.isCorrect`, true);
     }
-  }, [requestCorrectAnswer]);
+  }, [requestCorrectAnswer, options, setValue, questionIndex]);
 
   useEffect(() => {
-    const validationResult = validationRules.options.validate(watchedOptions, questionType, requestCorrectAnswer);
+    const validationResult = surveyValidationRules.options.validate(watchedOptions, questionType, requestCorrectAnswer);
     if (validationResult !== true) {
       setError(`questions.${questionIndex}.options`, { type: 'manual', message: validationResult });
     } else {

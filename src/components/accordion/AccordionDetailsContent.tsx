@@ -1,7 +1,7 @@
 import { useFormContext, Controller, useFieldArray } from 'react-hook-form';
 import OptionList from './OptionList';
 import { Typography, Select, MenuItem, FormControlLabel, Checkbox } from '@mui/material';
-import { validationRules } from '../../data/validationRules';
+import { surveyValidationRules } from '../../data/validationRules';
 import { QuestionType } from '../../types/questionType';
 import { Question } from '../../types/question';
 
@@ -30,7 +30,7 @@ const AccordionDetailsContent: React.FC<AccordionDetailsContentProps> = ({ quest
           type="text"
           placeholder="Texto de la Pregunta"
           className="w-full border border-gray-300 rounded-lg p-3"
-          {...register(`questions.${questionIndex}.text`, validationRules.questionText)}
+          {...register(`questions.${questionIndex}.text`, surveyValidationRules.questionText)}
         />
         {errors.questions?.[questionIndex]?.text && (
           <span className="text-red-500">{errors.questions[questionIndex].text.message}</span>

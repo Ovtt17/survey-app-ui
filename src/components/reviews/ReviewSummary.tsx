@@ -5,6 +5,7 @@ import { getRatingGroupBySurveyId } from '../../services/ratingService';
 import {SurveyResponse} from '../../types/survey';
 import { Rating } from '@mui/material';
 import RatingBar from '../rating/RatingBar';
+import '../../styles/reviews.css';
 
 interface ReviewSummaryProps {
   surveyId: number;
@@ -53,6 +54,7 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({ surveyId }) => {
             value={survey?.averageRating || 0}
             readOnly
             precision={0.5}
+            className='animate-rating'
           />
         </div>
         <p className="font-medium text-xl leading-8 text-gray-900 text-center">{survey?.ratingCount} Ratings</p>

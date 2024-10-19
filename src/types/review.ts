@@ -1,11 +1,17 @@
 import { Rating } from "./rating";
 
-export interface Review {
-  id?: number;
+interface BaseReview {
   title: string;
   content: string;
   surveyId: number;
-  author?: string;
   rating: Rating;
+}
+
+export interface NewReview extends BaseReview {}
+
+export interface Review extends BaseReview {
+  id?: number;
+  authorUsername: string;
+  authorPicture?: string;
   createdDate?: string;
 }

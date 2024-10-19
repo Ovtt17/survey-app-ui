@@ -8,6 +8,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import AnswersInfoModal from "../answer/AnswersInfoModal";
 import { Answer } from "../../types/answer";
 import { getAnswersBySurveyIdAndUserId } from "../../services/answerService";
+import NoProfilePictureBlackIcon from '../../assets/no-profile-picture-bg-black.svg';
 
 
 const SurveyParticipations = () => {
@@ -58,8 +59,9 @@ const SurveyParticipations = () => {
           <TableHead>
             <TableRow>
               <TableCell align="center" style={{ backgroundColor: '#1f2937', color: 'white', fontWeight: 'bold' }}>Id Participación</TableCell>
-              <TableCell align="center" style={{ backgroundColor: '#1f2937', color: 'white', fontWeight: 'bold' }}>Username</TableCell>
-              <TableCell align="center" style={{ backgroundColor: '#1f2937', color: 'white', fontWeight: 'bold' }}>Fecha de participacion</TableCell>
+              <TableCell align="center" style={{ backgroundColor: '#1f2937', color: 'white', fontWeight: 'bold' }}>Foto de Perfil</TableCell>
+              <TableCell align="center" style={{ backgroundColor: '#1f2937', color: 'white', fontWeight: 'bold' }}>Nombre de Usuario</TableCell>
+              <TableCell align="center" style={{ backgroundColor: '#1f2937', color: 'white', fontWeight: 'bold' }}>Fecha de participación</TableCell>
               <TableCell align="center" style={{ backgroundColor: '#1f2937', color: 'white', fontWeight: 'bold' }}>Acción</TableCell>
             </TableRow>
           </TableHead>
@@ -67,10 +69,23 @@ const SurveyParticipations = () => {
             {participations.map((p) => (
               <TableRow key={p.id}>
                 <TableCell align="center">{p.id}</TableCell>
+                <TableCell align="center"
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                  }}
+                >
+                  <img
+                    src={p.profilePictureUrl ? p.profilePictureUrl : NoProfilePictureBlackIcon}
+                    alt="profile_picture"
+                    className="h-10 w-10 rounded-full"
+                  />
+                </TableCell>
                 <TableCell align="center">{p.username}</TableCell>
                 <TableCell align="center">{dayjs(p.participatedDate).format("DD-MM-YYYY HH:mm:ss")}</TableCell>
                 <TableCell align="center">
-                  <IconButton onClick={() => handleModalAnswers (p.surveyId, p.userId, p.id)} aria-label="view" size="small">
+                  <IconButton onClick={() => handleModalAnswers(p.surveyId, p.userId, p.id)} aria-label="view" size="small">
                     <VisibilityIcon fontSize="medium" color="success" />
                   </IconButton>
                 </TableCell>

@@ -5,7 +5,7 @@ import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
 import { SurveySubmission } from '../types/survey.ts';
 import { surveyDefault } from '../data/SurveyDefault.ts';
 import { createSurvey, updateSurvey } from '../services/surveyService.ts';
-import SurveyFormContent from '../components/survey/SurveyFormContent.tsx';
+import SurveyFormContent from '../components/survey/form/SurveyFormContent.tsx';
 import SuccessModal from '../components/modals/SuccessModal.tsx';
 import ProccessingModal from '../components/modals/ProccessingModal.tsx';
 

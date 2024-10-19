@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { useFormContext } from 'react-hook-form';
-import { isValidImageFormat } from '../../utils/imageUtils';
+import { isValidImageFormat } from '../../../utils/imageUtils';
 
 const ImageUpload: React.FC = () => {
   const { register, setValue, getValues } = useFormContext();
