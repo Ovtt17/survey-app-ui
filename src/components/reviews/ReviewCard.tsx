@@ -29,15 +29,15 @@ const ReviewCard: FC<ReviewCardProps> = ({ review }) => {
             <h3 className="font-manrope font-semibold text-2xl sm:text-3xl leading-tight text-gray-800 mb-4">{review.title}</h3>
             <div className="flex sm:items-center flex-col sm:flex-row justify-between gap-4 mb-6">
               <div className="flex items-center gap-4">
-                <Link to={`/${review.author}`}>
+                <Link to={`/${review.authorUsername}`}>
                   <img
                     src={review.authorPicture || NoProfilePictureBlackIcon}
                     alt="user image"
                     className="w-10 h-10 rounded-full shadow-md"
                   />
                 </Link>
-                <Link to={`/${review.author}`} className="hover:underline">
-                  <h6 className="font-semibold text-lg leading-6 text-indigo-600">@{review.author}</h6>
+                <Link to={`/${review.authorUsername}`} className="hover:underline">
+                  <h6 className="font-semibold text-lg leading-6 text-indigo-600">@{review.authorUsername}</h6>
                 </Link>
               </div>
               <p className="font-normal text-md leading-6 text-gray-500">{formattedDate}</p>
