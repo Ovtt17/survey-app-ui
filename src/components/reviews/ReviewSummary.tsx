@@ -3,7 +3,7 @@ import { getSurveyById } from '../../services/surveyService';
 import { RatingGroup } from '../../types/rating';
 import { getRatingGroupBySurveyId } from '../../services/ratingService';
 import {SurveyResponse} from '../../types/survey';
-import { Rating } from '@mui/material';
+import Rating from '@mui/material/Rating';
 import RatingBar from '../rating/RatingBar';
 import '../../styles/reviews.css';
 
@@ -30,7 +30,7 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({ surveyId }) => {
   return (
     <div className="grid grid-cols-1 xl:grid-cols-2 gap-11 pb-11 border-b border-gray-100 max-xl:max-w-2xl max-xl:mx-auto">
       {/* Rating Count */}
-      <div className="box flex flex-col gap-y-4 w-full ">
+      <div className="box flex flex-col gap-y-4 w-full min-h-52">
         {
           ratings.map((rating) => (
             <RatingBar
@@ -43,10 +43,10 @@ export const ReviewSummary: FC<ReviewSummaryProps> = ({ surveyId }) => {
         }
       </div>
       {/* Rating average */}
-      <div className="p-8 bg-amber-50 rounded-3xl flex items-center justify-center flex-col">
-        <h2 className="font-manrope font-bold text-5xl text-amber-400 mb-6">
+      <div className="p-8 bg-amber-50 rounded-3xl flex items-center justify-center flex-col min-h-52">
+        <h3 className="font-bold text-5xl text-amber-400 mb-6">
           {survey?.averageRating}
-        </h2>
+        </h3>
         <div className="flex items-center justify-center gap-2 sm:gap-6 mb-4">
           <Rating
             name="read-only"
