@@ -6,6 +6,7 @@ export interface Review {
   content: string;
   surveyId: number;
   author?: string;
+  authorPicture: string;
   rating: Rating;
   createdDate?: string;
 }
