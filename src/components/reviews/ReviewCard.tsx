@@ -36,7 +36,9 @@ const ReviewCard: FC<ReviewCardProps> = ({ review }) => {
                     className="w-10 h-10 rounded-full shadow-md"
                   />
                 </Link>
-                <h6 className="font-semibold text-lg leading-6 text-indigo-600">@{review.author}</h6>
+                <Link to={`/${review.author}`} className="hover:underline">
+                  <h6 className="font-semibold text-lg leading-6 text-indigo-600">@{review.author}</h6>
+                </Link>
               </div>
               <p className="font-normal text-md leading-6 text-gray-500">{formattedDate}</p>
             </div>
