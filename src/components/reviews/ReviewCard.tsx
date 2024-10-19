@@ -2,6 +2,7 @@ import { FC } from "react";
 import { Review } from "../../types/review";
 import { Rating } from "@mui/material";
 import '../../styles/reviews.css'
+import NoProfilePictureBlackIcon from '../../assets/no-profile-picture-bg-black.svg';
 
 interface ReviewCardProps {
   review: Review;
@@ -18,7 +19,7 @@ const ReviewCard: FC<ReviewCardProps> = ({ review }) => {
     : 'Date not available';
 
   return (
-    <section className="py-8 relative bg-white shadow-lg rounded-lg">
+    <section className="my-8 py-4 relative bg-white shadow-lg rounded-lg">
       <div className="w-full max-w-4xl px-6 md:px-8 lg:px-10 mx-auto">
         <div className="w-full">
           {/* ReviewCard component */}
@@ -27,7 +28,11 @@ const ReviewCard: FC<ReviewCardProps> = ({ review }) => {
             <h3 className="font-manrope font-semibold text-2xl sm:text-3xl leading-tight text-gray-800 mb-4">{review.title}</h3>
             <div className="flex sm:items-center flex-col sm:flex-row justify-between gap-4 mb-6">
               <div className="flex items-center gap-4">
-                <img src="https://pagedone.io/asset/uploads/1704349572.png" alt="user image" className="w-10 h-10 rounded-full shadow-md" />
+                <img
+                  src={review.authorPicture || NoProfilePictureBlackIcon}
+                  alt="user image"
+                  className="w-10 h-10 rounded-full shadow-md"
+                />
                 <h6 className="font-semibold text-lg leading-6 text-indigo-600">@{review.author}</h6>
               </div>
               <p className="font-normal text-md leading-6 text-gray-500">{formattedDate}</p>
