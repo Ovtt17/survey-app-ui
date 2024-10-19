@@ -1,10 +1,10 @@
 import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 interface GradientCircularProgressProps {
-  size: number;
+  size?: number;
 }
 
-const GradientCircularProgress: React.FC<GradientCircularProgressProps> = ({ size }) => {
+const GradientCircularProgress: React.FC<GradientCircularProgressProps> = ({ size =180 }) => {
   return (
     <React.Fragment>
       <svg width={0} height={0}>

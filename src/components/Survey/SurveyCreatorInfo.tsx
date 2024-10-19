@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Link } from 'react-router-dom';
 import NoProfilePictureBlackIcon from '../../assets/no-profile-picture-bg-black.svg';
-import { Rating } from '@mui/material';
+import Rating from '@mui/material/Rating';
 
 interface SurveyCreatorInfoProps {
   survey: {

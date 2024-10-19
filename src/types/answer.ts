@@ -5,6 +5,7 @@ interface BaseAnswer {
 }
 export interface Answer extends BaseAnswer {
   id?: number;
+  questionText?: string;
 }
 
 export interface NewAnswer extends BaseAnswer {
