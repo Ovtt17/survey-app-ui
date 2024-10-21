@@ -2,6 +2,7 @@ import {lazy, Suspense} from 'react';
 import {Route, Routes} from 'react-router-dom';
 import {SurveyProvider} from '../context/SurveyContext.tsx';
 import LoadingComponent from '../components/loadings/LoadingComponent';
+import NotFound from '../components/error/NotFound.tsx';
 
 const Home = lazy(() => import('../pages/Home'));
 const AnswerSurvey = lazy(() => import('../pages/AnswerSurvey'));
@@ -76,6 +77,8 @@ const AppRoutes = () => {
 
         {/* Report Routes */}
         <Route path={ROUTES.REPORTS} element={<Report />} />
+
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
   );
