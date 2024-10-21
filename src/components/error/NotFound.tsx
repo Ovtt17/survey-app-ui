@@ -1,10 +1,15 @@
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import NotFoundAnimation from "../../assets/lottie/NotFoundAnimation.lottie";
 import { Link } from "react-router-dom";
+import { FC } from "react";
 
-const NotFound = () => {
+interface NotFoundProps {
+  errorMessage?: string;
+}
+
+const NotFound: FC<NotFoundProps> = ({ errorMessage }) => {
   return (
-    <div className="flex flex-col justify-center items-center text-center gap-2 sm:gap-4">
+    <div className="absolute inset-0 z-50 bg-midnight-black text-white flex flex-col justify-center items-center text-center gap-2 sm:gap-4">
       <DotLottieReact
         src={NotFoundAnimation}
         loop
@@ -14,11 +19,11 @@ const NotFound = () => {
       <h1 className="text-2xl font-bold sm:text-3xl md:text-4xl leading-snug text-blue-gray-900">
         OOPS!
       </h1>
-      <p className="text-base sm:text-lg md:text-xl text-gray-500">
-        Esta no es la página que buscas
+      <p className="text-base sm:text-lg md:text-xl">
+        {errorMessage || 'Esta no es la página que buscas'}
       </p>
       <Link to='/'>
-        <button className="px-4 py-2 bg-midnight-black text-white rounded md:w-[10rem]">
+        <button className="px-4 py-2 bg-blue-500 rounded md:w-[10rem]">
           volver al inicio
         </button>
       </Link>
