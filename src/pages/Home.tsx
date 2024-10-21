@@ -1,12 +1,11 @@
 import { useState } from "react";
-import SurveyCard from "../components/survey/SurveyCard";
 import CreateSurveyButton from "../components/buttons/CreateSurveyButton";
 import ErrorModal from "../components/error/ErrorModal";
 import { useNavigate } from "react-router-dom";
 import useFetchSurveys from "../hooks/useFetchSurveys";
-import { Pagination } from "@mui/material";
 import ErrorTemplate from "../components/error/ErrorTemplate";
 import LoadingComponent from "../components/loadings/LoadingComponent";
+import SurveyList from "../components/survey/SurveyList";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -50,20 +49,11 @@ const Home = () => {
       <div className="App flex flex-col items-center">
         {thereAreSurveys ? (
           <>
-            <div className="flex flex-wrap justify-start">
-              {surveys?.map((survey, index) => (
-                <div key={index} className="w-full md:w-1/2 p-2">
-                  <SurveyCard survey={survey} />
-                </div>
-              ))}
-            </div>
-            <Pagination
-              count={totalPages}
+            <SurveyList
+              surveys={surveys}
+              totalPages={totalPages}
               page={page}
-              onChange={handleSurveyPageChange}
-              color="primary"
-              size="large"
-              className="my-5"
+              onPageChange={handleSurveyPageChange}
             />
           </>
         ) : (
