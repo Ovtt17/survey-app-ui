@@ -32,6 +32,9 @@ export const getUserByUsername = async (username: string): Promise<User> => {
       method: 'GET',
       headers: getHeaders()
     });
+    if (response.status === 404) {
+      throw new Error(`User ${username} not found`);
+    }
     if (!response.ok) {
       throw new Error(`Failed to fetch data for user ${username}: ${response.statusText}`);
     }
