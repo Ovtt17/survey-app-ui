@@ -20,14 +20,14 @@ const SurveyActions: React.FC<SurveyActionsProps> = ({ survey, handleOpenErrorMo
       <Link to={`/surveys/${survey.id}`} onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}>
         <button className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300">
           <ChecklistRtlIcon className="mr-1" />
-          <span className="hidden md:inline md:text-base">Responder</span>
+          <span className="hidden xl:inline xl:text-base">Responder</span>
         </button>
       </Link>
 
       <Link to={`/surveys/${survey.id}/reviews`} onClick={(e) => verifySession(e, handleOpenErrorModal, () => { })}>
         <button className="flex items-center text-gray-600 hover:bg-gray-200 px-3 py-2 rounded transition duration-300">
           <ReviewsIcon className="mr-1" />
-          <span className="hidden md:inline md:text-base">Reseñas</span>
+          <span className="hidden xl:inline xl:text-base">Reseñas</span>
         </button>
       </Link>
 
@@ -36,7 +36,7 @@ const SurveyActions: React.FC<SurveyActionsProps> = ({ survey, handleOpenErrorMo
         onClick={(e) => verifySession(e, handleOpenErrorModal, handleOpenRatingModal)}
       >
         <StarRateIcon className="mr-1" />
-        <span className="hidden md:inline md:text-base">Valorar</span>
+        <span className="hidden xl:inline xl:text-base">Valorar</span>
       </button>
     </div>
   );
