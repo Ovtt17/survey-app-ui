@@ -25,7 +25,7 @@ const ProfileSurveys = () => {
   }
 
   return (
-    <div className="w-full h-full md:w-2/3 p-4 flex flex-col">
+    <div className="w-full h-full lg:w-2/3 p-4 flex flex-col">
       <h2 className="text-xl font-semibold mb-4 border-b-2">Encuestas</h2>
       {hasSurveys ? (
         <>

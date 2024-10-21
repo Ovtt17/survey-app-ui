@@ -24,7 +24,7 @@ const Profile = () => {
   };
 
   return (
-    <section className="w-full h-full flex flex-col justify-center md:flex-row gap-4 md:gap-0 p-2 md:p-5">
+    <section className="w-full h-full flex flex-col justify-center lg:flex-row gap-4 lg:gap-0 p-2 lg:p-5">
       {isAuthenticated ? (
         <>
           <ProfileAside />
