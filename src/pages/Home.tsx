@@ -6,13 +6,19 @@ import useFetchSurveys from "../hooks/useFetchSurveys";
 import ErrorTemplate from "../components/error/ErrorTemplate";
 import LoadingComponent from "../components/loadings/LoadingComponent";
 import SurveyList from "../components/survey/SurveyList";
+import NotFound from "../components/error/NotFound";
 
 const Home = () => {
   const navigate = useNavigate();
   const [page, setPage] = useState(1);
   const pageSize = 6;
   const [openErrorModal, setOpenErrorModal] = useState<boolean>(false);
-  const { surveys, errorMessage, openErrorTemplate, setOpenErrorTemplate, totalPages, loading } = useFetchSurveys(page, pageSize);
+  const {
+    surveys,
+    error,
+    totalPages,
+    loading
+  } = useFetchSurveys(page, pageSize);
   const thereAreSurveys = surveys.length > 0;
 
   const handleOpenErrorModal = () => {
@@ -32,16 +38,8 @@ const Home = () => {
     return <LoadingComponent />;
   }
 
-  if (openErrorTemplate) {
-    <ErrorTemplate
-      title="Encuestas no encontradas."
-      message={errorMessage}
-      buttonText="Recargar la página"
-      onButtonClick={() => {
-        setOpenErrorTemplate(false);
-        navigate("/");
-      }}
-    />
+  if (error) {
+    return <NotFound errorMessage={error} />;
   }
 
   return (
