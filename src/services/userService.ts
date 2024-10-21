@@ -1,3 +1,4 @@
+import { ExceptionResponse } from "../types/ExceptionResponse";
 import { User } from "../types/user";
 import { getToken } from "../utils/auth";
 
@@ -32,16 +33,14 @@ export const getUserByUsername = async (username: string): Promise<User> => {
       method: 'GET',
       headers: getHeaders()
     });
-    if (response.status === 404) {
-      throw new Error(`User ${username} not found`);
-    }
     if (!response.ok) {
-      throw new Error(`Failed to fetch data for user ${username}: ${response.statusText}`);
+      const errorResponse: ExceptionResponse = await response.json();
+      throw new Error(errorResponse.businessErrorDescription || 'An unexpected error occurred. Please try again later.');
     }
     const user: User = await response.json();
     return user;
-  } catch (error) {
+  } catch (error: any) {
     console.error(`Error fetching data for user ${username}:`, error);
-    throw new Error(`An error occurred while fetching data for user ${username}. Please try again later.`);
+    throw new Error(error.message || 'An unexpected error occurred. Please try again later.');
   }
 };
