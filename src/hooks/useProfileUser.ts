@@ -8,6 +8,8 @@ const useProfileUser = () => {
   const { username } = useParams<{ username: string }>();
   const { isProfileOwner, user } = useAuthContext();
   const [profileUser, setProfileUser] = useState<User | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   const isOwner = isProfileOwner(username!);
 
@@ -17,17 +19,21 @@ const useProfileUser = () => {
         try {
           const fetchedUser = await getUserByUsername(username!);
           setProfileUser(fetchedUser);
-        } catch (error) {
-          console.error(`Error fetching data for user ${username}:`, error);
+        } catch (error: any) {
+          console.error(error);
+          setError(error.message);
+        } finally {
+          setLoading(false);
         }
       };
       fetchUser();
     } else {
       setProfileUser(user);
+      setLoading(false);
     }
   }, [username]);
 
-  return { profileUser, isOwner };
+  return { profileUser, isOwner, error, loading };
 };
 
 export default useProfileUser;

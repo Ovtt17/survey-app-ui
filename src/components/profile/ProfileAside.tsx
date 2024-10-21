@@ -3,12 +3,14 @@ import useProfileUser from '../../hooks/useProfileUser';
 import NoProfilePictureWhiteIcon from '../../assets/no-profile-picture-bg-white.svg';
 import EditProfilePictureDropDown from './EditProfilePictureDropDown';
 import { useAuthContext } from '../../context/AuthContext';
+import NotFound from '../error/NotFound';
+import LoadingComponent from '../loadings/LoadingComponent';
 
 interface ProfileAsideProps {
 }
 
 const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
-  const { profileUser, isOwner } = useProfileUser();
+  const { profileUser, isOwner, error, loading } = useProfileUser();
   const { changeUser } = useAuthContext();
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | undefined>(profileUser?.profilePictureUrl);
 
@@ -23,6 +25,14 @@ const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
       changeUser(updatedUser);
     }
   };
+
+  if (loading) {
+    return <LoadingComponent />
+  }
+
+  if (error) {
+    return <NotFound errorMessage={error} />
+  }
 
   return (
     <aside className="w-full lg:w-1/5 lg:max-w-1/3 lg:pb-6">
