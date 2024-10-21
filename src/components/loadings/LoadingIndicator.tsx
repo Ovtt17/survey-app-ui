@@ -3,7 +3,7 @@ import LoadingAnimation from '../../assets/lottie/LoadingAnimation.lottie';
 
 const LoadingIndicator = () => {
   return (
-    <div className="flex flex-col items-center gap-2 text-midnight-blackd"
+    <div className="flex flex-col items-center gap-2 text-midnight-black"
       aria-live="assertive"
       aria-busy="true"
     >
