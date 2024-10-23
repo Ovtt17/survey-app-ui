@@ -3,9 +3,9 @@ import CreateSurveyButton from "../components/buttons/CreateSurveyButton";
 import ErrorModal from "../components/error/ErrorModal";
 import { useNavigate } from "react-router-dom";
 import useFetchSurveys from "../hooks/useFetchSurveys";
-import LoadingComponent from "../components/loadings/LoadingComponent";
 import SurveyList from "../components/survey/SurveyList";
 import NotFound from "../components/error/NotFound";
+import SurveysGlimmer from "../components/loadings/SurveysGlimmer";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -34,35 +34,35 @@ const Home = () => {
   };
 
   if (loading) {
-    return <LoadingComponent />;
+    return (
+      <div className="App flex flex-col items-center">
+        <SurveysGlimmer />
+      </div>
+    )
   }
 
   return (
-    <>
-      <div className="App flex flex-col items-center">
-        {thereAreSurveys ? (
-          <>
-            <SurveyList
-              surveys={surveys}
-              totalPages={totalPages}
-              page={page}
-              onPageChange={handleSurveyPageChange}
-            />
-          </>
-        ) : (
-          <NotFound errorMessage={error} />
-        )}
-        <CreateSurveyButton handleOpenErrorModal={handleOpenErrorModal} />
-        <ErrorModal
-          open={openErrorModal}
-          setOpen={setOpenErrorModal}
-          title="Error"
-          message="Para realizar esta acción es necesario iniciar sesión"
-          confirmText="Iniciar Sesión"
-          onConfirm={handleConfirmLogin}
+    <div className="flex flex-col justify-center">
+      {thereAreSurveys ? (
+        <SurveyList
+          surveys={surveys}
+          totalPages={totalPages}
+          page={page}
+          onPageChange={handleSurveyPageChange}
         />
-      </div>
-    </>
+      ) : (
+        <NotFound errorMessage={error} />
+      )}
+      <CreateSurveyButton handleOpenErrorModal={handleOpenErrorModal} />
+      <ErrorModal
+        open={openErrorModal}
+        setOpen={setOpenErrorModal}
+        title="Error"
+        message="Para realizar esta acción es necesario iniciar sesión"
+        confirmText="Iniciar Sesión"
+        onConfirm={handleConfirmLogin}
+      />
+    </div>
   );
 };
 
