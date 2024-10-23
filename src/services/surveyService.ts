@@ -27,9 +27,7 @@ const getHeaders = () => ({
 
 const handleErrorResponse = async (response: Response) => {
   const errorData: ExceptionResponse = await response.json();
-  const error = new Error(errorData.businessErrorDescription || 'Error desconocido');
-  (error as any).status = response.status;
-  throw error;
+  throw new Error(errorData.businessErrorDescription || 'Error desconocido');
 };
 
 const fetchWithHandling = async (url: string, options: RequestInit) => {
