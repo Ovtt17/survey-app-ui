@@ -17,15 +17,15 @@ const useFetchSurveys = (page: number, size: number) => {
         setSurveys(response.surveys);
         setCurrentPage(response.page + 1);
         setTotalPages(response.totalPages);
-      } catch (error: any) {
-        setError(error.message);
+      } catch (error: unknown) {
+        setError((error as Error).message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchSurveys();
-  }, [page]);
+  }, [page, size]);
 
   return { surveys, error, currentPage, totalPages, loading };
 };
