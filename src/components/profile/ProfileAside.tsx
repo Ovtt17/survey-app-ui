@@ -1,16 +1,17 @@
 import { FC, useEffect, useState } from 'react';
-import useProfileUser from '../../hooks/useProfileUser';
 import NoProfilePictureWhiteIcon from '../../assets/no-profile-picture-bg-white.svg';
 import EditProfilePictureDropDown from './EditProfilePictureDropDown';
 import { useAuthContext } from '../../context/AuthContext';
-import NotFound from '../error/NotFound';
-import LoadingComponent from '../loadings/LoadingComponent';
+import { ProfileInfoGlimmer } from '../loadings/ProfileInfoGlimmer';
+import { User } from '../../types/user';
 
 interface ProfileAsideProps {
+  profileUser: User | null;
+  isOwner: boolean;
+  loading: boolean;
 }
 
-const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
-  const { profileUser, isOwner, error, loading } = useProfileUser();
+const ProfileAside: FC<ProfileAsideProps> = ({profileUser, isOwner, loading}) => {
   const { changeUser } = useAuthContext();
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | undefined>(profileUser?.profilePictureUrl);
 
@@ -27,11 +28,7 @@ const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
   };
 
   if (loading) {
-    return <LoadingComponent />
-  }
-
-  if (error) {
-    return <NotFound errorMessage={error} />
+    return <ProfileInfoGlimmer />
   }
 
   return (
