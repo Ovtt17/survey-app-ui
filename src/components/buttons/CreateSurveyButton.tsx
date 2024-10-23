@@ -18,7 +18,7 @@ const CreateSurveyButton: FC<CreateSurveyButtonProps> = ({ handleOpenErrorModal 
     <Link
       to='/surveys/create'
       onClick={handleClick}
-      className='fixed bottom-10 right-10'
+      className='fixed bottom-10 right-10 z-20'
     >
       <CreateButton />
     </Link>

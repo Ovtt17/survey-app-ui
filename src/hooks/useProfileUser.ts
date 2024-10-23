@@ -19,9 +19,9 @@ const useProfileUser = () => {
         try {
           const fetchedUser = await getUserByUsername(username!);
           setProfileUser(fetchedUser);
-        } catch (error: any) {
-          console.error(error);
-          setError(error.message);
+        } catch (error: unknown) {
+          console.error(error as Error);
+          setError((error as Error).message);
         } finally {
           setLoading(false);
         }
@@ -31,7 +31,7 @@ const useProfileUser = () => {
       setProfileUser(user);
       setLoading(false);
     }
-  }, [username]);
+  }, [username, isOwner, user]);
 
   return { profileUser, isOwner, error, loading };
 };
