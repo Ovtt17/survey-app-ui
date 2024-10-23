@@ -1,3 +1,4 @@
+import { ExceptionResponse } from "../types/ExceptionResponse";
 import { Participation } from "../types/participation";
 import { SurveyPagedResponse, SurveyResponse, SurveySubmission } from "../types/survey";
 import { getToken } from "../utils/auth";
@@ -25,10 +26,8 @@ const getHeaders = () => ({
 });
 
 const handleErrorResponse = async (response: Response) => {
-  const errorData = await response.json();
-  const error = new Error(errorData.businessErrorDescription || 'Error desconocido');
-  (error as any).status = response.status;
-  throw error;
+  const errorData: ExceptionResponse = await response.json();
+  throw new Error(errorData.error || 'Error desconocido');
 };
 
 const fetchWithHandling = async (url: string, options: RequestInit) => {

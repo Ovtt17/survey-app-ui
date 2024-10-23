@@ -1,4 +1,4 @@
-import {useSurveyContext} from '../context/SurveyContext.tsx';
+import { useSurveyContext } from '../context/SurveyContext.tsx';
 import { useAuthContext } from '../context/AuthContext.tsx';
 import { useState } from 'react';
 import { FormProvider, useFieldArray, useForm } from 'react-hook-form';
@@ -8,10 +8,13 @@ import { createSurvey, updateSurvey } from '../services/surveyService.ts';
 import SurveyFormContent from '../components/survey/form/SurveyFormContent.tsx';
 import SuccessModal from '../components/modals/SuccessModal.tsx';
 import ProccessingModal from '../components/modals/ProccessingModal.tsx';
+import ErrorTemplate from '../components/error/ErrorTemplate.tsx';
+import { useNavigate } from 'react-router-dom';
 
 const SurveyForm = () => {
+  const navigate = useNavigate();
   const { isSurveyEditable } = useSurveyContext();
-  const { user } = useAuthContext();
+  const { user, isAuthenticated } = useAuthContext();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [modalMessage, setModalMessage] = useState<string>('');
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -48,6 +51,19 @@ const SurveyForm = () => {
   const removeQuestion = (index: number) => {
     remove(index);
   };
+
+  if (!isAuthenticated) {
+    return (
+      <ErrorTemplate
+        title="No puedes acceder."
+        message="Debes iniciar sesión para crear una encuesta."
+        buttonText="Iniciar Sesión"
+        onButtonClick={() => {
+          navigate("/login");
+        }}
+      />
+    )
+  }
 
   return (
     <>

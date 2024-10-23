@@ -1,11 +1,10 @@
-import { useState, useEffect, startTransition } from "react";
+import { useState, useEffect } from "react";
 import {SurveyResponse} from "../types/survey";
 import { getSurveys } from "../services/surveyService";
 
 const useFetchSurveys = (page: number, size: number) => {
   const [surveys, setSurveys] = useState<SurveyResponse[]>([]);
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [openErrorTemplate, setOpenErrorTemplate] = useState(false);
+  const [error, setError] = useState<string>('');
   const [currentPage, setCurrentPage] = useState(page);
   const [totalPages, setTotalPages] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -18,21 +17,17 @@ const useFetchSurveys = (page: number, size: number) => {
         setSurveys(response.surveys);
         setCurrentPage(response.page + 1);
         setTotalPages(response.totalPages);
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'Error desconocido';
-        startTransition(() => {
-          setErrorMessage(errorMessage);
-          setOpenErrorTemplate(true);
-        });
+      } catch (error: unknown) {
+        setError((error as Error).message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchSurveys();
-  }, [page]);
+  }, [page, size]);
 
-  return { surveys, errorMessage, openErrorTemplate, setOpenErrorTemplate, currentPage, totalPages, loading };
+  return { surveys, error, currentPage, totalPages, loading };
 };
 
 export default useFetchSurveys;

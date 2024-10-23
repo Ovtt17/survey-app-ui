@@ -2,7 +2,7 @@ import { useRef, useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { login } from "../services/authService";
 import { useAuthContext } from '../context/AuthContext';
-import { SitemarkIcon } from '../icons/CustomIcons';
+import AppIcon from '../assets/app_icon.svg';
 import LoginForm from '../components/sign-in/LoginForm';
 import OrSeparator from '../components/sign-in/OrSeparator';
 import SocialLoginButtons from '../components/sign-in/SocialLoginButtons';
@@ -53,7 +53,7 @@ const Login = () => {
     <section className="flex min-h-screen flex-col justify-center items-center px-4 sm:px-6 lg:px-8">
       <div className={`w-full flex justify-center max-w-lg p-6 sm:p-8 bg-white rounded-md shadow-md transition-opacity duration-300 ${isLoading || isSuccess ? 'opacity-10' : ''}`}>
         <article className="flex flex-col gap-4 w-full max-w-sm">
-          <SitemarkIcon />
+          <img src={AppIcon} alt="App Icon" className="w-12 h-12" />
           <h2 className="text-start text-3xl font-bold leading-9 tracking-tight text-gray-900">
             Iniciar Sesión
           </h2>

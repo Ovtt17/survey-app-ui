@@ -7,6 +7,7 @@ import RegistrationForm from '../components/register/RegistrationForm';
 import { validateStep, verifyStepData } from '../auth/stepValidation';
 import { LinearProgress } from '@mui/material';
 import SuccessModal from '../components/modals/SuccessModal';
+import AppIcon from '../assets/app_icon.svg';
 
 const Register: FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -126,7 +127,7 @@ const Register: FC = () => {
               <article className="text-center lg:text-left">
                 <img
                   alt="Your Company"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                  src={AppIcon}
                   className="lg:absolute lg:top-10 lg:left-10 mx-auto lg:mx-0 h-10 w-auto mb-4"
                 />
                 <h2 className="text-3xl font-bold tracking-tight text-gray-900">
@@ -134,7 +135,7 @@ const Register: FC = () => {
                 </h2>
                 <p className="mt-2 text-md text-gray-600">
                   Completa la información para crear tu cuenta
-                  </p>
+                </p>
               </article>
               <article className="flex flex-col justify-between">
                 <RegistrationForm

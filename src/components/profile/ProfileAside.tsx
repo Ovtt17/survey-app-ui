@@ -1,14 +1,17 @@
 import { FC, useEffect, useState } from 'react';
-import useProfileUser from '../../hooks/useProfileUser';
 import NoProfilePictureWhiteIcon from '../../assets/no-profile-picture-bg-white.svg';
 import EditProfilePictureDropDown from './EditProfilePictureDropDown';
 import { useAuthContext } from '../../context/AuthContext';
+import { ProfileInfoGlimmer } from '../loadings/ProfileInfoGlimmer';
+import { User } from '../../types/user';
 
 interface ProfileAsideProps {
+  profileUser: User | null;
+  isOwner: boolean;
+  loading: boolean;
 }
 
-const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
-  const { profileUser, isOwner } = useProfileUser();
+const ProfileAside: FC<ProfileAsideProps> = ({profileUser, isOwner, loading}) => {
   const { changeUser } = useAuthContext();
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | undefined>(profileUser?.profilePictureUrl);
 
@@ -24,10 +27,14 @@ const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
     }
   };
 
+  if (loading) {
+    return <ProfileInfoGlimmer />
+  }
+
   return (
-    <aside className="w-full md:w-1/5 md:max-w-1/3 md:pb-6">
-      <div className="flex flex-col gap-6 items-center md:items-start">
-        <div className="relative flex justify-center w-full max-w-xs md:max-w-sm">
+    <aside className="w-full lg:w-1/5 lg:max-w-1/3 lg:pb-6">
+      <div className="flex flex-col gap-6 items-center lg:items-start">
+        <div className="relative flex justify-center w-full max-w-xs lg:max-w-sm">
           <img
             src={profilePictureUrl || NoProfilePictureWhiteIcon}
             alt="profile-picture"
@@ -39,7 +46,7 @@ const ProfileAside: FC<ProfileAsideProps> = ({ }) => {
           />
           }
         </div>
-        <div className="text-center md:text-left">
+        <div className="text-center lg:text-left">
           <p className="text-2xl font-bold mb-2">{profileUser?.fullName}</p>
           <p className="text-base text-gray-500">@{profileUser?.username}</p>
         </div>
