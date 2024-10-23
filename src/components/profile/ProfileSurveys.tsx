@@ -15,7 +15,10 @@ const ProfileSurveys = () => {
   };
 
   const isOwner = isProfileOwner(username!);
-  const surveysHook = isOwner ? useFetchSurveysByCurrentUser(page, pageSize) : useFetchSurveysByUsername(username as string, page, pageSize);
+  const surveysByCurrentUser = useFetchSurveysByCurrentUser(page, pageSize);
+  const surveysByUsername = useFetchSurveysByUsername(username as string, page, pageSize);
+
+  const surveysHook = isOwner ? surveysByCurrentUser : surveysByUsername;
 
   const { surveys, setSurveys, openErrorTemplate, totalPages } = surveysHook;
   const hasSurveys = surveys.length > 0;
