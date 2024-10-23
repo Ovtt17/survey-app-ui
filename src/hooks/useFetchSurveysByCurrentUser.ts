@@ -30,7 +30,7 @@ const useFetchSurveysByCurrentUser = (page: number, size: number) => {
     };
 
     fetchSurveys();
-  }, [page]);
+  }, [page, size]);
 
   return { surveys, errorMessage, openErrorTemplate, setSurveys, setOpenErrorTemplate, currentPage, totalPages, loading };
 };
