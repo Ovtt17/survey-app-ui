@@ -3,7 +3,6 @@ import CreateSurveyButton from "../components/buttons/CreateSurveyButton";
 import ErrorModal from "../components/error/ErrorModal";
 import { useNavigate } from "react-router-dom";
 import useFetchSurveys from "../hooks/useFetchSurveys";
-import ErrorTemplate from "../components/error/ErrorTemplate";
 import LoadingComponent from "../components/loadings/LoadingComponent";
 import SurveyList from "../components/survey/SurveyList";
 import NotFound from "../components/error/NotFound";
@@ -38,10 +37,6 @@ const Home = () => {
     return <LoadingComponent />;
   }
 
-  if (error) {
-    return <NotFound errorMessage={error} />;
-  }
-
   return (
     <>
       <div className="App flex flex-col items-center">
@@ -55,10 +50,7 @@ const Home = () => {
             />
           </>
         ) : (
-          <ErrorTemplate
-            title="No se encontraron encuestas"
-            message="Actualmente no hay encuestas disponibles. ¡Crea una nueva encuesta para empezar!"
-          />
+          <NotFound errorMessage={error} />
         )}
         <CreateSurveyButton handleOpenErrorModal={handleOpenErrorModal} />
         <ErrorModal
