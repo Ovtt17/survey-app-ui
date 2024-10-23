@@ -20,16 +20,14 @@ const SurveyList: FC<SurveyListProps> = ({
 }) => {
   return (
     <>
-      <div className="flex flex-wrap justify-start">
-        {surveys.map((survey, index) => (
-          <div key={index} className="w-full md:w-1/2 p-2">
-            <SurveyCard
-              key={survey.id}
-              survey={survey}
-              allowOwnerOptions={!!handleSurveyDeleted}
-              onDelete={handleSurveyDeleted}
-            />
-          </div>
+      <div className="w-full flex flex-wrap justify-center">
+        {surveys.map(survey => (
+          <SurveyCard
+            key={survey.id}
+            survey={survey}
+            allowOwnerOptions={!!handleSurveyDeleted}
+            onDelete={handleSurveyDeleted}
+          />
         ))}
       </div>
       <div className="flex justify-center mt-5 mb-16 md:my-0">

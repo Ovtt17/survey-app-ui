@@ -1,9 +1,6 @@
 const SurveysGlimmer = () => {
   return (
     <section className="w-full h-full lg:w-2/3 p-4 flex flex-col animate-pulse">
-      <header>
-        <h2 className="text-xl font-semibold mb-4 border-b-2">Encuestas</h2>
-      </header>
       <div className="flex flex-wrap justify-start">
         {Array.from({ length: 2 }).map((_, index) => (
           <article key={index} className="w-full md:w-1/2 p-2">
