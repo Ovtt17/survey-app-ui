@@ -11,7 +11,6 @@ const useFetchSurveysByCurrentUser = (page: number, size: number) => {
 
   useEffect(() => {
     const fetchSurveys = async () => {
-      setLoading(true);
       try {
         const response = await getSurveysByCurrentUserWithPaging(page, size);
         setSurveys(response.surveys);
