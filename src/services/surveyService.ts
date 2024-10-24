@@ -1,12 +1,16 @@
+import { AppError } from "../types/AppError";
+import { errorMappings } from "../constants/errorMappings";
 import { ExceptionResponse } from "../types/ExceptionResponse";
 import { Participation } from "../types/participation";
 import { SurveyPagedResponse, SurveyResponse, SurveySubmission } from "../types/survey";
 import { getToken } from "../utils/auth";
+import { AnimationPaths } from "../constants/animationPaths";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys`;
 
 export const convertSurveyToFormData = (survey: SurveySubmission): FormData => {
-  const formData = new FormData();  formData.append('surveyRequest', new Blob([JSON.stringify({
+  const formData = new FormData();
+  formData.append('surveyRequest', new Blob([JSON.stringify({
     id: survey.id,
     title: survey.title,
     description: survey.description,
@@ -27,7 +31,22 @@ const getHeaders = () => ({
 
 const handleErrorResponse = async (response: Response) => {
   const errorData: ExceptionResponse = await response.json();
-  throw new Error(errorData.error || 'Error desconocido');
+  const errorMapping = errorMappings[response.status];
+  if (errorMapping) {
+    throw new AppError(
+      errorData.businessErrorDescription || 'Error',
+      errorData.error || 'Error desconocido',
+      errorMapping.animationSrc,
+      errorMapping.buttonText
+    );
+  } else {
+    throw new AppError(
+      'Error desconocido',
+      errorData.error || 'Error desconocido',
+      '../../assets/lottie/NoResultFound.lottie',
+      'Volver al inicio'
+    );
+  }
 };
 
 const fetchWithHandling = async (url: string, options: RequestInit) => {
@@ -38,6 +57,14 @@ const fetchWithHandling = async (url: string, options: RequestInit) => {
     }
     return await response.json();
   } catch (error) {
+    if (error instanceof TypeError) {
+      throw new AppError(
+        'Servidor no disponible',
+        'No se pudo conectar con el servidor. Por favor, inténtelo de nuevo más tarde.',
+        AnimationPaths.ServerUnavailable,
+        'Volver al inicio'
+      );
+    }
     console.error('Error during fetch operation:', error);
     throw error;
   }
