@@ -55,6 +55,14 @@ const fetchWithHandling = async (url: string, options: RequestInit) => {
     if (!response.ok) {
       await handleErrorResponse(response);
     }
+    if (response.status === 204) {
+      throw new AppError(
+        'Encuestas no encontradas.',
+        'No hay encuestas. ¡Crea una nueva encuesta para empezar!',
+        AnimationPaths.NoResultFound,
+        'Volver al inicio'
+      );
+    }
     return await response.json();
   } catch (error) {
     if (error instanceof TypeError) {
