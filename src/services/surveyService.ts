@@ -1,10 +1,9 @@
 import { AppError } from "../types/AppError";
-import { errorMappings } from "../constants/errorMappings";
-import { ExceptionResponse } from "../types/ExceptionResponse";
 import { Participation } from "../types/participation";
 import { SurveyPagedResponse, SurveyResponse, SurveySubmission } from "../types/survey";
 import { getToken } from "../utils/auth";
 import { AnimationPaths } from "../constants/animationPaths";
+import { handleErrorResponse } from "./handleErrorResponse";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/surveys`;
 
@@ -28,26 +27,6 @@ const getHeaders = () => ({
   'Accept': 'application/json',
   'Authorization': `Bearer ${getToken()}`
 });
-
-const handleErrorResponse = async (response: Response) => {
-  const errorData: ExceptionResponse = await response.json();
-  const errorMapping = errorMappings[response.status];
-  if (errorMapping) {
-    throw new AppError(
-      errorData.businessErrorDescription || 'Error',
-      errorData.error || 'Error desconocido',
-      errorMapping.animationSrc,
-      errorMapping.buttonText
-    );
-  } else {
-    throw new AppError(
-      'Error desconocido',
-      errorData.error || 'Error desconocido',
-      '../../assets/lottie/NoResultFound.lottie',
-      'Volver al inicio'
-    );
-  }
-};
 
 const fetchWithHandling = async (url: string, options: RequestInit) => {
   try {
