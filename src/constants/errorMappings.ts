@@ -6,10 +6,6 @@ export interface ErrorMapping {
 }
 
 export const errorMappings: { [key: number]: { animationSrc: string; buttonText: string } } = {
-  204: {
-    animationSrc: AnimationPaths.NoResultFound,
-    buttonText: 'Volver al inicio',
-  },
   400: {
     animationSrc: AnimationPaths.BadRequest,
     buttonText: 'Intentar de nuevo',
