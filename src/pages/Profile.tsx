@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import ErrorTemplate from '../components/error/ErrorTemplate';
 import useProfileUser from '../hooks/useProfileUser';
-import NotFound from '../components/error/NotFound';
+import { AnimationPaths } from '../constants/animationPaths';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -25,7 +25,12 @@ const Profile = () => {
   };
 
   if (error) {
-    return <NotFound errorMessage={error} />;
+    return (
+      <ErrorTemplate
+        error={error}
+        onButtonClick={() => navigate('/')}
+      />
+    );
   }
 
   return (
@@ -45,9 +50,13 @@ const Profile = () => {
         </>
       ) : (
         <ErrorTemplate
-          title='Error'
-          message='Para realizar esta acción es necesario iniciar sesión'
-          buttonText='Iniciar Sesión'
+          error={{
+            name: "UnauthorizedError",
+            title: "No Autorizado",
+            message: "Debes iniciar sesión para ver esta página.",
+            animationSrc: AnimationPaths.Unauthorized,
+            buttonText: "Iniciar sesión"
+          }}
           onButtonClick={handleConfirmLogin}
         />
       )}
