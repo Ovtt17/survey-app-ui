@@ -1,3 +1,5 @@
+import { AnimationPaths } from "../constants/animationPaths";
+import { AppError } from "../types/AppError";
 import { User } from "../types/user";
 import { getToken } from "../utils/auth";
 import { handleErrorResponse } from "./handleErrorResponse";
@@ -38,8 +40,16 @@ export const getUserByUsername = async (username: string): Promise<User> => {
     }
     const user: User = await response.json();
     return user;
-  } catch (error: unknown) {
-    console.error(`Error fetching data for user ${username}:`, error);
-    throw new Error((error as Error).message || 'An unexpected error occurred. Please try again later.');
+  } catch (error) {
+    if (error instanceof TypeError) {
+      throw new AppError(
+        'Servidor no disponible',
+        'No se pudo conectar con el servidor. Por favor, inténtelo de nuevo más tarde.',
+        AnimationPaths.ServerUnavailable,
+        'Volver al inicio'
+      );
+    }
+    console.error('Error during fetch operation:', error);
+    throw error;
   }
 };
