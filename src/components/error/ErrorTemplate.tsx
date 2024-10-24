@@ -1,54 +1,36 @@
 import React from 'react';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
-import { useNavigate } from 'react-router-dom';
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Link } from 'react-router-dom';
 
 interface ErrorTemplateProps {
-  title?: string;
+  title: string;
   message: string;
-  buttonText?: string;
+  buttonText: string;
+  animationSrc: string;
   onButtonClick?: () => void;
 }
 
-const ErrorTemplate: React.FC<ErrorTemplateProps> = ({
-  title = 'Error',
-  message,
-  buttonText = 'Volver al inicio',
-  onButtonClick,
-}) => {
-  const navigate = useNavigate();
-
-  const handleButtonClick = () => {
-    if (onButtonClick) {
-      onButtonClick();
-    } else {
-      navigate('/');
-    }
-  };
-
+const ErrorTemplate: React.FC<ErrorTemplateProps> = ({ title, message, buttonText, animationSrc, onButtonClick }) => {
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      alignItems="center"
-      justifyContent="center"
-      height="80vh"
-      textAlign="center"
-      px={3}
-    >
-      <ErrorOutlineIcon color="error" style={{ fontSize: 80, marginBottom: 16 }} />
-      <Typography variant="h4" gutterBottom>
+    <div className="absolute inset-0 z-20 text-midnight-black flex flex-col justify-center items-center text-center gap-2 sm:gap-4">
+      <DotLottieReact
+        src={animationSrc}
+        loop
+        autoplay
+        className="w-[250px] sm:w-[300px] md:w-[400px] h-[250px] sm:h-[300px] md:h-[330px]"
+      />
+      <h1 className="text-2xl font-bold sm:text-3xl md:text-4xl leading-snug text-blue-gray-900">
         {title}
-      </Typography>
-      <Typography variant="body1" color="textSecondary">
+      </h1>
+      <p className="text-base sm:text-lg md:text-xl">
         {message}
-      </Typography>
-      <Button variant="contained" color="primary" onClick={handleButtonClick}>
-        {buttonText}
-      </Button>
-    </Box>
+      </p>
+      <Link to='/'>
+        <button className="px-4 py-2 bg-blue-500 text-white rounded md:w-[10rem]" onClick={onButtonClick}>
+          {buttonText}
+        </button>
+      </Link>
+    </div>
   );
 };
 
