@@ -39,8 +39,8 @@ export const getUserByUsername = async (username: string): Promise<User> => {
     }
     const user: User = await response.json();
     return user;
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error(`Error fetching data for user ${username}:`, error);
-    throw new Error(error.message || 'An unexpected error occurred. Please try again later.');
+    throw new Error((error as Error).message || 'An unexpected error occurred. Please try again later.');
   }
 };
