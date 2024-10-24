@@ -1,6 +1,6 @@
 export const AnimationPaths = {
   BadRequest: '../../../src/assets/lottie/BadRequestAnimation.lottie',
-  Unauthorized: '../../../src/assets/lottie/UnauthorizedAnimation.lottie',
+  Unauthorized: '../../../src/assets/lottie/Unauthorized.lottie',
   Forbidden: '../../../src/assets/lottie/ForbiddenAnimation.lottie',
   NotFound: '../../../src/assets/lottie/NotFoundAnimation.lottie',
   ServerError: '../../../src/assets/lottie/ServerError.lottie',
