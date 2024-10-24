@@ -1,6 +1,6 @@
-import { ExceptionResponse } from "../types/ExceptionResponse";
 import { User } from "../types/user";
 import { getToken } from "../utils/auth";
+import { handleErrorResponse } from "./handleErrorResponse";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/users`;
 
@@ -34,8 +34,7 @@ export const getUserByUsername = async (username: string): Promise<User> => {
       headers: getHeaders()
     });
     if (!response.ok) {
-      const errorResponse: ExceptionResponse = await response.json();
-      throw new Error(errorResponse.businessErrorDescription || 'An unexpected error occurred. Please try again later.');
+      await handleErrorResponse(response);
     }
     const user: User = await response.json();
     return user;
