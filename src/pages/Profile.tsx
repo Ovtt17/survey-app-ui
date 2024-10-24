@@ -19,11 +19,6 @@ const Profile = () => {
     setOpenErrorModal(true);
   };
 
-  const handleConfirmLogin = () => {
-    setOpenErrorModal(false);
-    navigate("/login");
-  };
-
   if (error) {
     return (
       <ErrorTemplate
@@ -57,7 +52,9 @@ const Profile = () => {
             animationSrc: AnimationPaths.Unauthorized,
             buttonText: "Iniciar sesión"
           }}
-          onButtonClick={handleConfirmLogin}
+            onButtonClick={() => {
+            navigate("/login");
+          }}
         />
       )}
     </section>
