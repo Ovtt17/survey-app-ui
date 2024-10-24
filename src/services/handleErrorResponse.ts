@@ -1,3 +1,4 @@
+import { AnimationPaths } from "../constants/animationPaths";
 import { errorMappings } from "../constants/errorMappings";
 import { AppError } from "../types/AppError";
 import { ExceptionResponse } from "../types/ExceptionResponse";
@@ -16,7 +17,7 @@ export const handleErrorResponse = async (response: Response) => {
     throw new AppError(
       'Error desconocido',
       errorData.error || 'Error desconocido',
-      '../../assets/lottie/NoResultFound.lottie',
+      AnimationPaths.UnknownError,
       'Volver al inicio'
     );
   }
