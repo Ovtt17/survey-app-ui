@@ -8,8 +8,8 @@ export const handleErrorResponse = async (response: Response) => {
   const errorMapping = errorMappings[response.status];
   if (errorMapping) {
     throw new AppError(
-      errorData.businessErrorDescription || 'Error',
-      errorData.error || 'Error desconocido',
+      errorData.businessErrorDescription,
+      errorData.error,
       errorMapping.animationSrc,
       errorMapping.buttonText
     );
