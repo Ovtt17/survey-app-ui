@@ -1,6 +1,5 @@
 import React from 'react';
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import { Link } from 'react-router-dom';
 import { AppError } from '../../types/AppError';
 
 interface ErrorTemplateProps {
@@ -10,7 +9,7 @@ interface ErrorTemplateProps {
 
 const ErrorTemplate: React.FC<ErrorTemplateProps> = ({ error, onButtonClick }) => {
   return (
-    <div className="absolute inset-0 z-20 text-midnight-black flex flex-col justify-center items-center text-center gap-2 sm:gap-4">
+    <div className="absolute inset-0 z-20 bg-white text-midnight-black flex flex-col justify-center items-center text-center gap-2 sm:gap-4">
       <DotLottieReact
         src={error.animationSrc}
         loop
@@ -23,11 +22,9 @@ const ErrorTemplate: React.FC<ErrorTemplateProps> = ({ error, onButtonClick }) =
       <p className="text-base sm:text-lg md:text-xl">
         {error.message}
       </p>
-      <Link to='/'>
-        <button className="px-4 py-2 bg-blue-500 text-white rounded md:w-[10rem]" onClick={onButtonClick}>
-          {error.buttonText}
-        </button>
-      </Link>
+      <button className="px-4 py-2 bg-blue-500 text-white rounded md:w-[10rem]" onClick={onButtonClick}>
+        {error.buttonText}
+      </button>
     </div>
   );
 };
