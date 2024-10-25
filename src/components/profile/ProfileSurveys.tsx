@@ -1,5 +1,4 @@
 import { FC, useState } from 'react';
-import useFetchSurveysByCurrentUser from '../../hooks/useFetchSurveysByCurrentUser';
 import useFetchSurveysByUsername from '../../hooks/useFetchSurveysByUsername';
 import SurveyList from '../survey/SurveyList';
 import SurveysGlimmer from '../loadings/SurveysGlimmer';
@@ -14,16 +13,14 @@ interface ProfileSurveysProps {
 const ProfileSurveys: FC<ProfileSurveysProps> = ({ isOwner, username }) => {
   const [page, setPage] = useState(1);
   const pageSize = 8;
+
   const handleSurveyPageChange = (_event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
   };
 
-  const surveysByCurrentUser = useFetchSurveysByCurrentUser(page, pageSize);
   const surveysByUsername = useFetchSurveysByUsername(username as string, page, pageSize);
 
-  const surveysHook = isOwner ? surveysByCurrentUser : surveysByUsername;
-
-  const { surveys, setSurveys, totalPages, loading, error } = surveysHook;
+  const { surveys, setSurveys, totalPages, loading, error } = surveysByUsername;
   const hasSurveys = surveys.length > 0;
 
   const handleSurveyDeleted = (id: number) => {
