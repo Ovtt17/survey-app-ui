@@ -8,11 +8,9 @@ import { createSurvey, updateSurvey } from '../services/surveyService.ts';
 import SurveyFormContent from '../components/survey/form/SurveyFormContent.tsx';
 import SuccessModal from '../components/modals/SuccessModal.tsx';
 import ProccessingModal from '../components/modals/ProccessingModal.tsx';
-import ErrorTemplate from '../components/error/ErrorTemplate.tsx';
-import { useNavigate } from 'react-router-dom';
+import LoginErrorTemplate from '../components/error/LoginErrorTemplate.tsx';
 
 const SurveyForm = () => {
-  const navigate = useNavigate();
   const { isSurveyEditable } = useSurveyContext();
   const { user, isAuthenticated } = useAuthContext();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -54,14 +52,7 @@ const SurveyForm = () => {
 
   if (!isAuthenticated) {
     return (
-      <ErrorTemplate
-        title="No puedes acceder."
-        message="Debes iniciar sesión para crear una encuesta."
-        buttonText="Iniciar Sesión"
-        onButtonClick={() => {
-          navigate("/login");
-        }}
-      />
+      <LoginErrorTemplate />
     )
   }
 

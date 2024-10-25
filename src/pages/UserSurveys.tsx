@@ -1,11 +1,15 @@
-import useFetchSurveysByCurrentUser from "../hooks/useFetchSurveysByCurrentUser";
 import { useState } from "react";
-import SurveyContainer from "./SurveyContainer";
+import SurveyContainer from "../components/survey/SurveyContainer";
+import useFetchSurveysByUsername from "../hooks/useFetchSurveysByUsername";
+import { useParams } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
 const UserSurveys = () => {
+  const { username } = useParams<{ username: string }>();
+  const { isProfileOwner } = useAuthContext();
+  const isOwner = isProfileOwner(username as string);
   const [page, setPage] = useState(1);
   const pageSize = 6;
-
 
   const {
     surveys,
@@ -13,11 +17,12 @@ const UserSurveys = () => {
     totalPages,
     loading,
     error
-  } = useFetchSurveysByCurrentUser(page, pageSize);
+  } = useFetchSurveysByUsername(username as string, page, pageSize);
 
   const handleSurveyDeleted = (id: number) => {
     setSurveys((prevSurveys) => prevSurveys.filter((survey) => survey.id !== id));
   }
+
   return (
     <SurveyContainer
       surveys={surveys}
@@ -28,7 +33,7 @@ const UserSurveys = () => {
       setPage={setPage}
       handleSurveyDeleted={handleSurveyDeleted}
     >
-      <h2 className="text-2xl font-bold">Mis Encuestas</h2>
+      <h2 className="text-2xl font-bold">{ isOwner ? 'Mis Encuestas' : `Encuestas de ${username}` }</h2>
     </SurveyContainer>
   );
 }

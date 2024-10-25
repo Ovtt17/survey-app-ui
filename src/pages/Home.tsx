@@ -1,6 +1,6 @@
 import { useState } from "react";
 import useFetchSurveys from "../hooks/useFetchSurveys";
-import SurveyContainer from "./SurveyContainer";
+import SurveyContainer from "../components/survey/SurveyContainer";
 
 const Home = () => {
   const [page, setPage] = useState(1);

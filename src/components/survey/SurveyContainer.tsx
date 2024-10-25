@@ -1,17 +1,18 @@
 import { ReactNode, useState } from 'react';
-import { SurveyResponse } from '../types/survey';
-import SurveysGlimmer from '../components/loadings/SurveysGlimmer';
-import SurveyList from '../components/survey/SurveyList';
-import NotFound from '../components/error/NotFound';
-import CreateSurveyButton from '../components/buttons/CreateSurveyButton';
-import ErrorModal from '../components/error/ErrorModal';
+import { SurveyResponse } from '../../types/survey';
+import SurveysGlimmer from '../loadings/SurveysGlimmer';
+import SurveyList from './SurveyList';
+import CreateSurveyButton from '../buttons/CreateSurveyButton';
+import ErrorModal from '../error/ErrorModal';
 import { useNavigate } from 'react-router-dom';
+import ErrorTemplate from '../error/ErrorTemplate';
+import { AppError } from '../../types/AppError';
 
 interface SurveyContainerProps {
   surveys: SurveyResponse[];
   totalPages: number;
   loading: boolean;
-  error: string | null;
+  error: AppError | null;
   pageSize?: number;
   page: number;
   setPage: (value: number) => void;
@@ -52,7 +53,7 @@ const SurveyContainer = ({
   return (
     <div className="flex flex-col justify-center">
       {children && <div className="flex flex-col items-center">{children}</div>}
-      {thereAreSurveys ? (
+      {thereAreSurveys && (
         <SurveyList
           surveys={surveys}
           totalPages={totalPages}
@@ -60,9 +61,18 @@ const SurveyContainer = ({
           onPageChange={handleSurveyPageChange}
           handleSurveyDeleted={handleSurveyDeleted}
         />
-      ) : (
-        <NotFound errorMessage={error ?? undefined} />
       )}
+
+      {error && (
+        <ErrorTemplate
+          error={error}
+          onButtonClick={() => {
+            navigate('/');
+            window.location.reload();
+          }}
+        />
+      )}
+
       <CreateSurveyButton handleOpenErrorModal={handleOpenErrorModal} />
       <ErrorModal
         open={openErrorModal}
