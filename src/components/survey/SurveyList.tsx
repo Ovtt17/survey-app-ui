@@ -20,7 +20,7 @@ const SurveyList: FC<SurveyListProps> = ({
 }) => {
   return (
     <>
-      <div className="w-full flex flex-wrap justify-center">
+      <div className="w-full lg:w-4/5 p-4 flex flex-wrap justify-start">
         {surveys.map(survey => (
           <SurveyCard
             key={survey.id}
