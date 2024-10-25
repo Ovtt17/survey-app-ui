@@ -1,6 +1,6 @@
 import useFetchSurveysByCurrentUser from "../hooks/useFetchSurveysByCurrentUser";
 import { useState } from "react";
-import SurveyContainer from "./SurveyContainer";
+import SurveyContainer from "../components/survey/SurveyContainer";
 
 const UserSurveys = () => {
   const [page, setPage] = useState(1);

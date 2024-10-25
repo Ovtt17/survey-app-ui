@@ -1,12 +1,12 @@
 import { ReactNode, useState } from 'react';
-import { SurveyResponse } from '../types/survey';
-import SurveysGlimmer from '../components/loadings/SurveysGlimmer';
-import SurveyList from '../components/survey/SurveyList';
-import CreateSurveyButton from '../components/buttons/CreateSurveyButton';
-import ErrorModal from '../components/error/ErrorModal';
+import { SurveyResponse } from '../../types/survey';
+import SurveysGlimmer from '../loadings/SurveysGlimmer';
+import SurveyList from './SurveyList';
+import CreateSurveyButton from '../buttons/CreateSurveyButton';
+import ErrorModal from '../error/ErrorModal';
 import { useNavigate } from 'react-router-dom';
-import ErrorTemplate from '../components/error/ErrorTemplate';
-import { AppError } from '../types/AppError';
+import ErrorTemplate from '../error/ErrorTemplate';
+import { AppError } from '../../types/AppError';
 
 interface SurveyContainerProps {
   surveys: SurveyResponse[];
