@@ -47,7 +47,7 @@ const ProfileSurveys: FC<ProfileSurveysProps> = ({ isOwner, username }) => {
         </>
       ) : (
         <div className="text-center text-gray-500">
-          {error ? error : 'No hay encuestas'}
+          {error ? error.toString() : 'No hay encuestas'}
         </div>
       )}
     </div>
