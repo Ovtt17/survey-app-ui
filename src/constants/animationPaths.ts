@@ -1,10 +1,12 @@
+const BASE_PATH = '../../../src/assets/lottie/';
+
 export const AnimationPaths = {
-  BadRequest: '../../../src/assets/lottie/BadRequestAnimation.lottie',
-  Unauthorized: '../../../src/assets/lottie/Unauthorized.lottie',
-  Forbidden: '../../../src/assets/lottie/ForbiddenAnimation.lottie',
-  NotFound: '../../../src/assets/lottie/NotFoundAnimation.lottie',
-  ServerError: '../../../src/assets/lottie/ServerError.lottie',
-  NoResultFound: '../../../src/assets/lottie/NoResultFound.lottie',
-  ServerUnavailable: '../../../src/assets/lottie/ServerError.lottie',
-  UnknownError: '../../../src/assets/lottie/UnknownError.lottie',
+  BadRequest: `${BASE_PATH}/BadRequestAnimation.lottie`,
+  Unauthorized: `${BASE_PATH}/Unauthorized.lottie`,
+  Forbidden: `${BASE_PATH}/Unauthorized.lottie`,
+  NotFound: `${BASE_PATH}/NotFoundAnimation.lottie`,
+  ServerError: `${BASE_PATH}/ServerError.lottie`,
+  NoResultFound: `${BASE_PATH}/NoResultFound.lottie`,
+  ServerUnavailable: `${BASE_PATH}/ServerError.lottie`,
+  UnknownError: `${BASE_PATH}/UnknownError.lottie`,
 };
