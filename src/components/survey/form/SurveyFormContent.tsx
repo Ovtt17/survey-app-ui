@@ -32,11 +32,8 @@ const SurveyFormContent: FC<SurveyFormContentProps> = ({ onSubmit, questions, ad
   if (error) {
     return (
       <ErrorTemplate
-        message={error}
-        buttonText='Mis encuestas'
-        onButtonClick={() => {
-          navigate(`/${user?.username}/surveys`);
-        }}
+        error={error}
+        onButtonClick={() => navigate(`/${user?.username}/surveys`)}
       />
     );
   }
