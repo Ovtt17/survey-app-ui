@@ -3,6 +3,8 @@ import useFetchSurveysByCurrentUser from '../../hooks/useFetchSurveysByCurrentUs
 import useFetchSurveysByUsername from '../../hooks/useFetchSurveysByUsername';
 import SurveyList from '../survey/SurveyList';
 import SurveysGlimmer from '../loadings/SurveysGlimmer';
+import { DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { AnimationPaths } from '../../constants/animationPaths';
 
 interface ProfileSurveysProps {
   isOwner: boolean;
@@ -33,7 +35,7 @@ const ProfileSurveys: FC<ProfileSurveysProps> = ({ isOwner, username }) => {
   }
 
   return (
-    <div className="w-full h-full lg:w-2/3 p-4 flex flex-col">
+    <section className="w-full h-full lg:w-2/3 p-4 flex flex-col">
       <h2 className="text-xl font-semibold mb-4 border-b-2">Encuestas</h2>
       {hasSurveys ? (
         <>
@@ -47,10 +49,18 @@ const ProfileSurveys: FC<ProfileSurveysProps> = ({ isOwner, username }) => {
         </>
       ) : (
         <div className="text-center text-gray-500">
-          {error ? error.toString() : 'No hay encuestas'}
+          <div className='flex justify-center'>
+            <DotLottieReact
+              src={AnimationPaths.NoResultFound}
+              loop
+              autoplay
+              className="w-[250px] sm:w-[300px] md:w-[400px] h-[250px] sm:h-[300px] md:h-[330px]"
+            />
+          </div>
+          {isOwner && error ? error.message : 'No hay encuestas'}
         </div>
       )}
-    </div>
+    </section>
   );
 }
 
