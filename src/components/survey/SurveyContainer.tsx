@@ -51,7 +51,7 @@ const SurveyContainer = ({
   }
 
   return (
-    <div className="flex flex-col justify-center">
+    <div className="flex flex-col items-center">
       {children && <div className="flex flex-col items-center">{children}</div>}
       {thereAreSurveys && (
         <SurveyList
