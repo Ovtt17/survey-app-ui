@@ -67,6 +67,7 @@ const SurveyContainer = ({
         <ErrorTemplate
           error={error}
           onButtonClick={() => {
+            navigate('/');
             window.location.reload();
           }}
         />
