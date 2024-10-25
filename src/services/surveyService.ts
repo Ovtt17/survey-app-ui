@@ -166,14 +166,6 @@ export const getSurveysByCurrentUser = async (): Promise<SurveyResponse[]> => {
   });
 };
 
-export const getSurveysByCurrentUserWithPaging = async (page: number, size: number): Promise<SurveyPagedResponse> => {
-  const adjustedPage = page - 1;
-  return await fetchWithHandling(`${BASE_URL}/user/paged?page=${adjustedPage}&size=${size}`, {
-    method: 'GET',
-    headers: getHeaders()
-  });
-};
-
 export const getSurveysByUsernameWithPaging = async (username: string, page: number, size: number): Promise<SurveyPagedResponse> => {
   const adjustedPage = page - 1;
   return await fetchWithHandling(`${BASE_URL}/user/${username}/paged?page=${adjustedPage}&size=${size}`, {
