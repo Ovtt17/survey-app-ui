@@ -28,7 +28,7 @@ const getHeaders = () => ({
   'Authorization': `Bearer ${getToken()}`
 });
 
-const fetchWithHandling = async (url: string, options: RequestInit) => {
+const fetchWithHandling = async (url: string, options: RequestInit, noSurveysMessage?: string) => {
   try {
     const response = await fetch(url, options);
     if (!response.ok) {
@@ -37,9 +37,9 @@ const fetchWithHandling = async (url: string, options: RequestInit) => {
     if (response.status === 204) {
       throw new AppError(
         'Encuestas no encontradas.',
-        'No hay encuestas. ¡Crea una nueva encuesta para empezar!',
+        noSurveysMessage || 'No se encontraron encuestas.',
         AnimationPaths.NoResultFound,
-        'Volver al inicio'
+        'Volver al Inicio'
       );
     }
     return await response.json();
@@ -49,7 +49,7 @@ const fetchWithHandling = async (url: string, options: RequestInit) => {
         'Servidor no disponible',
         'No se pudo conectar con el servidor. Por favor, inténtelo de nuevo más tarde.',
         AnimationPaths.ServerUnavailable,
-        'Volver al inicio'
+        'Volver al Inicio'
       );
     }
     console.error('Error during fetch operation:', error);
@@ -129,13 +129,16 @@ export const deleteSurvey = async (id: number): Promise<string> => {
 
 export const getSurveys = async (page: number, size: number): Promise<SurveyPagedResponse> => {
   const adjustedPage = page - 1;
-  return await fetchWithHandling(`${BASE_URL}?page=${adjustedPage}&size=${size}`, {
+  const url = `${BASE_URL}?page=${adjustedPage}&size=${size}`;
+  const options = {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     }
-  });
+  }
+  const noSurveysMessage = 'No hay encuestas. ¡Crea una nueva encuesta para empezar!';
+  return await fetchWithHandling(url, options, noSurveysMessage);
 };
 
 export const getSurveyByIdForSubmission = async (id: string): Promise<SurveySubmission> => {
@@ -168,10 +171,13 @@ export const getSurveysByCurrentUser = async (): Promise<SurveyResponse[]> => {
 
 export const getSurveysByUsernameWithPaging = async (username: string, page: number, size: number): Promise<SurveyPagedResponse> => {
   const adjustedPage = page - 1;
-  return await fetchWithHandling(`${BASE_URL}/user/${username}/paged?page=${adjustedPage}&size=${size}`, {
+  const url = `${BASE_URL}/user/${username}/paged?page=${adjustedPage}&size=${size}`;
+  const options = {
     method: 'GET',
     headers: getHeaders()
-  });
+  }
+  const noSurveysMessage = `${username} no tiene encuestas.`;
+  return await fetchWithHandling(url, options, noSurveysMessage);
 };
 
 export const getSurveyParticipants = async (id: string): Promise<Participation[]> => {
