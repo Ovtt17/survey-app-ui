@@ -10,6 +10,7 @@ import SuccessModal from '../components/modals/SuccessModal.tsx';
 import ProccessingModal from '../components/modals/ProccessingModal.tsx';
 import ErrorTemplate from '../components/error/ErrorTemplate.tsx';
 import { useNavigate } from 'react-router-dom';
+import { AnimationPaths } from '../constants/animationPaths.ts';
 
 const SurveyForm = () => {
   const navigate = useNavigate();
@@ -55,12 +56,14 @@ const SurveyForm = () => {
   if (!isAuthenticated) {
     return (
       <ErrorTemplate
-        title="No puedes acceder."
-        message="Debes iniciar sesión para crear una encuesta."
-        buttonText="Iniciar Sesión"
-        onButtonClick={() => {
-          navigate("/login");
+        error={{
+          name: 'UnauthorizedError',
+          title: 'No Autorizado',
+          message: 'Debes iniciar sesión para crear una encuesta.',
+          animationSrc: AnimationPaths.Unauthorized,
+          buttonText: 'Iniciar sesión'
         }}
+        onButtonClick={() => navigate('/login')}
       />
     )
   }
