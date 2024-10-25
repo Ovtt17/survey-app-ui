@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../context/AuthContext';
 import ErrorTemplate from '../components/error/ErrorTemplate';
 import useProfileUser from '../hooks/useProfileUser';
-import { AnimationPaths } from '../constants/animationPaths';
+import LoginErrorTemplate from '../components/error/LoginErrorTemplate';
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -44,18 +44,7 @@ const Profile = () => {
           {isOwner && <CreateSurveyButton handleOpenErrorModal={handleOpenErrorModal} />}
         </>
       ) : (
-        <ErrorTemplate
-          error={{
-            name: "UnauthorizedError",
-            title: "No Autorizado",
-            message: "Debes iniciar sesión para ver esta página.",
-            animationSrc: AnimationPaths.Unauthorized,
-            buttonText: "Iniciar sesión"
-          }}
-            onButtonClick={() => {
-            navigate("/login");
-          }}
-        />
+        <LoginErrorTemplate />
       )}
     </section>
   );
