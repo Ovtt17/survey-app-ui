@@ -39,7 +39,7 @@ const fetchWithHandling = async (url: string, options: RequestInit, noSurveysMes
         'Encuestas no encontradas.',
         noSurveysMessage || 'No se encontraron encuestas.',
         AnimationPaths.NoResultFound,
-        'Volver al Inicio'
+        'Volver al Inicio'.toLowerCase()
       );
     }
     return await response.json();
@@ -49,7 +49,7 @@ const fetchWithHandling = async (url: string, options: RequestInit, noSurveysMes
         'Servidor no disponible',
         'No se pudo conectar con el servidor. Por favor, inténtelo de nuevo más tarde.',
         AnimationPaths.ServerUnavailable,
-        'Volver al Inicio'
+        'Volver al Inicio'.toLowerCase()
       );
     }
     console.error('Error during fetch operation:', error);
