@@ -51,11 +51,5 @@ export const newUserValidationRules = {
       value: 6,
       message: 'La contraseña debe tener al menos 6 caracteres.'
     }
-  },
-  confirmPassword: {
-    required: 'La confirmación de la contraseña es obligatoria.',
-    validate: (confirmPassword: string, context: { password: string }) => {
-      return confirmPassword === context.password ? true : 'Las contraseñas no coinciden.';
-    }
   }
 };
