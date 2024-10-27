@@ -30,7 +30,17 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
   ];
 
   const validateStep = async () => {
-    const result = await trigger(['firstName', 'lastName']);
+    const result = await trigger(
+      [
+        'firstName',
+        'lastName',
+        'phone',
+        'dateOfBirth',
+        'email',
+        'username',
+        'password',
+        'confirmPassword',
+      ]);
     return result;
   }
 
@@ -51,7 +61,7 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-3 lg:gap-6 flex flex-col h-full justify-between">
-      <div>
+      <div className='flex flex-col gap-3'>
         {steps[step]}
       </div>
       <StepNavigation
