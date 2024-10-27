@@ -1,51 +1,35 @@
-import { Checkbox, FormControlLabel, TextField } from '@mui/material';
-import React, { FC, useState } from 'react';
-import ErrorHelperText from '../error/ErrorHelperText';
+import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { newUserValidationRules } from '../../data/newUserValidationRules';
+import { Checkbox, FormControlLabel } from '@mui/material';
+import UserInputField from './UserInputField';
 
-interface PasswordStepProps {
-  password: string;
-  confirmPassword: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  passwordError: string | null;
-  confirmPasswordError: string | null;
-}
-
-const PasswordStep: FC<PasswordStepProps> = ({
-  password,
-  confirmPassword,
-  handleChange,
-  passwordError,
-  confirmPasswordError
-}) => {
+const PasswordStep = () => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
+  const { getValues } = useFormContext();
+
   return (
-    <div>
-      <TextField
-        fullWidth
-        margin="normal"
-        required
-        autoFocus
+    <>
+      <UserInputField
+        id="password"
+        type={showPassword ? "text" : "password"}
         label="Contraseña"
-        name='password'
-        value={password}
-        error={!!passwordError}
-        helperText={passwordError ? <ErrorHelperText errorMessage={passwordError} /> : null}
-        type={showPassword ? "text" : "password"}
-        onChange={handleChange}
+        placeholder="Ingrese su contraseña"
+        validationRules={newUserValidationRules.password}
+        autoFocus
       />
-      <TextField
-        fullWidth
-        margin="normal"
-        required
-        label="Confirmar contraseña"
-        name='confirmPassword'
-        value={confirmPassword}
-        error={!!confirmPasswordError}
-        helperText={confirmPasswordError ? <ErrorHelperText errorMessage={confirmPasswordError} /> : null}
+      <UserInputField
+        id="confirmPassword"
         type={showPassword ? "text" : "password"}
-        onChange={handleChange}
+        label="Confirmar Contraseña"
+        placeholder="Confirme su contraseña"
+        validationRules={{
+          required: 'Este campo es requerido',
+          validate: value => value === getValues('password') || 'Las contraseñas no coinciden'
+        }}
+        autoFocus
       />
       <FormControlLabel
         control={
@@ -57,7 +41,7 @@ const PasswordStep: FC<PasswordStepProps> = ({
         }
         label="Mostrar contraseña"
       />
-    </div>
+    </>
   );
 }
 

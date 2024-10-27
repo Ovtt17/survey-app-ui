@@ -35,7 +35,7 @@ const ProfileSurveys: FC<ProfileSurveysProps> = ({ isOwner, username }) => {
     <section className="w-full h-full lg:w-2/3 p-4 flex flex-col">
       <h2 className="text-xl font-semibold mb-4 border-b-2">Encuestas</h2>
       {hasSurveys ? (
-        <>
+        <div className='flex flex-col items-center'>
           <SurveyList
             surveys={surveys}
             totalPages={totalPages}
@@ -43,7 +43,7 @@ const ProfileSurveys: FC<ProfileSurveysProps> = ({ isOwner, username }) => {
             onPageChange={handleSurveyPageChange}
             handleSurveyDeleted={handleSurveyDeleted}
           />
-        </>
+        </div>
       ) : (
         <div className="text-center text-gray-500">
           <div className='flex justify-center'>
