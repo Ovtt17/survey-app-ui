@@ -1,85 +1,52 @@
-import { TextField } from '@mui/material';
-import { Dayjs } from 'dayjs';
-import React, { FC, useMemo, useState } from 'react';
-import { DatePicker, DateValidationError, LocalizationProvider } from '@mui/x-date-pickers';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { StepErrors } from '../../auth/constants';
-import ErrorHelperText from '../error/ErrorHelperText';
+import { newUserValidationRules } from '../../data/newUserValidationRules';
+import { Controller, useFormContext } from 'react-hook-form';
+import dayjs from 'dayjs';
 
-
-interface PhoneAndDateOfBirthStepProps {
-  phone: string;
-  dateOfBirth: Dayjs | null;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  handleChangeDate: (date: Dayjs | null) => void;
-  setFieldError: (field: keyof StepErrors, value: string | null) => void;
-  phoneError: string | null;
-  minDate: Dayjs;
-  maxDate: Dayjs;
-}
-
-const PhoneAndDateOfBirthStep: FC<PhoneAndDateOfBirthStepProps> = ({
-  phone,
-  dateOfBirth,
-  handleChange,
-  handleChangeDate,
-  setFieldError,
-  phoneError,
-  minDate,
-  maxDate
-}) => {
-  const phoneField = 'phone';
-  const [error, setError] = useState<DateValidationError | null>(null);
-
-  const handleDateError = (error: DateValidationError | null) => {
-    setError(error);
-    setFieldError('dateOfBirth', error ? 'Fecha de nacimiento inválida' : null);
-  };
-
-  const errorMessage = useMemo(() => {
-    switch (error) {
-      case 'maxDate': return 'Debes ser mayor de 15 años para registrarte.';
-      case 'minDate': return 'La edad máxima es 100 años.';
-      case 'invalidDate': return 'Por favor, selecciona una fecha válida.';
-      default: return '';
-    }
-  }, [error]);
-
+const PhoneAndDateOfBirthStep = () => {
+  const minDate = dayjs().subtract(100, 'year');
+  const maxDate = dayjs().subtract(15, 'year');
+  const { register, control, formState: { errors } } = useFormContext();
   return (
-    <div>
+    <>
       <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale='es'>
-        <DatePicker
-          autoFocus
-          className='w-full'
-          label="Fecha de Nacimiento"
-          format='DD/MM/YYYY'
-          minDate={minDate}
-          maxDate={maxDate}
-          value={dateOfBirth}
-          onChange={handleChangeDate}
-          onError={handleDateError}
-          slotProps={{
-            textField: {
-              helperText: errorMessage ? <ErrorHelperText errorMessage={errorMessage} /> : null,
-            },
-          }}
-          sx={{ marginTop: 2 }}
+        <Controller
+          name="dateOfBirth"
+          control={control}
+          rules={newUserValidationRules.dateOfBirth}
+          render={({ field }) => (
+            <DatePicker
+              {...field}
+              autoFocus
+              className='w-full'
+              label="Fecha de Nacimiento"
+              format='DD/MM/YYYY'
+              minDate={minDate}
+              maxDate={maxDate}
+              onChange={(date) => field.onChange(date)}
+              value={field.value || null}
+            />
+          )}
         />
       </LocalizationProvider>
-      <TextField
-        required
-        type='tel'
-        autoComplete='tel'
-        label="Teléfono"
-        name={phoneField}
-        value={phone}
-        onChange={handleChange}
-        error={!!phoneError}
-        helperText={phoneError ? <ErrorHelperText errorMessage={phoneError} /> : null}
-        fullWidth
-        margin="normal"
-      />
-    </div>
+      {errors.dateOfBirth && <span className="text-red-500">{String(errors.dateOfBirth.message)}</span>}
+      <div>
+        <label htmlFor="given-name" className="block mb-2 text-sm font-medium text-gray-900">
+          Teléfono
+        </label>
+        <input
+          type="tel"
+          id="tel"
+          {...register('phone', newUserValidationRules.phone)}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          placeholder="87227697"
+          required
+          autoComplete="tel"
+        />
+        {errors.phone && <span className="text-red-500">{String(errors.phone.message)}</span>}
+      </div>
+    </>
   );
 }
 
