@@ -1,131 +1,36 @@
-import React, { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import { registerUser } from '../services/authService';
 import { NewUser } from '../types/user';
-import dayjs, { Dayjs } from 'dayjs';
-import { ERROR_MESSAGES, initialFieldErrors, initialFormData, STEP_FIELDS, StepErrors } from '../auth/constants';
 import RegistrationForm from '../components/register/RegistrationForm';
-import { validateStep, verifyStepData } from '../auth/stepValidation';
-import { LinearProgress } from '@mui/material';
 import SuccessModal from '../components/modals/SuccessModal';
 import AppIcon from '../assets/app_icon.svg';
 import { FormProvider, useForm } from 'react-hook-form';
 import { newUserDefault } from '../data/NewUserDefault';
 
 const Register: FC = () => {
-  const [errorMessage, setErrorMessage] = useState<string>('');
-  const [step, setStep] = useState<number>(0);
-  const [dateOfBirth, setDateOfBirth] = useState<Dayjs | null>(null);
-
-  const minDate = dayjs().subtract(100, 'year');
-  const maxDate = dayjs().subtract(15, 'year');
-
-  const [formData, setFormData] = useState<NewUser>(initialFormData);
-  const [errors, setErrors] = useState<StepErrors[]>(initialFieldErrors);
-  const [loading, setLoading] = useState<boolean>(false);
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
-
   const methods = useForm<NewUser>({
     defaultValues: newUserDefault,
   });
 
-
-
-  const updateError = (field: keyof StepErrors, value: string | null) => {
-    setErrors(prev => {
-      const newFieldErrors = [...prev];
-      newFieldErrors[step] = { ...newFieldErrors[step], [field]: value };
-      return newFieldErrors;
-    });
-  };
-
-  useEffect(() => {
-    if (errors.every(stepErrors => Object.values(stepErrors).every(error => error === null))) {
-      setErrorMessage('');
-    }
-  }, [errors]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-    updateError(name as keyof StepErrors, null);
-  };
-
-  const handleChangeDate = (newDateOfBirth: Dayjs | null) => {
-    const isValidDate = newDateOfBirth?.isAfter(minDate) && newDateOfBirth?.isBefore(maxDate);
-    const name = 'dateOfBirth';
-    setDateOfBirth(newDateOfBirth);
-
-    setFormData(prevData => ({
-      ...prevData,
-      dateOfBirth: isValidDate && newDateOfBirth ? newDateOfBirth.toDate() : null,
-    }));
-    updateError(name as keyof StepErrors, isValidDate ? null : 'Fecha de nacimiento no válida');
-  };
-
-  const handleNextStep = async () => {
-    try {
-      const isValid = await validateStep(step, formData, minDate, maxDate, setLoading, setErrors, setErrorMessage);
-      if (!isValid) return;
-
-      const stepError = await verifyStepData(step, formData);
-      if (stepError) {
-        setErrorMessage(stepError);
-        const stepFieldName = STEP_FIELDS[step][0];
-        updateError(stepFieldName as keyof StepErrors, stepError);
-        return;
-      }
-
-      setErrorMessage('');
-      setStep(prev => prev + 1);
-    } catch (error) {
-      console.error('Error during step validation:', error);
-      setErrorMessage('Ocurrió un error durante la validación. Por favor, inténtalo de nuevo.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handlePrevStep = () => {
-    setErrorMessage('');
-    setErrors(prevErrors => {
-      const newErrors = [...prevErrors];
-      newErrors[step] = {};
-      return newErrors;
-    });
-    setStep((prevStep) => prevStep - 1);
-  };
-
   const handleSubmit = async (user: NewUser) => {
     try {
-      const isValid = await validateStep(step, formData, minDate, maxDate, setLoading, setErrors, setErrorMessage);
-      if (!isValid) return;
       const isRegistered = await registerUser(user);
-      if (!isRegistered) {
-        setErrorMessage(ERROR_MESSAGES.registrationFailed);
-        return;
-      }
-      setIsRegistered(true);
+      setIsRegistered(isRegistered);
     } catch (error) {
       console.error('Registration failed:', error);
-      setErrorMessage(ERROR_MESSAGES.registrationFailed);
     }
   };
 
   return (
     <section className="flex px-5 min-h-screen flex-col justify-center items-center">
       <div className="w-full max-w-sm md:max-w-md lg:max-w-5xl bg-white rounded-2xl shadow-md">
-        <div className='px-2'>
-          {loading && <LinearProgress />}
-        </div>
         <div className={`min-h-80 relative p-12 ${isRegistered ? 'flex justify-center items-center' : 'lg:grid lg:grid-cols-2 lg:gap-6 lg:pt-24'}`}>
           {isRegistered ? (
             <SuccessModal
               open={true}
               title="¡Registro Exitoso!"
-              message={`Hemos enviado un correo electrónico a tu dirección de correo "${formData.email}". Por favor, revisa tu bandeja de entrada y sigue el enlace de activación para completar el registro.`}
+              message={`Hemos enviado un correo electrónico a tu dirección de correo "${methods.getValues('email')}". Por favor, revisa tu bandeja de entrada y sigue el enlace de activación para completar el registro.`}
               buttonText="Activar cuenta"
               buttonLink="/activate-account"
             />
@@ -147,18 +52,6 @@ const Register: FC = () => {
               <article className="flex flex-col justify-between">
                 <FormProvider {...methods}>
                   <RegistrationForm
-                    formData={formData}
-                    errors={errors}
-                    dateOfBirth={dateOfBirth}
-                    minDate={minDate}
-                    maxDate={maxDate}
-                    errorMessage={errorMessage}
-                    step={step}
-                    handleChange={handleChange}
-                    handleChangeDate={handleChangeDate}
-                    updateError={updateError}
-                    handlePrevStep={handlePrevStep}
-                    handleNextStep={handleNextStep}
                     handleSubmit={methods.handleSubmit(handleSubmit)}
                   />
                 </FormProvider>
