@@ -1,3 +1,4 @@
+import dayjs, { Dayjs } from "dayjs";
 import { AuthenticationResponse } from "../types/authenticationResponse";
 import { NewUser } from "../types/user";
 
@@ -16,11 +17,11 @@ const handleResponse = async (response: Response) => {
   return response.json();
 };
 
-const toLocalDateString = (date: Date): string => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+const toLocalDateString = (date: Dayjs | Date): string => {
+  if (dayjs.isDayjs(date)) {
+    date = date.toDate();
+  }
+  return date.toLocaleDateString('en-CA');
 };
 
 export const login = async (usernameOrEmail: string, password: string): Promise<AuthenticationResponse> => {
@@ -48,7 +49,7 @@ export const registerUser = async (user: NewUser): Promise<boolean> => {
     formData.append('username', user.username);
     formData.append('firstName', user.firstName);
     formData.append('lastName', user.lastName);
-    formData.append('dateOfBirth', user.dateOfBirth ? toLocalDateString(user.dateOfBirth) : '');
+    formData.append('dateOfBirth', user.dateOfBirth ? toLocalDateString(dayjs(user.dateOfBirth)) : '');
     formData.append('phone', user.phone);
     formData.append('email', user.email);
     formData.append('password', user.password);
