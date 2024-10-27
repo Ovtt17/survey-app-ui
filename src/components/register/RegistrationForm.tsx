@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import PersonalDetailsStep from './PersonalDetailsStep';
 import PhoneAndDateOfBirthStep from './PhoneAndDateOfBirthStep';
 import EmailStep from './EmailStep';
@@ -6,6 +6,7 @@ import StepNavigation from './StepNavigation';
 import UsernameStep from './UsernameStep';
 import PasswordStep from './PasswordStep';
 import { useFormContext } from 'react-hook-form';
+import { checkExistingEmail, checkExistingUsername } from '../../services/authService';
 
 interface RegistrationFormProps {
   handleSubmit: (event: React.FormEvent) => void;
@@ -14,8 +15,11 @@ interface RegistrationFormProps {
 const RegistrationForm: FC<RegistrationFormProps> = ({
   handleSubmit,
 }) => {
-  const { trigger } = useFormContext();
+  const { getValues, trigger, setError } = useFormContext();
   const [step, setStep] = React.useState<number>(0);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+
   const steps = [
     <PersonalDetailsStep />,
     <PhoneAndDateOfBirthStep />,
@@ -23,6 +27,21 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
     <UsernameStep />,
     <PasswordStep />
   ];
+
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  const checkFieldExistence = async (field: 'email' | 'username', checkFunction: (value: string) => Promise<boolean>) => {
+    setIsLoading(true);
+    await delay(1000);
+    const value = getValues(field);
+    const isInUse = await checkFunction(value);
+    setIsLoading(false);
+    if (isInUse) {
+      setError(field, { type: 'manual', message: 'En uso, Intenta con otro.' });
+      return false;
+    }
+    return true;
+  };
 
   const validateStep = async () => {
     const result = await trigger(
@@ -36,7 +55,18 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
         'password',
         'confirmPassword',
       ]);
-    return result;
+
+    if (!result) return false;
+
+    const emailStep = steps[2];
+    const usernameStep = steps[3];
+
+    if (emailStep === steps[step]) {
+      return await checkFieldExistence('email', checkExistingEmail);
+    } else if (usernameStep === steps[step]) {
+      return await checkFieldExistence('username', checkExistingUsername);
+    }
+    return true;
   }
 
   const handlePrevStep = () => {
@@ -62,6 +92,7 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
       <StepNavigation
         step={step}
         totalSteps={totalSteps}
+        isLoading={isLoading}
         handlePrevStep={handlePrevStep}
         handleNextStep={handleNextStep}
       />

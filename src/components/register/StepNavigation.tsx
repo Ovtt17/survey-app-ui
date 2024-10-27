@@ -1,8 +1,10 @@
 import { FC } from 'react';
+import GradientCircularProgress from '../loadings/GradientCircularProgress';
 
 interface StepNavigationProps {
   step: number;
   totalSteps: number;
+  isLoading: boolean;
   handlePrevStep: () => void;
   handleNextStep: () => void;
 }
@@ -10,6 +12,7 @@ interface StepNavigationProps {
 const StepNavigation: FC<StepNavigationProps> = ({
   step,
   totalSteps,
+  isLoading,
   handlePrevStep,
   handleNextStep,
 }) => {
@@ -36,11 +39,12 @@ const StepNavigation: FC<StepNavigationProps> = ({
       )}
       <div className="flex-1 text-right">
         <button
+          disabled={isLoading}
           type={isLastStep ? "submit" : "button"}
           onClick={handleClickNext}
-          className="rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+          className="min-w-24 rounded-full bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
         >
-          {isLastStep ? 'Finalizar' : 'Continuar'}
+          {isLoading ? <GradientCircularProgress size={20} /> : isLastStep ? 'Finalizar' : 'Continuar'}
         </button>
       </div>
     </div>
