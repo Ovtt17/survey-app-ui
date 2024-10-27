@@ -6,7 +6,6 @@ import dayjs from 'dayjs';
 import 'dayjs/locale/es';
 import UserInputField from './UserInputField';
 
-
 const PhoneAndDateOfBirthStep = () => {
   const minDate = dayjs().subtract(100, 'year');
   const maxDate = dayjs().subtract(15, 'year');
