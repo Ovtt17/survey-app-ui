@@ -1,35 +1,17 @@
-import { TextField } from '@mui/material';
-import { FC } from 'react';
-import ErrorHelperText from '../error/ErrorHelperText';
+import { newUserValidationRules } from "../../data/newUserValidationRules";
+import UserInputField from "./UserInputField";
 
-interface EmailStepProps {
-  email: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  emailError: string | null;
-}
-
-const EmailStep: FC<EmailStepProps> = ({
-  email,
-  handleChange,
-  emailError,
-}) => {
-  const emailField = 'email';
-
+const EmailStep = () => {
   return (
-    <div>
-      <TextField
-        label='Email'
-        name={emailField}
-        type='email'
-        required
-        value={email}
-        onChange={handleChange}
-        error={!!emailError}
-        helperText={emailError ? <ErrorHelperText errorMessage={emailError} /> : null}
-        fullWidth
-        margin="normal"
-      />
-    </div>
+    <UserInputField
+      id="email"
+      type="email"
+      label="Correo Electrónico"
+      placeholder="john@mail.com"
+      validationRules={newUserValidationRules.email}
+      autoComplete="email"
+      autoFocus
+    />
   );
 }
 

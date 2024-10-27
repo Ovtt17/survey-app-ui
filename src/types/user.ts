@@ -1,3 +1,5 @@
+import { Dayjs } from "dayjs";
+
 export interface User {
   username: string;
   firstName: string;
@@ -10,7 +12,7 @@ export interface NewUser {
   username: string;
   firstName: string;
   lastName: string;
-  dateOfBirth: Date | null;
+  dateOfBirth: Dayjs | null;
   phone: string;
   email: string;
   password: string;
