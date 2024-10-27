@@ -8,6 +8,8 @@ import { validateStep, verifyStepData } from '../auth/stepValidation';
 import { LinearProgress } from '@mui/material';
 import SuccessModal from '../components/modals/SuccessModal';
 import AppIcon from '../assets/app_icon.svg';
+import { FormProvider, useForm } from 'react-hook-form';
+import { newUserDefault } from '../data/NewUserDefault';
 
 const Register: FC = () => {
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -21,6 +23,12 @@ const Register: FC = () => {
   const [errors, setErrors] = useState<StepErrors[]>(initialFieldErrors);
   const [loading, setLoading] = useState<boolean>(false);
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
+
+  const methods = useForm<NewUser>({
+    defaultValues: newUserDefault,
+  });
+
+
 
   const updateError = (field: keyof StepErrors, value: string | null) => {
     setErrors(prev => {
@@ -90,12 +98,11 @@ const Register: FC = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (user: NewUser) => {
     try {
-      event.preventDefault();
       const isValid = await validateStep(step, formData, minDate, maxDate, setLoading, setErrors, setErrorMessage);
       if (!isValid) return;
-      const isRegistered = await registerUser(formData);
+      const isRegistered = await registerUser(user);
       if (!isRegistered) {
         setErrorMessage(ERROR_MESSAGES.registrationFailed);
         return;
@@ -138,21 +145,23 @@ const Register: FC = () => {
                 </p>
               </article>
               <article className="flex flex-col justify-between">
-                <RegistrationForm
-                  formData={formData}
-                  errors={errors}
-                  dateOfBirth={dateOfBirth}
-                  minDate={minDate}
-                  maxDate={maxDate}
-                  errorMessage={errorMessage}
-                  step={step}
-                  handleChange={handleChange}
-                  handleChangeDate={handleChangeDate}
-                  updateError={updateError}
-                  handlePrevStep={handlePrevStep}
-                  handleNextStep={handleNextStep}
-                  handleSubmit={handleSubmit}
-                />
+                <FormProvider {...methods}>
+                  <RegistrationForm
+                    formData={formData}
+                    errors={errors}
+                    dateOfBirth={dateOfBirth}
+                    minDate={minDate}
+                    maxDate={maxDate}
+                    errorMessage={errorMessage}
+                    step={step}
+                    handleChange={handleChange}
+                    handleChangeDate={handleChangeDate}
+                    updateError={updateError}
+                    handlePrevStep={handlePrevStep}
+                    handleNextStep={handleNextStep}
+                    handleSubmit={methods.handleSubmit(handleSubmit)}
+                  />
+                </FormProvider>
               </article>
             </>
           )}
