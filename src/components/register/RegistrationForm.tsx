@@ -17,16 +17,11 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
   const { trigger } = useFormContext();
   const [step, setStep] = React.useState<number>(0);
   const steps = [
-    <PersonalDetailsStep
-    />,
-    <PhoneAndDateOfBirthStep
-    />,
-    <EmailStep
-    />,
-    <UsernameStep
-    />,
-    <PasswordStep
-    />
+    <PersonalDetailsStep />,
+    <PhoneAndDateOfBirthStep />,
+    <EmailStep />,
+    <UsernameStep />,
+    <PasswordStep />
   ];
 
   const validateStep = async () => {
