@@ -24,8 +24,16 @@ export const newUserValidationRules = {
   phone: {
     required: 'El teléfono es obligatorio.',
     minLength: {
-      value: 10,
-      message: 'El teléfono debe tener al menos 10 caracteres.'
+      value: 8,
+      message: 'El teléfono debe tener 8 caracteres.'
+    },
+    maxLength: {
+      value: 8,
+      message: 'El teléfono debe tener 8 caracteres.'
+    },
+    validate: (phone: string) => {
+      const phoneRegex = /^[0-9]{8}$/;
+      return phoneRegex.test(phone) ? true : 'El teléfono debe contener solo números y tener 8 caracteres.';
     }
   },
   email: {
