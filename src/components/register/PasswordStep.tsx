@@ -1,52 +1,47 @@
-import { Checkbox, FormControlLabel, TextField } from '@mui/material';
-import React, { FC, useState } from 'react';
-import ErrorHelperText from '../error/ErrorHelperText';
+import { useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { newUserValidationRules } from '../../data/newUserValidationRules';
+import { Checkbox, FormControlLabel } from '@mui/material';
 
-interface PasswordStepProps {
-  password: string;
-  confirmPassword: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  passwordError: string | null;
-  confirmPasswordError: string | null;
-}
-
-const PasswordStep: FC<PasswordStepProps> = ({
-  password,
-  confirmPassword,
-  handleChange,
-  passwordError,
-  confirmPasswordError
-}) => {
+const PasswordStep = () => {
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
 
+  const { register, getValues, formState: { errors } } = useFormContext();
+
   return (
-    <div>
-      <TextField
-        fullWidth
-        margin="normal"
-        required
-        autoFocus
-        label="Contraseña"
-        name='password'
-        value={password}
-        error={!!passwordError}
-        helperText={passwordError ? <ErrorHelperText errorMessage={passwordError} /> : null}
-        type={showPassword ? "text" : "password"}
-        onChange={handleChange}
-      />
-      <TextField
-        fullWidth
-        margin="normal"
-        required
-        label="Confirmar contraseña"
-        name='confirmPassword'
-        value={confirmPassword}
-        error={!!confirmPasswordError}
-        helperText={confirmPasswordError ? <ErrorHelperText errorMessage={confirmPasswordError} /> : null}
-        type={showPassword ? "text" : "password"}
-        onChange={handleChange}
-      />
+    <>
+      <div>
+        <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">
+          Contraseña
+        </label>
+        <input
+          type={showPassword ? "text" : "password"}
+          id="password"
+          {...register('password', newUserValidationRules.password)}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          required
+          autoFocus
+        />
+        {errors.password && <span className="text-red-500">{String(errors.password.message)}</span>}
+      </div>
+      <div>
+        <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900">
+          Confirmar Contraseña
+        </label>
+        <input
+          type={showPassword ? "text" : "password"}
+          id="password"
+          {...register('confirmPassword', {
+            required: 'Este campo es requerido',
+            validate: value => value === getValues('password') || 'Las contraseñas no coinciden'
+          })}
+          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          required
+          autoFocus
+        />
+        {errors.confirmPassword && <span className="text-red-500">{String(errors.confirmPassword.message)}</span>}
+      </div>
       <FormControlLabel
         control={
           <Checkbox
@@ -57,7 +52,7 @@ const PasswordStep: FC<PasswordStepProps> = ({
         }
         label="Mostrar contraseña"
       />
-    </div>
+    </>
   );
 }
 
