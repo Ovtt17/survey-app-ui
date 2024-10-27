@@ -32,7 +32,7 @@ const PhoneAndDateOfBirthStep = () => {
       </LocalizationProvider>
       {errors.dateOfBirth && <span className="text-red-500">{String(errors.dateOfBirth.message)}</span>}
       <div>
-        <label htmlFor="given-name" className="block mb-2 text-sm font-medium text-gray-900">
+        <label htmlFor="phone" className="block mb-2 text-sm font-medium text-gray-900">
           Teléfono
         </label>
         <input
