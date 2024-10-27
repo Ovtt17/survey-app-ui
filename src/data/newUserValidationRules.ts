@@ -1,3 +1,7 @@
+import dayjs, { Dayjs } from "dayjs";
+const minDate = dayjs().subtract(100, 'year');
+const maxDate = dayjs().subtract(15, 'year');
+
 export const newUserValidationRules = {
   username: {
     required: 'El nombre de usuario es obligatorio.',
@@ -14,12 +18,10 @@ export const newUserValidationRules = {
   },
   dateOfBirth: {
     required: 'La fecha de nacimiento es obligatoria.',
-    validate: (date: Date | null) => {
-      if (!date) return 'La fecha de nacimiento no puede ser nula.';
-      const today = new Date();
-      if (date >= today) return 'La fecha de nacimiento debe ser anterior a hoy.';
-      return true;
-    }
+    validate: {
+      minDate: (value: Dayjs) => dayjs(value).isAfter(minDate) || `La fecha debe ser posterior a ${minDate.format('DD/MM/YYYY')}.`,
+      maxDate: (value: Dayjs) => dayjs(value).isBefore(maxDate) || `La fecha debe ser anterior a ${maxDate.format('DD/MM/YYYY')}.`,
+    },
   },
   phone: {
     required: 'El teléfono es obligatorio.',
