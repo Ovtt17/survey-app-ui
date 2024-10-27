@@ -1,34 +1,26 @@
-import { TextField } from '@mui/material';
-import React, { FC } from 'react';
-import ErrorHelperText from '../error/ErrorHelperText';
+import { useFormContext } from "react-hook-form";
+import { newUserValidationRules } from "../../data/newUserValidationRules";
 
-interface UsernameStepProps {
-  username: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  usernameError: string | null;
-}
+const UsernameStep = () => {
 
-const UsernameStep: FC<UsernameStepProps> = ({
-  username,
-  handleChange,
-  usernameError,
-}) => {
-  const usernameField = 'username';
+  const { register, formState: { errors } } = useFormContext();
 
   return (
     <div>
-      <TextField
-        label='Nombre de usuario'
-        name={usernameField}
-        type='text'
+      <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900">
+        Nombre
+      </label>
+      <input
+        type="text"
+        id="username"
+        {...register('firstName', newUserValidationRules.username)}
+        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+        placeholder="John"
         required
-        value={username}
-        onChange={handleChange}
-        error={!!usernameError}
-        helperText={usernameError ? <ErrorHelperText errorMessage={usernameError} /> : null}
-        fullWidth
-        margin="normal"
+        autoFocus
+        autoComplete="username"
       />
+      {errors.firstName && <span className="text-red-500">{String(errors.firstName.message)}</span>}
     </div>
   );
 }
