@@ -2,7 +2,7 @@ export const newUserValidationRules = {
   username: {
     required: 'El nombre de usuario es obligatorio.',
     minLength: {
-      value: 3,
+      value: 5,
       message: 'El nombre de usuario debe tener al menos 3 caracteres.'
     }
   },
