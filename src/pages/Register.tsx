@@ -6,6 +6,7 @@ import SuccessModal from '../components/modals/SuccessModal';
 import AppIcon from '../assets/app_icon.svg';
 import { FormProvider, useForm } from 'react-hook-form';
 import { newUserDefault } from '../data/NewUserDefault';
+import { Link } from 'react-router-dom';
 
 const Register: FC = () => {
   const [isRegistered, setIsRegistered] = useState<boolean>(false);
@@ -37,11 +38,13 @@ const Register: FC = () => {
           ) : (
             <>
               <article className="text-center lg:text-left">
-                <img
-                  alt="Your Company"
-                  src={AppIcon}
-                  className="lg:absolute lg:top-10 lg:left-10 mx-auto lg:mx-0 h-10 w-auto mb-4"
-                />
+                <Link to={'/'}>
+                  <img
+                    alt="SurveyHub Icon"
+                    src={AppIcon}
+                    className="lg:absolute lg:top-10 lg:left-10 mx-auto lg:mx-0 h-10 w-auto mb-4"
+                  />
+                </Link>
                 <h2 className="text-3xl font-bold tracking-tight text-gray-900">
                   Crear Cuenta
                 </h2>
