@@ -3,7 +3,9 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { newUserValidationRules } from '../../data/newUserValidationRules';
 import { Controller, useFormContext } from 'react-hook-form';
 import dayjs from 'dayjs';
+import 'dayjs/locale/es';
 import UserInputField from './UserInputField';
+
 
 const PhoneAndDateOfBirthStep = () => {
   const minDate = dayjs().subtract(100, 'year');
