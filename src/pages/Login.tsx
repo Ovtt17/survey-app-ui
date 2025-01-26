@@ -28,7 +28,6 @@ const Login = () => {
     const password = formData.get('password') as string;
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
       const authReponse = await login(usernameOrEmail, password);
       setAuth(authReponse);
       setIsSuccess(true);
@@ -36,8 +35,9 @@ const Login = () => {
         navigate('/');
       }, 2500);
     } catch (error) {
-      console.error('Login failed:', error);
-      setErrorMessage('Credenciales incorrectas. Por favor, inténtalo de nuevo.');
+      if (error instanceof Error) {
+        setErrorMessage(error.message);
+      }
       if (passwordRef.current) {
         passwordRef.current.value = '';
         passwordRef.current.focus();
@@ -72,7 +72,7 @@ const Login = () => {
         </article>
       </div>
       {(isLoading || isSuccess) && (
-        <div className="fixed inset-0 bg-white bg-opacity-75 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-white bg-opacity-10 flex items-center justify-center z-50">
           {isLoading && (
             <LoadingIndicator />
           )}
