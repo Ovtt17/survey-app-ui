@@ -47,13 +47,6 @@ const LoginForm: FC<LoginFormProps> = ({
         />
       </FormControl>
       <FormControl fullWidth error={!!errorMessage}>
-        <div className="flex justify-end">
-          <div className="text-sm">
-            <a href="#" className="leading-6 text-midnight-black hover:text-gray-600 underline">
-              Olvidaste la Contraseña?
-            </a>
-          </div>
-        </div>
         <FormControl
           required
           fullWidth
@@ -88,6 +81,13 @@ const LoginForm: FC<LoginFormProps> = ({
             </FormHelperText>
           )}
         </FormControl>
+        <div className="flex justify-end">
+          <div className="text-sm">
+            <a href="#" className="leading-6 text-midnight-black hover:text-gray-600 underline">
+              Olvidaste la Contraseña?
+            </a>
+          </div>
+        </div>
       </FormControl>
       <div>
         <button type="submit"
