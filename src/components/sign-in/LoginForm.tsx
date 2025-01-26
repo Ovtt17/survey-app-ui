@@ -74,6 +74,7 @@ const LoginForm: FC<LoginFormProps> = ({
             }
             inputRef={passwordRef}
             onChange={handlePasswordChange}
+            inputProps={{ minLength: 8 }}
           />
           {errorMessage && (
             <FormHelperText>
