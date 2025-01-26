@@ -12,9 +12,13 @@ const getJsonHeaders = () => ({
 });
 
 const handleResponse = async (response: Response) => {
+  const exception: ExceptionResponse = await response.json();
   if (!response.ok) {
-    const exception: ExceptionResponse = await response.json();
-    throw new Error(exception.businessErrorDescription);
+    if (exception.validationErrors) {
+      throw new Error(Array.from(exception.validationErrors).join(', ').toString());
+    } else {
+      throw new Error(exception.businessErrorDescription);
+    }
   }
   return response.json();
 };
