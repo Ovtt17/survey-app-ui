@@ -2,7 +2,6 @@ import dayjs, { Dayjs } from "dayjs";
 import { AuthenticationResponse } from "../types/authenticationResponse";
 import { NewUser } from "../types/user";
 import { handleErrorResponse } from "./handleErrorResponse";
-import { ExceptionResponse } from "../types/ExceptionResponse";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/auth`;
 
@@ -12,15 +11,15 @@ const getJsonHeaders = () => ({
 });
 
 const handleResponse = async (response: Response) => {
-  const exception: ExceptionResponse = await response.json();
+  const data = await response.json();
   if (!response.ok) {
-    if (exception.validationErrors) {
-      throw new Error(Array.from(exception.validationErrors).join(', ').toString());
+    if (data.validationErrors) {
+      throw new Error(Array.from(data.validationErrors).join(', ').toString());
     } else {
-      throw new Error(exception.businessErrorDescription);
+      throw new Error(data.businessErrorDescription);
     }
   }
-  return response.json();
+  return data;
 };
 
 const toLocalDateString = (date: Dayjs | Date): string => {
