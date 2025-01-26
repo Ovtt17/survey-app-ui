@@ -1,6 +1,8 @@
 import dayjs, { Dayjs } from "dayjs";
 import { AuthenticationResponse } from "../types/authenticationResponse";
 import { NewUser } from "../types/user";
+import { handleErrorResponse } from "./handleErrorResponse";
+import { ExceptionResponse } from "../types/ExceptionResponse";
 
 const BASE_URL = `${import.meta.env.VITE_API_URL}/auth`;
 
@@ -11,8 +13,8 @@ const getJsonHeaders = () => ({
 
 const handleResponse = async (response: Response) => {
   if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(`Error: ${response.status} ${response.statusText} - ${errorData.message}`);
+    const exception: ExceptionResponse = await response.json();
+    throw new Error(exception.businessErrorDescription);
   }
   return response.json();
 };
@@ -39,7 +41,7 @@ export const login = async (usernameOrEmail: string, password: string): Promise<
     return authResponse;
   } catch (error) {
     console.error('Error during login:', error);
-    throw new Error('An unexpected error occurred during login. Please try again later.');
+    throw error;
   }
 };
 
@@ -58,15 +60,16 @@ export const registerUser = async (user: NewUser): Promise<boolean> => {
       method: 'POST',
       body: formData
     });
+
     if (!response.ok) {
-      throw new Error(`Registration failed: ${response.status} ${response.statusText}`);
+      await handleErrorResponse(response);
     }
 
     const isRegistered = await handleResponse(response);
     return isRegistered;
   } catch (error) {
     console.error('Error during registration:', error);
-    throw new Error('An unexpected error occurred during registration. Please try again later.');
+    throw error;
   }
 };
 
@@ -77,13 +80,10 @@ export const activateUser = async (token: string): Promise<void> => {
       headers: getJsonHeaders()
     });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(`Error: ${response.status} ${response.statusText} - ${errorData.message}`);
-    }
+    await handleResponse(response);
   } catch (error) {
     console.error('Error during account activation:', error);
-    throw new Error('An unexpected error occurred during account activation. Please try again later.');
+    throw error;
   }
 };
 
@@ -98,7 +98,7 @@ export const checkExistingEmail = async (email: string): Promise<boolean> => {
     return data;
   } catch (error) {
     console.error('Error while checking if email already exists:', error);
-    throw new Error('An unexpected error occurred while checking for existing email. Please try again later.');
+    throw error;
   }
 };
 
@@ -113,6 +113,6 @@ export const checkExistingUsername = async (username: string): Promise<boolean> 
     return data;
   } catch (error) {
     console.error('Error while checking if username already exists:', error);
-    throw new Error('An unexpected error occurred while checking for existing username. Please try again later.');
+    throw error;
   }
 };
