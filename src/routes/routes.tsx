@@ -16,6 +16,7 @@ const ActivateAccount = lazy(() => import('../pages/ActivateAccount'));
 const UserSurveys = lazy(() => import('../pages/UserSurveys'));
 const LogIn = lazy(() => import('../pages/Login'));
 const Profile = lazy(() => import('../pages/Profile'));
+const AuthCallback = lazy(() => import('../pages/AuthCallback'));
 
 const ROUTES = {
   // General Routes
@@ -41,6 +42,9 @@ const ROUTES = {
 
   // Report Routes
   REPORTS: '/reports',
+
+  // Auth Callback
+  AUTH_CALLBACK: '/auth/callback'
 };
 
 const AppRoutes = () => {
@@ -78,6 +82,9 @@ const AppRoutes = () => {
 
         {/* Report Routes */}
         <Route path={ROUTES.REPORTS} element={<Report />} />
+
+        {/* Auth Callback */}
+        <Route path={ROUTES.AUTH_CALLBACK} element={<AuthCallback />} />
 
         <Route
           path="*"
