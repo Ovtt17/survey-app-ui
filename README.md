@@ -48,7 +48,10 @@ npm install
 Create a `.env` file in the root directory and add your environment variables:
 
 ```env
-VITE_API_URL=https://api.yourdomain.com
+VITE_API_URL='http://localhost:8080/api/v1'
+VITE_GOOGLE_OAUTH_URL='http://localhost:8080/api/v1/oauth2/authorization/google'
+VITE_FACEBOOK_OAUTH_URL='http://localhost:8080/api/v1/oauth2/authorization/facebook'
+
 ```
 
 ---
