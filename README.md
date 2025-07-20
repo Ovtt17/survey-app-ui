@@ -64,7 +64,7 @@ npm run dev
 
 The app will be available at:
 
-```
+```txt
 http://localhost:5173
 ```
 
@@ -87,30 +87,37 @@ This project is divided into the following modules:
 Below are screenshots of the main functionalities:
 
 ### Login
+
 ![Login Screenshot](public/screenshots/login.png)
 _Securely access the application with your credentials using a simple and intuitive login form._
 
 ### Registration (Stepper)
+
 ![Register Screenshot](public/screenshots/register.png)
 _Register a new account through a multistep form (stepper) similar to Google's registration process, making onboarding easy and user-friendly._
 
 ### Survey Creation
+
 ![Survey Creation Screenshot](public/screenshots/survey-create.png)
 _Easily create new surveys with customizable questions and options._
 
 ### Answering Surveys
+
 ![Answer Survey Screenshot](public/screenshots/answer-survey.png)
 _Participate in surveys and submit your responses with a user-friendly interface._
 
 ### Reviews and Ratings
+
 ![Reviews Screenshot](public/screenshots/reviews.png)
 _Leave feedback and ratings for surveys to help improve the quality of future surveys._
 
 ### Survey Reports
+
 ![Survey Reports Screenshot](public/screenshots/reports.png)
 _View detailed reports and analytics for each survey, including response statistics. **Note:** The section titles are in Spanish because the app was originally designed for Spanish-speaking users._
 
 ### User Profile
+
 ![User Profile Screenshot](public/screenshots/profile.png)
 _Manage your profile, view your created surveys, and access your survey results._
 
@@ -132,17 +139,23 @@ Want to help improve the app? Here's how:
 
 1. Fork the repository
 2. Create a new branch:
+
    ```bash
    git checkout -b feature/your-feature
    ```
+
 3. Commit your changes:
+
    ```bash
    git commit -am 'Add new feature'
    ```
+
 4. Push to your fork:
+
    ```bash
    git push origin feature/your-feature
    ```
+
 5. Open a **Pull Request**
 
 ---
