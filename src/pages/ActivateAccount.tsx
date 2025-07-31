@@ -2,7 +2,7 @@ import { TextField, Button, Box, Typography } from '@mui/material';
 import { FC, useState } from 'react';
 import { activateUser } from '../services/authService';
 import SuccessModal from '../components/modals/SuccessModal';
-
+import AppIcon from "../assets/app_icon.svg";
 
 const ActivateAccount: FC = () => {
   const [code, setCode] = useState('');
@@ -54,7 +54,7 @@ const ActivateAccount: FC = () => {
         >
           <img
             alt="Logo de la Empresa"
-            src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+            src={AppIcon}
             className="absolute -top-10 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-12"
           />
           <Typography variant="h4" className="font-bold tracking-tight text-gray-900">
