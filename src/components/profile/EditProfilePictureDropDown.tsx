@@ -25,7 +25,7 @@ const EditProfilePictureDropDown: FC<EditProfilePictureDropDownProps> = ({ profi
     if (!file) return;
 
     if (!isValidImageFormat(file)) {
-      alert('Por favor, selecciona un archivo de imagen válido (jpg, jpeg, png).');
+      alert('Por favor, selecciona un archivo de imagen válido (jpg, jpeg, png, webp).');
       handleMenuClose();
       return;
     }
