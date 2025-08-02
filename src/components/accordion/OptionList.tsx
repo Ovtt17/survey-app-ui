@@ -62,7 +62,11 @@ const OptionList: React.FC<OptionListProps> = ({ questionIndex, requestCorrectAn
       setSelectedCorrectOption(null);
     }
     const hasMultipleOptions = options.length > 1;
-    setValue(`questions.${questionIndex}.isCorrect`, hasMultipleOptions);
+
+    // Verificar si requestCorrectAnswer está activado antes de modificar isCorrect
+    if (requestCorrectAnswer) {
+      setValue(`questions.${questionIndex}.isCorrect`, hasMultipleOptions);
+    }
   };
 
   const handleCorrectAnswerChange = (index: number) => {
